@@ -28,6 +28,8 @@ plugins/android.json
 plugins/ios.json
 www/
 $RECYCLE.BIN/
+aws-config.js
+aws-exports.js
 
 .DS_Store
 Thumbs.db
