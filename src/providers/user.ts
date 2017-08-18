@@ -7,7 +7,6 @@ declare var AWS: any;
 declare const aws_cognito_region;
 declare const aws_cognito_identity_pool_id;
 declare const aws_user_pools_id;
-declare const aws_user_pools_web_client_id;
 
 @Injectable()
 export class User {

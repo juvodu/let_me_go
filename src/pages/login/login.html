@@ -9,6 +9,7 @@
 
 <ion-content padding>
   <form (submit)="login()">
+    <p *ngIf="error" style="text-align: center">{{error.message}}</p>
     <ion-list>
 
       <ion-item>

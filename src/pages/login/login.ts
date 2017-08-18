@@ -17,11 +17,20 @@ export class LoginDetails {
 export class LoginPage {
 
   public loginDetails: LoginDetails;
+  error: any;
 
   constructor(public navCtrl: NavController,
               public user: User,
               public loadingCtrl: LoadingController) {
     this.loginDetails = new LoginDetails(); 
+  }
+
+  ionViewDidLoad() {
+    this.user.isAuthenticated().then((result) => {
+      this.navCtrl.setRoot(ListPage);
+    }).catch((err) => {
+        console.log("User not authenticated. Showing login page.");
+    });
   }
 
   login() {
@@ -31,9 +40,9 @@ export class LoginPage {
     loading.present();
 
     let details = this.loginDetails;
-    console.log('login..');
+    this.error = null;
+
     this.user.login(details.username, details.password).then((result) => {
-      console.log('result:', result);
       loading.dismiss();
       this.navCtrl.setRoot(ListPage);
     }).catch((err) => { 
@@ -41,8 +50,8 @@ export class LoginPage {
         loading.dismiss();
         this.navCtrl.push(ConfirmPage, { 'username': details.username });
       }
-      console.log('errrror', err);
       loading.dismiss();
+      this.error = err;
     });
   }
 

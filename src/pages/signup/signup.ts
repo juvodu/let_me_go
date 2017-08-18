@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { User } from '../../providers/user';
 import { ConfirmPage } from '../confirm/confirm';
+import { LoginPage } from '../login/login';
 
 export class UserDetails {
     username: string;
@@ -42,5 +43,9 @@ export class SignupPage {
       loading.dismiss();
       this.error = err;
     });
+  }
+
+  showLoginPage(){
+    this.navCtrl.push(LoginPage);
   }
 }
