@@ -36,3 +36,5 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 
 src/assets/img/surfspot.jpg
+
+src/providers/app.settings.ts
