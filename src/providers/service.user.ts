@@ -9,7 +9,7 @@ declare const aws_cognito_identity_pool_id;
 declare const aws_user_pools_id;
 
 @Injectable()
-export class User {
+export class UserService {
 
   private user: any;
   public loggedIn: boolean = false;

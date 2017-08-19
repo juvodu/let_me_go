@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
@@ -8,11 +9,13 @@ import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
 import { ConfirmPage } from '../pages/confirm/confirm';
+import { DetailPage } from '../pages/detail/detail';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { User } from '../providers/user';
+import { UserService } from '../providers/service.user';
+import { SpotService } from '../providers/service.spot';
 import { Cognito } from '../providers/aws.cognito';
 
 @NgModule({
@@ -22,10 +25,12 @@ import { Cognito } from '../providers/aws.cognito';
     ListPage,
     LoginPage,
     SignupPage,
-    ConfirmPage
+    ConfirmPage,
+    DetailPage
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
@@ -35,14 +40,16 @@ import { Cognito } from '../providers/aws.cognito';
     ListPage, 
     LoginPage,
     SignupPage,
-    ConfirmPage
+    ConfirmPage,
+    DetailPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    User,
-    Cognito
+    UserService,
+    SpotService,
+    Cognito,
   ]
 })
 export class AppModule {}

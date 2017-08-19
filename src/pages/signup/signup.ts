@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
-import { User } from '../../providers/user';
+import { UserService } from '../../providers/service.user';
 import { ConfirmPage } from '../confirm/confirm';
 import { LoginPage } from '../login/login';
 
@@ -21,7 +21,7 @@ export class SignupPage {
 
 
   constructor(public navCtrl: NavController,
-              public user: User,
+              public userService: UserService,
               public loadingCtrl: LoadingController) {
    this.userDetails = new UserDetails();
   }
@@ -36,7 +36,7 @@ export class SignupPage {
     let details = this.userDetails;
     this.error = null;
 
-    this.user.register(details.username, details.password, {'email': details.email}).then((user) => {
+    this.userService.register(details.username, details.password, {'email': details.email}).then((user) => {
       loading.dismiss();
       this.navCtrl.push(ConfirmPage, { username: details.username });
     }).catch((err) => {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
-import { User } from '../../providers/user';
+import { UserService } from '../../providers/service.user';
 import { SignupPage} from '../signup/signup';
 import { ConfirmPage } from '../confirm/confirm';
 import { ListPage } from '../list/list';
@@ -20,13 +20,13 @@ export class LoginPage {
   error: any;
 
   constructor(public navCtrl: NavController,
-              public user: User,
+              public userService: UserService,
               public loadingCtrl: LoadingController) {
     this.loginDetails = new LoginDetails(); 
   }
 
   ionViewDidLoad() {
-    this.user.isAuthenticated().then((result) => {
+    this.userService.isAuthenticated().then((result) => {
       this.navCtrl.setRoot(ListPage);
     }).catch((err) => {
         console.log("User not authenticated. Showing login page.");
@@ -42,7 +42,7 @@ export class LoginPage {
     let details = this.loginDetails;
     this.error = null;
 
-    this.user.login(details.username, details.password).then((result) => {
+    this.userService.login(details.username, details.password).then((result) => {
       loading.dismiss();
       this.navCtrl.setRoot(ListPage);
     }).catch((err) => { 
@@ -55,7 +55,7 @@ export class LoginPage {
     });
   }
 
-  signup() {
+  showSignupPage() {
     this.navCtrl.push(SignupPage);
   }
 }
