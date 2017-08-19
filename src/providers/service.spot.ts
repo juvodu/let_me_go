@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import {AppSettings} from './app.settings';
 import 'rxjs/add/operator/map';
@@ -13,7 +13,6 @@ import 'rxjs/add/operator/map';
 export class SpotService {
 
     constructor(public http: Http) {
-
     }
 
     /**
@@ -21,7 +20,10 @@ export class SpotService {
      */
     getAllSpots(): Observable<any[]>{
 
-        let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "/spots")
+        let headers = new Headers();
+        headers.append('x-api-key', AppSettings.SPOT_API_KEY);
+        let options = new RequestOptions({headers: headers});
+        let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "/spots", options)
              .map((res:Response) => res.json());
         return spots;
     };
