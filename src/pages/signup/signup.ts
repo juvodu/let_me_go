@@ -46,6 +46,6 @@ export class SignupPage {
   }
 
   showLoginPage(){
-    this.navCtrl.push(LoginPage);
+    this.navCtrl.setRoot(LoginPage);
   }
 }
