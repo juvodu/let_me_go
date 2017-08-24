@@ -21,11 +21,11 @@ export class DetailPage {
     //show map
     let position = this.spot.position;
     let map = L.map('map')
-      .setView([position.latitude, position.longitude], 13);
+      .setView([position.latitude + 0.005, position.longitude], 13);
 
     L.tileLayer(AppSettings.MAPBOX_API_ENDPOINT, {
         attribution: AppSettings.MAP_ATTRIBUTION,
-        maxZoom: 18,
+        maxZoom: 20,
         id: 'mapbox.streets',
         accessToken: AppSettings.MAPBOX_API_KEY
     }).addTo(map);
