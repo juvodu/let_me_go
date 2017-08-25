@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { NearbyPage } from '../nearby/nearby';
-import { RegionsPage } from '../regions/regions';
+import { ContinentsPage } from '../continents/continents';
 import { FavoritesPage } from '../favorites/favorites';
 
 @Component({
@@ -11,7 +11,7 @@ import { FavoritesPage } from '../favorites/favorites';
 export class TabsPage {
 
   nearbyRoot:any = NearbyPage;
-  regionsRoot:any = RegionsPage;
+  regionsRoot:any = ContinentsPage;
   favoritesRoot:any = FavoritesPage;
 
   constructor(public navCtrl: NavController) {}

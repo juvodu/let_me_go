@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { SpotService } from '../../providers/service.spot';
+import { DetailPage } from '../detail/detail';
 
 @Component({
   selector: 'page-regions',
@@ -7,11 +9,40 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class RegionsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+    error: any;
+    continent: {label: string, value: string};
+    spots: any = {};
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad RegionPage');
-  }
+    constructor(public navCtrl: NavController,
+                public navParams: NavParams,
+                public loadingCtrl: LoadingController,
+                public spotService: SpotService) {
 
+      this.continent = {label: navParams.get('label'), value: navParams.get('value')};
+      this.spots = [];
+
+      let loading = this.loadingCtrl.create({
+        content: 'Please wait...'
+      });
+
+      loading.present();
+      this.error = null;
+
+      this.spotService.getSpotsByContinent(this.continent.value).subscribe(
+          (spots) => {
+            loading.dismiss();
+            this.spots = spots;
+          },
+          (error) =>{
+            loading.dismiss();
+            this.error = error;
+          }
+        );
+    }
+
+    itemTapped(event, spot) {
+      this.navCtrl.push(DetailPage, {
+        spot: spot
+      });
+    }
 }

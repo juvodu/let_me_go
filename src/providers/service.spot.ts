@@ -31,6 +31,22 @@ export class SpotService {
         return spots;
     };
 
+    /**
+     * Get all spots for a specific continent
+     * @param continent 
+     */
+    getSpotsByContinent(continent: string){
+
+        let options:RequestOptions = new RequestOptions({headers: this.headers});
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('continent', continent);
+        options.params = params;
+
+        let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "/spot", options)
+             .map((res:Response) => res.json());
+        return spots;
+    }
+
    /**
     * Get spots within a specific distance
     * @param continent

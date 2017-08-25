@@ -11,8 +11,9 @@ import { ConfirmPage } from '../pages/confirm/confirm';
 import { DetailPage } from '../pages/detail/detail';
 import { TabsPage } from '../pages/tabs/tabs';
 import { NearbyPage } from '../pages/nearby/nearby';
-import { RegionsPage } from '../pages/regions/regions';
+import { ContinentsPage } from '../pages/continents/continents';
 import { FavoritesPage } from '../pages/favorites/favorites'; 
+import { RegionsPage } from '../pages/regions/regions';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -32,6 +33,7 @@ import { Cognito } from '../providers/aws.cognito';
     TabsPage,
     NearbyPage,
     FavoritesPage,
+    ContinentsPage, 
     RegionsPage
   ],
   imports: [
@@ -50,6 +52,7 @@ import { Cognito } from '../providers/aws.cognito';
     TabsPage,
     NearbyPage,
     FavoritesPage,
+    ContinentsPage,
     RegionsPage
   ],
   providers: [
