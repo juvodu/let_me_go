@@ -5,11 +5,14 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
 import { ConfirmPage } from '../pages/confirm/confirm';
 import { DetailPage } from '../pages/detail/detail';
+import { TabsPage } from '../pages/tabs/tabs';
+import { NearbyPage } from '../pages/nearby/nearby';
+import { RegionsPage } from '../pages/regions/regions';
+import { FavoritesPage } from '../pages/favorites/favorites'; 
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -22,11 +25,14 @@ import { Cognito } from '../providers/aws.cognito';
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
     LoginPage,
     SignupPage,
     ConfirmPage,
-    DetailPage
+    DetailPage,
+    TabsPage,
+    NearbyPage,
+    FavoritesPage,
+    RegionsPage
   ],
   imports: [
     BrowserModule,
@@ -37,11 +43,14 @@ import { Cognito } from '../providers/aws.cognito';
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage, 
     LoginPage,
     SignupPage,
     ConfirmPage,
-    DetailPage
+    DetailPage,
+    TabsPage,
+    NearbyPage,
+    FavoritesPage,
+    RegionsPage
   ],
   providers: [
     StatusBar,

@@ -4,10 +4,10 @@ import { SpotService } from '../../providers/service.spot';
 import { DetailPage } from '../detail/detail';
 
 @Component({
-  selector: 'page-list',
-  templateUrl: 'list.html'
+  selector: 'page-nearby',
+  templateUrl: 'nearby.html',
 })
-export class ListPage {
+export class NearbyPage {
 
   error: any;
   icons: string[];

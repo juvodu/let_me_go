@@ -3,7 +3,7 @@ import { NavController, LoadingController } from 'ionic-angular';
 import { UserService } from '../../providers/service.user';
 import { SignupPage} from '../signup/signup';
 import { ConfirmPage } from '../confirm/confirm';
-import { ListPage } from '../list/list';
+import { TabsPage } from '../tabs/tabs';
 
 export class LoginDetails {
   username: string;
@@ -27,7 +27,7 @@ export class LoginPage {
 
   ionViewDidLoad() {
     this.userService.isAuthenticated().then((result) => {
-      this.navCtrl.setRoot(ListPage);
+      this.navCtrl.setRoot(TabsPage);
     }).catch((err) => {
         console.log("User not authenticated. Showing login page.");
     });
@@ -44,7 +44,7 @@ export class LoginPage {
 
     this.userService.login(details.username, details.password).then((result) => {
       loading.dismiss();
-      this.navCtrl.setRoot(ListPage);
+      this.navCtrl.setRoot(TabsPage);
     }).catch((err) => { 
       if (err.message === "User is not confirmed.") {
         loading.dismiss();
