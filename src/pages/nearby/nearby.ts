@@ -10,8 +10,13 @@ import { DetailPage } from '../detail/detail';
 export class NearbyPage {
 
   error: any;
-  icons: string[];
   spots: any = {};
+  defaultDistanceFilter: string = "10";
+
+  //TODO: replace by actual position of the user
+  defaultContinentFilter: string = "EU";
+  defaultLatFilter: string = "43.452663";
+  defaultLongFilter: string = "-3.963651";
 
   constructor(public navCtrl: NavController,
               public loadingCtrl: LoadingController,
@@ -26,15 +31,19 @@ export class NearbyPage {
     loading.present();
     this.error = null;
 
-    this.spotService.getAllSpots().subscribe(
-      (spots) => {
-        loading.dismiss();
-        this.spots = spots;
-      },
-      (error) =>{
-        loading.dismiss();
-        this.error = error;
-      });
+    this.spotService.getSpotsByDistance(this.defaultContinentFilter, 
+      this.defaultLatFilter, 
+      this.defaultLongFilter, 
+      this.defaultDistanceFilter).subscribe(
+        (spots) => {
+          loading.dismiss();
+          this.spots = spots;
+        },
+        (error) =>{
+          loading.dismiss();
+          this.error = error;
+        }
+      );
   }
 
   itemTapped(event, spot) {

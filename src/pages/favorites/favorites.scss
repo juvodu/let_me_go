@@ -1,3 +1,11 @@
 page-favorites {
+    .name{
+        text-overflow: ellipsis;
+        overflow: hidden;    
+    }
 
+    .description{
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 }

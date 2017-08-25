@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
+import { SpotService } from '../../providers/service.spot';
+import { DetailPage } from '../detail/detail';
 
 @Component({
   selector: 'page-favorites',
@@ -7,11 +9,37 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class FavoritesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+    error: any;
+    spots: any = {};
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad FavoritsPage');
-  }
+    constructor(public navCtrl: NavController,
+                public loadingCtrl: LoadingController,
+                public spotService: SpotService) {
 
+      this.spots = [];
+
+      let loading = this.loadingCtrl.create({
+        content: 'Please wait...'
+      });
+
+      loading.present();
+      this.error = null;
+
+      this.spotService.getAllSpots().subscribe(
+          (spots) => {
+            loading.dismiss();
+            this.spots = spots;
+          },
+          (error) =>{
+            loading.dismiss();
+            this.error = error;
+          }
+        );
+    }
+
+    itemTapped(event, spot) {
+      this.navCtrl.push(DetailPage, {
+        spot: spot
+      });
+    }
 }
