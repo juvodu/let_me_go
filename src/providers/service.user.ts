@@ -58,7 +58,6 @@ export class UserService {
 
           console.log('authentication failed');
           reject(err);
-
         }
       });
     });
@@ -145,5 +144,43 @@ export class UserService {
         reject()
       }
     });
+  }
+
+  addFavorite(spotId: string){
+   
+    var attributes = [];
+    attributes.push(this.cognito.makeAttribute("custom:favoriteSpots", spotId));
+    
+    this.user.updateAttributes(attributes, function(err, result) {
+        if (err) {
+            alert(err);
+            return;
+        }
+        console.log('call result: ' + result);
+    });
+  }
+
+  /**
+   * Retrieve favorite Spots saved as a cognito cutom attribute
+   */
+  getAllFavorites(){
+
+      return new Promise((resolve, reject) => {
+        this.user.getUserAttributes((err, attributes) => {
+          if (err) {
+              reject(err)
+            } else {
+              let favoriteSpots: string;
+              for(let i = 0; i < attributes.length; i++){
+                
+                let el = attributes[i];
+                if(el.Name == "custom:favoriteSpots"){
+                  favoriteSpots = el.Value;
+                }
+              }
+              resolve(favoriteSpots)
+            }
+        });
+      });
   }
 }

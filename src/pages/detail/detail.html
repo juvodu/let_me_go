@@ -20,5 +20,10 @@
         {{spot.description}}
       </p>
     </ion-card-content>
+    <ion-item>
+        <button ion-button icon-left clear item-end large (click)="toggleFavorite()">
+          <ion-icon name="heart"></ion-icon>
+        </button>
+    </ion-item>
   </ion-card>
 </ion-content>

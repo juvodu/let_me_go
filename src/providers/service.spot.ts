@@ -20,6 +20,19 @@ export class SpotService {
         this.headers.append('x-api-key', AppSettings.SPOT_API_KEY);
     }
 
+
+    getSpotById(id): Observable<any>{
+        
+        let options:RequestOptions = new RequestOptions({headers: this.headers});
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('id', id);
+        options.params = params;
+
+        let spot: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "/spot", options)
+             .map((res:Response) => res.json());
+        return spot;
+    }
+
     /**
      * Get all available spots
      */
@@ -35,7 +48,7 @@ export class SpotService {
      * Get all spots for a specific continent
      * @param continent 
      */
-    getSpotsByContinent(continent: string){
+    getSpotsByContinent(continent: string): Observable<any[]>{
 
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
