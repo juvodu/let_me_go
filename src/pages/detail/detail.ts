@@ -13,6 +13,7 @@ export class DetailPage {
   spot: any;
   isFav: boolean;
   color: string;
+  mapId: string;
   map: any;
   favoriteSpotIds: Array<string>;
 
@@ -23,6 +24,7 @@ export class DetailPage {
         this.spot = navParams.get('spot');
         this.isFav = false;
         this.favoriteSpotIds = [];
+        this.mapId = "map-" + Math.floor((1 + Math.random()) * 0x10000);
   }
 
   ionViewDidLoad() {
@@ -34,13 +36,6 @@ export class DetailPage {
   ionViewDidEnter(){
 
   }
-
-  ionViewWillLeave() {
-    /*console.log("leave!");
-    this.map.off();
-    this.map.remove();*/
-  }
-
 
   private isFavorite(){
 
@@ -64,7 +59,7 @@ export class DetailPage {
 
     let position = this.spot.position;
 
-    this.map = L.map('map')
+    this.map = L.map(this.mapId)
       .setView([position.latitude + 0.005, position.longitude], 13);
 
     L.tileLayer(AppSettings.MAPBOX_API_ENDPOINT, {
