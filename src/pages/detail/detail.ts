@@ -33,10 +33,6 @@ export class DetailPage {
     this.isFavorite();
   }
 
-  ionViewDidEnter(){
-
-  }
-
   private isFavorite(){
 
     this.userService.getAllFavorites().then((favoriteSpotIds: Array<string>) => {
