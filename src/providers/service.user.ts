@@ -146,17 +146,37 @@ export class UserService {
     });
   }
 
-  addFavorite(spotId: string){
-   
+  /**
+   * Store favorite spots as an cognito attribute
+   * @param favoriteSpotIds 
+   */
+  updateFavoriteSpots(favoriteSpotIds: Array<string>){
+
+    //concate spots to one string
+    let concatedSpotIds: string = "";
+    favoriteSpotIds.forEach(
+        (favoriteSpotId) => {
+            if(concatedSpotIds.length == 0){
+              concatedSpotIds += favoriteSpotId;
+            }else{
+              concatedSpotIds += "," + favoriteSpotId;
+            }
+        }
+    );
+
+    //max length to be stored
+    if(concatedSpotIds.length > 500){
+      return;
+    }
+
     var attributes = [];
-    attributes.push(this.cognito.makeAttribute("custom:favoriteSpots", spotId));
-    
+    attributes.push(this.cognito.makeAttribute("custom:favoriteSpots", concatedSpotIds));
     this.user.updateAttributes(attributes, function(err, result) {
         if (err) {
+            console.log(err);
             alert(err);
             return;
         }
-        console.log('call result: ' + result);
     });
   }
 
@@ -170,15 +190,17 @@ export class UserService {
           if (err) {
               reject(err)
             } else {
-              let favoriteSpots: string;
+
+              //look for favoriteSpots attribute
+              let favoriteSpotIds: string[];
               for(let i = 0; i < attributes.length; i++){
                 
                 let el = attributes[i];
                 if(el.Name == "custom:favoriteSpots"){
-                  favoriteSpots = el.Value;
+                  favoriteSpotIds = el.Value.split(",");
                 }
               }
-              resolve(favoriteSpots)
+              resolve(favoriteSpotIds)
             }
         });
       });

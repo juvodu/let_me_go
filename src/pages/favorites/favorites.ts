@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { SpotService } from '../../providers/service.spot';
-import { UserService } from '../../providers/service.user'
 import { DetailPage } from '../detail/detail';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'page-favorites',
@@ -15,10 +15,18 @@ export class FavoritesPage {
 
     constructor(public navCtrl: NavController,
                 public loadingCtrl: LoadingController,
-                public spotService: SpotService,
-                public userService: UserService) {
-
+                public spotService: SpotService) {
       this.spots = [];
+
+    }
+
+    ionViewDidEnter(){
+      
+        // refresh favorites each time page is entered
+        this.getFavorites();
+    }
+
+    getFavorites(){
 
       let loading = this.loadingCtrl.create({
         content: 'Please wait...'
@@ -27,35 +35,18 @@ export class FavoritesPage {
       loading.present();
       this.error = null;
 
-      this.userService.getAllFavorites().then((result) => {
-        console.log(result);
+      this.spotService.getSpotsByFavorite().then((spots) => {
 
-        this.spotService.getSpotById(result).subscribe(
-          (spot) => {
-            console.log(spot);
-            loading.dismiss();
-            this.spots.push(spot[0]);
-          },
-          (error) =>{
-            loading.dismiss();
-            console.log(error);
-          }
-        );
-      }).catch((err) => {
           loading.dismiss();
-          console.log(err);
+          this.spots = spots;
+        },
+        (error) =>{
+          loading.dismiss();
+          console.log(error);
+      }).catch((error) => {
+          loading.dismiss();
+          console.log(error);
       });
-
-      /*this.spotService.getAllSpots().subscribe(
-          (spots) => {
-            loading.dismiss();
-            this.spots = spots;
-          },
-          (error) =>{
-            loading.dismiss();
-            this.error = error;
-          }
-        );*/
     }
 
     itemTapped(event, spot) {
