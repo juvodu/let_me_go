@@ -11,6 +11,7 @@ import { ConfirmPage } from '../pages/confirm/confirm';
 import { DetailPage } from '../pages/detail/detail';
 import { TabsPage } from '../pages/tabs/tabs';
 import { NearbyPage } from '../pages/nearby/nearby';
+import { NearbyfilterPage } from '../pages/nearbyfilter/nearbyfilter';
 import { ContinentsPage } from '../pages/continents/continents';
 import { FavoritesPage } from '../pages/favorites/favorites'; 
 import { RegionsPage } from '../pages/regions/regions';
@@ -32,6 +33,7 @@ import { Cognito } from '../providers/aws.cognito';
     DetailPage,
     TabsPage,
     NearbyPage,
+    NearbyfilterPage,
     FavoritesPage,
     ContinentsPage, 
     RegionsPage
@@ -51,6 +53,7 @@ import { Cognito } from '../providers/aws.cognito';
     DetailPage,
     TabsPage,
     NearbyPage,
+    NearbyfilterPage,
     FavoritesPage,
     ContinentsPage,
     RegionsPage

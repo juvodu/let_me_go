@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, ModalController } from 'ionic-angular';
 import { SpotService } from '../../providers/service.spot';
 import { DetailPage } from '../detail/detail';
+import { NearbyfilterPage } from '../nearbyfilter/nearbyfilter';
+import { AppSettings } from '../../providers/app.settings';
 
 @Component({
   selector: 'page-nearby',
@@ -11,18 +13,24 @@ export class NearbyPage {
 
   error: any;
   spots: any = {};
-  defaultDistanceFilter: string = "10";
+
+  //filter
+  distance: string = AppSettings.NEARBY_DEFAULT_DISTANCE;
+  continent: string = "EU";
 
   //TODO: replace by actual position of the user
-  defaultContinentFilter: string = "EU";
   defaultLatFilter: string = "43.452663";
   defaultLongFilter: string = "-3.963651";
 
   constructor(public navCtrl: NavController,
               public loadingCtrl: LoadingController,
-              public spotService: SpotService) {
+              public spotService: SpotService,
+              public modalCtrl: ModalController) {
+                
+                this.getSpotsNearby();
+  }
 
-    this.spots = [];
+  private getSpotsNearby(){
 
     let loading = this.loadingCtrl.create({
       content: 'Please wait...'
@@ -30,11 +38,12 @@ export class NearbyPage {
 
     loading.present();
     this.error = null;
+    this.spots = [];
 
-    this.spotService.getSpotsByDistance(this.defaultContinentFilter, 
+    this.spotService.getSpotsByDistance(this.continent, 
       this.defaultLatFilter, 
       this.defaultLongFilter, 
-      this.defaultDistanceFilter).subscribe(
+      this.distance).subscribe(
         (spots) => {
           loading.dismiss();
           this.spots = spots;
@@ -50,5 +59,20 @@ export class NearbyPage {
     this.navCtrl.push(DetailPage, {
       spot: spot
     });
+  }
+
+  showFilterModal(){
+    let filterModal = this.modalCtrl.create(
+      NearbyfilterPage, 
+      { 
+        distance: this.distance,
+        continent: this.continent
+    });
+    filterModal.onDidDismiss(data => {
+      this.distance = data.distance;
+      this.continent = data.continent;
+      this.getSpotsNearby();
+    });
+    filterModal.present();
   }
 }

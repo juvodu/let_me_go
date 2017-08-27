@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { SpotService } from '../../providers/service.spot';
 import { DetailPage } from '../detail/detail';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'page-favorites',
