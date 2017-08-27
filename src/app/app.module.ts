@@ -18,6 +18,7 @@ import { RegionsPage } from '../pages/regions/regions';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { UserService } from '../providers/service.user';
 import { SpotService } from '../providers/service.spot';
@@ -65,6 +66,7 @@ import { Cognito } from '../providers/aws.cognito';
     UserService,
     SpotService,
     Cognito,
+    Geolocation
   ]
 })
 export class AppModule {}

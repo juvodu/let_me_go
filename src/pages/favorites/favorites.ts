@@ -28,7 +28,7 @@ export class FavoritesPage {
     getFavorites(){
 
       let loading = this.loadingCtrl.create({
-        content: 'Please wait...'
+        content: 'Fetching your favorite spots...'
       });
 
       loading.present();
@@ -38,11 +38,9 @@ export class FavoritesPage {
 
           loading.dismiss();
           this.spots = spots;
-        },
-        (error) =>{
-          loading.dismiss();
-          console.log(error);
-      }).catch((error) => {
+
+        }).catch((error) => {
+
           loading.dismiss();
           console.log(error);
       });

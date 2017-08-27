@@ -26,5 +26,4 @@ export class NearbyfilterPage {
       continent: this.continent
     });
   }
-
 }

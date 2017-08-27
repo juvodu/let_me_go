@@ -15,12 +15,8 @@ export class NearbyPage {
   spots: any = {};
 
   //filter
-  distance: string = AppSettings.NEARBY_DEFAULT_DISTANCE;
+  distance: number = AppSettings.NEARBY_DEFAULT_DISTANCE;
   continent: string = "EU";
-
-  //TODO: replace by actual position of the user
-  defaultLatFilter: string = "43.452663";
-  defaultLongFilter: string = "-3.963651";
 
   constructor(public navCtrl: NavController,
               public loadingCtrl: LoadingController,
@@ -33,26 +29,23 @@ export class NearbyPage {
   private getSpotsNearby(){
 
     let loading = this.loadingCtrl.create({
-      content: 'Please wait...'
+      content: 'Searching for spots nearby...'
     });
 
     loading.present();
     this.error = null;
     this.spots = [];
 
-    this.spotService.getSpotsByDistance(this.continent, 
-      this.defaultLatFilter, 
-      this.defaultLongFilter, 
-      this.distance).subscribe(
-        (spots) => {
-          loading.dismiss();
-          this.spots = spots;
-        },
-        (error) =>{
-          loading.dismiss();
-          this.error = error;
-        }
-      );
+    this.spotService.getSpotsNearby(this.continent, this.distance).then((spots) => {
+
+      loading.dismiss();
+      this.spots = spots;
+
+    }).catch((error) => {
+
+      loading.dismiss();
+      console.log(error);
+    });
   }
 
   itemTapped(event, spot) {

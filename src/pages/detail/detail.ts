@@ -25,6 +25,7 @@ export class DetailPage {
         this.isFav = false;
         this.favoriteSpotIds = [];
         this.mapId = "map-" + Math.floor((1 + Math.random()) * 0x10000);
+        this.color = "light_grey";
   }
 
   ionViewDidLoad() {
@@ -76,7 +77,7 @@ export class DetailPage {
     //delete
     if(this.isFav == true){
       this.isFav = false;
-      this.color = "primary";
+      this.color = "light_grey";
       let index: number = this.favoriteSpotIds.indexOf(spotId);
       if (index !== -1) {
           this.favoriteSpotIds.splice(index, 1);

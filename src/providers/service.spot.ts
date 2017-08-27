@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angular/http';
+import { Geolocation } from '@ionic-native/geolocation';
 import { UserService } from './service.user';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
@@ -16,7 +17,9 @@ export class SpotService {
 
     headers: Headers;
 
-    constructor(public http: Http, public userService:UserService) {
+    constructor(public http: Http,
+                public userService:UserService,
+                public geolocation: Geolocation) {
 
         this.headers = new Headers();
         this.headers.append('x-api-key', AppSettings.SPOT_API_KEY);
@@ -69,14 +72,14 @@ export class SpotService {
     * @param long 
     * @param distance 
     */
-    getSpotsByDistance(continent: string, lat: string, lon: string, distance: string): Observable<any>{
+    getSpotsByDistance(continent: string, lat: number, lon: number, distance: number): Observable<any>{
 
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
         params.set('continent', continent);
-        params.set('lat', lat);
-        params.set('lon', lon);
-        params.set('distance', distance);
+        params.set('lat', String(lat));
+        params.set('lon', String(lon));
+        params.set('distance', String(distance));
         options.params = params;
 
         let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spot", options)
@@ -116,11 +119,43 @@ export class SpotService {
                         resolve(spots);
                     },
                     (err) => {
-                        reject(err);
+                        reject(new Error(err));
                 });
             }).catch((err) => {
-                reject(err);
+                reject(new Error(err));
           });
+        });
+    }
+
+    /**
+     * Get spots neary, uses the geo native plugin to retrieve current user position
+     * @param continent
+     * @param distance 
+     */
+    getSpotsNearby(continent: string, distance: number){
+
+        return new Promise((resolve, reject)=>{
+
+            // retrieve users geolocation
+            this.geolocation.getCurrentPosition().then((resp) => {
+
+                let latitude = resp.coords.latitude;
+                let longitude = resp.coords.longitude;
+
+                // search spots by distance
+                this.getSpotsByDistance(continent, latitude, longitude, distance).subscribe(
+                    (spots) => {
+                        console.log(spots);
+                        resolve(spots);
+                    },
+                    (error) =>{
+                        reject(new Error(error));
+                    }
+                );
+
+            }).catch((error) => {
+                reject(new Error(error));
+            });
         });
     }
 }

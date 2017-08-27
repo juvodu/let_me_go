@@ -22,7 +22,7 @@ export class RegionsPage {
       this.spots = [];
 
       let loading = this.loadingCtrl.create({
-        content: 'Please wait...'
+        content: 'Finding spots in ' + this.continent.label
       });
 
       loading.present();
