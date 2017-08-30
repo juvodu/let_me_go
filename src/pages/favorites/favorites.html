@@ -15,6 +15,11 @@
   
   <ion-list>
 
+    <!-- empty list message -->
+    <ion-item *ngIf="!spots.length">
+      You did not save any surfspots yet...
+    </ion-item>
+
     <ion-item ion-item *ngFor="let spot of spots">
         <ion-thumbnail item-start>
           <img src="{{spot.image}}">

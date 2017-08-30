@@ -9,6 +9,12 @@
 
 <ion-content padding>
   <ion-list>
+
+    <!-- empty list message -->
+    <ion-item *ngIf="!spots.length">
+      No spots for this region available...
+    </ion-item>
+
     <ion-item ion-item *ngFor="let spot of spots">
         <ion-thumbnail item-start>
           <img src="{{spot.image}}">
