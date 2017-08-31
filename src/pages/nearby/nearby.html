@@ -16,13 +16,18 @@
 
 
 <ion-content padding>
-  <p *ngIf="error" style="text-align: center">{{error.message}}</p>
+
+  <!-- pull to refresh -->
+  <ion-refresher (ionRefresh)="getSpotsNearbyRefresher($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
   
   <ion-list>
-    
-    <!-- empty list message -->
-    <ion-item *ngIf="!spots.length">
-        No surfspots nearby...
+        
+    <!-- empty list or error message -->
+    <ion-item *ngIf="userFeedback">
+        {{userFeedback}}
     </ion-item>
 
     <ion-item ion-item *ngFor="let spot of spots">
@@ -50,5 +55,5 @@
         <button ion-button clear item-end (click)="itemTapped($event, spot)">View</button>
       </ion-item>
 
-  </ion-list>
+    </ion-list>
 </ion-content>

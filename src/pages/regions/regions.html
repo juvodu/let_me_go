@@ -8,11 +8,18 @@
 
 
 <ion-content padding>
+  
+  <!-- pull to refresh -->
+  <ion-refresher (ionRefresh)="getSpotsByRegionRefresher($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
+
   <ion-list>
 
-    <!-- empty list message -->
-    <ion-item *ngIf="!spots.length">
-      No spots for this region available...
+    <!-- empty list or error message -->
+    <ion-item *ngIf="userFeedback">
+        {{userFeedback}}
     </ion-item>
 
     <ion-item ion-item *ngFor="let spot of spots">

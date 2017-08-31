@@ -9,9 +9,10 @@ import { DetailPage } from '../detail/detail';
 })
 export class RegionsPage {
 
-    error: any;
     continent: {label: string, value: string};
     spots: any = {};
+    loadingMessage: string = "Finding spots in ";
+    userFeedback: string = null;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -19,30 +20,54 @@ export class RegionsPage {
                 public spotService: SpotService) {
 
       this.continent = {label: navParams.get('label'), value: navParams.get('value')};
-      this.spots = [];
+      this.getSpotsNearbyLoadingAlert();
+    }
 
+    /**
+     * Show alert while loading spots by region
+     */
+    getSpotsNearbyLoadingAlert(){
+      
       let loading = this.loadingCtrl.create({
-        content: 'Finding spots in ' + this.continent.label
+        content: this.loadingMessage + this.continent.label
       });
-
       loading.present();
-      this.error = null;
+      this.getSpotsByRegion(()=>loading.dismiss());
+    }
 
-      this.spotService.getSpotsByContinent(this.continent.value).subscribe(
-          (spots) => {
-            loading.dismiss();
-            this.spots = spots;
-          },
-          (error) =>{
-            loading.dismiss();
-            this.error = error;
-          }
-        );
+    /**
+     * Show refresher while loading spots by region
+     */
+    getSpotsByRegionRefresher(refresher){
+      
+      this.getSpotsByRegion(()=>refresher.complete());
     }
 
     itemTapped(event, spot) {
-      this.navCtrl.push(DetailPage, {
-        spot: spot
-      });
+        this.navCtrl.push(DetailPage, {
+          spot: spot
+        });
+    }
+
+    private getSpotsByRegion(callback){
+      
+      this.spots = [];
+      this.userFeedback = null;
+
+      this.spotService.getSpotsByContinent(this.continent.value).subscribe(
+          (spots) => {
+            if(spots.length == 0){
+              this.userFeedback = "No spots found in " + this.continent.label
+            }else{
+              this.spots = spots;
+            }
+            this.spots = spots;
+            callback();
+          },
+          (error) =>{
+            this.userFeedback = error;
+            callback();
+          }
+        );
     }
 }

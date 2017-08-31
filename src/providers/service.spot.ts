@@ -132,7 +132,7 @@ export class SpotService {
      * @param continent
      * @param distance 
      */
-    getSpotsNearby(continent: string, distance: number){
+    getSpotsNearby(continent: string, distance: number): Promise<[any]>{
 
         return new Promise((resolve, reject)=>{
 
@@ -145,7 +145,6 @@ export class SpotService {
                 // search spots by distance
                 this.getSpotsByDistance(continent, latitude, longitude, distance).subscribe(
                     (spots) => {
-                        console.log(spots);
                         resolve(spots);
                     },
                     (error) =>{
@@ -154,7 +153,7 @@ export class SpotService {
                 );
 
             }).catch((error) => {
-                reject(new Error(error));
+                reject(error);
             });
         });
     }

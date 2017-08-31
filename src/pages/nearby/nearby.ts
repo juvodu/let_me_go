@@ -11,8 +11,9 @@ import { AppSettings } from '../../providers/app.settings';
 })
 export class NearbyPage {
 
-  error: any;
   spots: any = {};
+  loadingMessage: string = "Searching for spots nearby...";
+  userFeedback: string = null;
 
   //filter
   distance: number = AppSettings.NEARBY_DEFAULT_DISTANCE;
@@ -23,28 +24,49 @@ export class NearbyPage {
               public spotService: SpotService,
               public modalCtrl: ModalController) {
                 
-                this.getSpotsNearby();
+              this.getSpotsNearbyLoadingAlert();
   }
 
-  private getSpotsNearby(){
-
+  /**
+   * Show alert while loading spots nearby
+   */
+  getSpotsNearbyLoadingAlert(){
+    
     let loading = this.loadingCtrl.create({
-      content: 'Searching for spots nearby...'
+      content: this.loadingMessage
     });
-
     loading.present();
-    this.error = null;
+    this.getSpotsNearby(()=>loading.dismiss());
+  }
+
+  /**
+   * Show refresher while loading spots nearby
+   */
+  getSpotsNearbyRefresher(refresher){
+    
+    this.getSpotsNearby(()=>refresher.complete());
+  }
+
+
+  private getSpotsNearby(callback){
+
+   
     this.spots = [];
+    this.userFeedback = null;
 
     this.spotService.getSpotsNearby(this.continent, this.distance).then((spots) => {
 
-      loading.dismiss();
-      this.spots = spots;
-
+      if(spots.length == 0){
+        this.userFeedback = "No spots found nearby..."
+      }else{
+        this.spots = spots;
+      }
+      callback();
+      
     }).catch((error) => {
-
-      loading.dismiss();
-      console.log(error);
+      
+      this.userFeedback = error.message;
+      callback();
     });
   }
 
@@ -55,6 +77,7 @@ export class NearbyPage {
   }
 
   showFilterModal(){
+
     let filterModal = this.modalCtrl.create(
       NearbyfilterPage, 
       { 
@@ -64,7 +87,7 @@ export class NearbyPage {
     filterModal.onDidDismiss(data => {
       this.distance = data.distance;
       this.continent = data.continent;
-      this.getSpotsNearby();
+      this.getSpotsNearbyLoadingAlert();
     });
     filterModal.present();
   }
