@@ -11,7 +11,7 @@ import { AppSettings } from '../../providers/app.settings';
 })
 export class NearbyPage {
 
-  spots: any = {};
+  spots: any = [];
   loadingMessage: string = "Searching for spots nearby...";
   userFeedback: string = null;
 
@@ -51,16 +51,13 @@ export class NearbyPage {
   private getSpotsNearby(callback){
 
    
-    this.spots = [];
     this.userFeedback = null;
-
     this.spotService.getSpotsNearby(this.continent, this.distance).then((spots) => {
 
       if(spots.length == 0){
         this.userFeedback = "No spots found nearby..."
-      }else{
-        this.spots = spots;
       }
+      this.spots = spots;
       callback();
       
     }).catch((error) => {
@@ -87,7 +84,6 @@ export class NearbyPage {
     filterModal.onDidDismiss(data => {
       this.distance = data.distance;
       this.continent = data.continent;
-      this.getSpotsNearbyLoadingAlert();
     });
     filterModal.present();
   }

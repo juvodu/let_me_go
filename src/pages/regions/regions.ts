@@ -10,7 +10,7 @@ import { DetailPage } from '../detail/detail';
 export class RegionsPage {
 
     continent: {label: string, value: string};
-    spots: any = {};
+    spots: any = [];
     loadingMessage: string = "Finding spots in ";
     userFeedback: string = null;
 
@@ -51,15 +51,11 @@ export class RegionsPage {
 
     private getSpotsByRegion(callback){
       
-      this.spots = [];
       this.userFeedback = null;
-
       this.spotService.getSpotsByContinent(this.continent.value).subscribe(
           (spots) => {
             if(spots.length == 0){
               this.userFeedback = "No spots found in " + this.continent.label
-            }else{
-              this.spots = spots;
             }
             this.spots = spots;
             callback();

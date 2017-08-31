@@ -11,13 +11,18 @@
 
 
 <ion-content padding>
-  <p *ngIf="error" style="text-align: center">{{error.message}}</p>
   
+  <!-- pull to refresh -->
+  <ion-refresher (ionRefresh)="getSpotsByFavoritesRefresher($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
+
   <ion-list>
 
-    <!-- empty list message -->
-    <ion-item *ngIf="!spots.length">
-      You did not save any surfspots yet...
+    <!-- empty list or error message -->
+    <ion-item *ngIf="userFeedback">
+        {{userFeedback}}
     </ion-item>
 
     <ion-item ion-item *ngFor="let spot of spots">

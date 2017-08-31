@@ -90,13 +90,16 @@ export class SpotService {
     /**
      * Get all favorite spot for the current user
      */
-    getSpotsByFavorite(){
+    getSpotsByFavorite(): Promise<[any]>{
         
         return new Promise((resolve, reject)=>{
             this.userService.getAllFavorites().then((favoriteSpotIds: string[]) => {
                 
                 // create an observable request for each spotId to request detailed information
                 let favoriteSpots: Array<Observable<any>> = [];
+                if(favoriteSpotIds == null){
+                    resolve([]); // return empty list
+                }
                 favoriteSpotIds.forEach(
                     (favoriteSpotId) => {
                         favoriteSpots.push(this.getSpotById(favoriteSpotId));
@@ -109,7 +112,7 @@ export class SpotService {
 
                         //returns n array we just concat and return as single result list
                         let spots: Array<any> = [];
-                        if(results != undefined){
+                        if(results != null){
                             results.forEach(
                                 (result)=>{
                                     spots.push(result[0]);
@@ -122,7 +125,7 @@ export class SpotService {
                         reject(new Error(err));
                 });
             }).catch((err) => {
-                reject(new Error(err));
+                reject(err);
           });
         });
     }

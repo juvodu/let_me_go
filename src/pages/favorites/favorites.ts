@@ -9,46 +9,58 @@ import { DetailPage } from '../detail/detail';
 })
 export class FavoritesPage {
 
-    error: any;
-    spots: any = {};
+    spots: any = [];
+    loadingMessage: string = "Updating your favorite spots";
+    userFeedback: string = null;
 
     constructor(public navCtrl: NavController,
                 public loadingCtrl: LoadingController,
                 public spotService: SpotService) {
-      this.spots = [];
-
+                  
+                  this.getSpotsByFavoritesLoadingAlert();
     }
 
-    ionViewDidEnter(){
+    /**
+     * Show alert while loading favorite spots
+     */
+    getSpotsByFavoritesLoadingAlert(){
       
-        // refresh favorites each time page is entered
-        this.getFavorites();
+      let loading = this.loadingCtrl.create({
+        content: this.loadingMessage
+      });
+      loading.present();
+      this.getFavorites(()=>loading.dismiss());
     }
 
-    getFavorites(){
-
-      let loading = this.loadingCtrl.create({
-        content: 'Fetching your favorite spots...'
-      });
-
-      loading.present();
-      this.error = null;
-
-      this.spotService.getSpotsByFavorite().then((spots) => {
-
-          loading.dismiss();
-          this.spots = spots;
-
-        }).catch((error) => {
-
-          loading.dismiss();
-          console.log(error);
-      });
+    /**
+     * Show refresher while loading favorite spots
+     */
+    getSpotsByFavoritesRefresher(refresher){
+      
+      this.getFavorites(()=>refresher.complete());
     }
 
     itemTapped(event, spot) {
       this.navCtrl.push(DetailPage, {
         spot: spot
+      });
+    }
+
+    private getFavorites(callback){
+
+      this.userFeedback = null;
+      this.spotService.getSpotsByFavorite().then((spots) => {
+
+          if(spots.length == 0){
+            this.userFeedback = "You have no favorites stored yet"
+          }
+          this.spots = spots;
+          callback();
+
+        }).catch((error) => {
+
+          this.userFeedback = error;
+          callback();
       });
     }
 }
