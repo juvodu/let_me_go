@@ -51,7 +51,7 @@ export class RegionsPage {
 
     itemTapped(event, spot) {
         this.navCtrl.push(DetailPage, {
-          spot: spot
+          spotId: spot.id
         });
     }
 

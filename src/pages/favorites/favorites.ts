@@ -48,7 +48,7 @@ export class FavoritesPage {
 
     itemTapped(event, spot) {
       this.navCtrl.push(DetailPage, {
-        spot: spot
+        spotId: spot.id
       });
     }
 

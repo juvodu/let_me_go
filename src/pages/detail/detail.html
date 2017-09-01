@@ -12,9 +12,14 @@
    <ion-card>
     <div style="height: 200px" id="{{mapId}}"></div>
     <ion-card-content>
-      <ion-card-title>
-        Spot Info
-      </ion-card-title>
+    
+      <ion-item>
+        <ion-thumbnail item-start>
+          <img src="{{spot.thumbnail}}">
+        </ion-thumbnail>
+        <h2>General Information</h2>
+        <p>{{spot.shortDescription}}</p>
+      </ion-item>
       <ion-grid>
         <ion-row>
           <ion-col><div class="property"> Experience </div></ion-col>

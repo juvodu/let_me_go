@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { AppSettings } from '../../providers/app.settings';
 import { UserService } from '../../providers/service.user';
+import { SpotService } from '../../providers/service.spot';
 import 'leaflet';
 
 @Component({
@@ -10,28 +11,49 @@ import 'leaflet';
 })
 export class DetailPage {
 
-  spot: any;
+  spot: any = {};
   isFav: boolean;
   color: string;
   mapId: string;
   map: any;
   favoriteSpotIds: Array<string>;
+  loadingMessage: string = "Loading...";
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              public userService: UserService) {
+              public userService: UserService,
+              public spotService: SpotService,
+              public loadingCtrl: LoadingController) {
 
-        this.spot = navParams.get('spot');
         this.isFav = false;
         this.favoriteSpotIds = [];
         this.mapId = "map-" + Math.floor((1 + Math.random()) * 0x10000);
         this.color = "light_grey";
+        this.getSpot(navParams.get('spotId')); 
   }
 
-  ionViewDidLoad() {
+  getSpot(spotId:string){
 
-    this.showMap();
-    this.isFavorite();
+    let loading = this.loadingCtrl.create({
+      content: this.loadingMessage
+    });
+    loading.present();
+
+    this.spotService.getSpotById(spotId).subscribe(
+      (result)=>{
+        let spot = result[0];
+        if(spot.thumbnail == null){
+          spot.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
+        }
+        this.spot = spot;
+        this.showMap();
+        this.isFavorite();
+        loading.dismiss();
+      },
+      (error)=>{
+        console.log(error);
+        loading.dismiss();
+      });
   }
 
   private isFavorite(){
