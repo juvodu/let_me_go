@@ -3,11 +3,14 @@ page-detail {
         font-size: 1.1em;
     }
 
-    ion-col div {
-        background-color: #f0f5ff;
+    ion-col div{
         border: 1px solid #e6e9ee;
         border-radius: 2px;
         padding: 5px;
+    }
+
+    ion-col .property {
+        background-color: #f0f5ff;
         text-align: center;
         font-weight: bold;
   }
