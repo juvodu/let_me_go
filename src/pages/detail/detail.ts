@@ -67,7 +67,7 @@ export class DetailPage {
     }).addTo(this.map);
 
     let marker = L.marker([position.latitude, position.longitude]).addTo(this.map);
-    marker.bindPopup("<b>" + this.spot.name + "</b><br> " + this.spot.description).openPopup();
+    marker.bindPopup("<b>" + this.spot.name + "</b><br> " + this.spot.walk).openPopup();
   }
 
   toggleFavorite(){

@@ -13,12 +13,74 @@
     <div style="height: 200px" id="{{mapId}}"></div>
     <ion-card-content>
       <ion-card-title>
-        {{spot.name}}
+        Spot Info
       </ion-card-title>
-      <div class="card-subtitle">41 Listings</div>
-      <p>
-        {{spot.description}}
-      </p>
+      <ion-grid>
+        <ion-row>
+          <ion-col><div> Experience </div></ion-col>
+          <ion-col>{{spot.experience}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Wave Quality </div></ion-col>
+          <ion-col>{{spot.waveQuality}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Wave Frequency </div></ion-col>
+          <ion-col>{{spot.frequency}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Wave Power </div></ion-col>
+          <ion-col col-6>{{spot.power}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Wave Direction </div></ion-col>
+          <ion-col>{{spot.direction}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Break Type </div></ion-col>
+          <ion-col>{{spot.type}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Ocean Bottom </div></ion-col>
+          <ion-col>{{spot.bottom}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Normal Day Length </div></ion-col>
+          <ion-col>{{spot.normalDayLength}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Good Day Length </div></ion-col>
+          <ion-col>{{spot.goodDayLength}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Good Swell Direction </div></ion-col>
+          <ion-col>{{spot.goodSwellDirection}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Good Wind Direction </div></ion-col>
+          <ion-col>{{spot.goodWindDirection}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Swell Size </div></ion-col>
+          <ion-col>{{spot.swellSize}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Best Tide Position </div></ion-col>
+          <ion-col>{{spot.bestTidePosition}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Best Tide Movement </div></ion-col>
+          <ion-col>{{spot.bestTideMovement}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Week Crowd </div></ion-col>
+          <ion-col>{{spot.weekCrowd}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><div> Week End Crowd </div></ion-col>
+          <ion-col>{{spot.weekEndCrowd}}</ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-card-content>
     <ion-item>
         <button ion-button icon-left clear item-end large (click)="toggleFavorite()">
