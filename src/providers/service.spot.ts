@@ -115,14 +115,20 @@ export class SpotService {
                         if(results != null){
                             results.forEach(
                                 (result)=>{
-                                    spots.push(result[0]);
+                                    
+                                    // ignore null values
+                                    let spot = result[0];
+                                    if(spot != null){
+                                        spots.push(result[0]);
+                                    }
                                 }
                             )
                         }
+
                         resolve(spots);
                     },
                     (err) => {
-                        reject(new Error(err));
+                        reject(err);
                 });
             }).catch((err) => {
                 reject(err);

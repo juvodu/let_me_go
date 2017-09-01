@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, LoadingController, VirtualScroll } from 'ionic-angular';
 import { SpotService } from '../../providers/service.spot';
+import { AppSettings } from '../../providers/app.settings';
 import { DetailPage } from '../detail/detail';
 
 @Component({
@@ -8,6 +9,8 @@ import { DetailPage } from '../detail/detail';
   templateUrl: 'favorites.html',
 })
 export class FavoritesPage {
+
+    @ViewChild(VirtualScroll) virtualScroll: VirtualScroll;
 
     spots: any = [];
     loadingMessage: string = "Updating your favorite spots";
@@ -37,7 +40,10 @@ export class FavoritesPage {
      */
     getSpotsByFavoritesRefresher(refresher){
       
-      this.getFavorites(()=>refresher.complete());
+      this.getFavorites(()=>{
+        this.virtualScroll.readUpdate(true);
+        refresher.complete();
+      });
     }
 
     itemTapped(event, spot) {
@@ -54,6 +60,12 @@ export class FavoritesPage {
           if(spots.length == 0){
             this.userFeedback = "You have no favorites stored yet"
           }
+          spots.forEach(spot=>{
+            if(spot.thumbnail == null){
+              spot.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
+            }
+          });
+
           this.spots = spots;
           callback();
 

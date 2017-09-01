@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, NavParams, LoadingController, VirtualScroll } from 'ionic-angular';
 import { SpotService } from '../../providers/service.spot';
 import { DetailPage } from '../detail/detail';
+import { AppSettings } from '../../providers/app.settings';
 
 @Component({
   selector: 'page-regions',
   templateUrl: 'regions.html',
 })
 export class RegionsPage {
+
+    @ViewChild(VirtualScroll) virtualScroll: VirtualScroll;
 
     continent: {label: string, value: string};
     spots: any = [];
@@ -40,7 +43,10 @@ export class RegionsPage {
      */
     getSpotsByRegionRefresher(refresher){
       
-      this.getSpotsByRegion(()=>refresher.complete());
+      this.getSpotsByRegion(()=>{
+        this.virtualScroll.readUpdate(true);
+        refresher.complete();
+      });
     }
 
     itemTapped(event, spot) {
@@ -57,6 +63,12 @@ export class RegionsPage {
             if(spots.length == 0){
               this.userFeedback = "No spots found in " + this.continent.label
             }
+            spots.forEach(spot=>{
+              if(spot.thumbnail == null){
+                spot.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
+              }
+            });
+
             this.spots = spots;
             callback();
           },

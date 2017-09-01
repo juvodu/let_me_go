@@ -49,14 +49,11 @@ export class UserService {
           this.isAuthenticated().then(() => {
             resolve();
           }).catch((err) => {
-            console.log('auth session failed');
+            reject(err);
           });
 
         },
-
         'onFailure': (err:any) => {
-
-          console.log('authentication failed');
           reject(err);
         }
       });
@@ -91,7 +88,6 @@ export class UserService {
       let user = this.cognito.makeUser(username);
       user.confirmRegistration(code, true, (err, result) => {
             if (err) {
-              console.log('could not confirm user', err);
               reject(err);
             } else {
               resolve(result);
@@ -105,7 +101,6 @@ export class UserService {
       let user = this.cognito.makeUser(username);
       user.resendConfirmationCode((err, result) => {
         if (err) {
-          console.log('could not resend code..', err);
           reject(err);
         } else {
           resolve();
@@ -120,10 +115,8 @@ export class UserService {
       if (user != null) {
         user.getSession((err, session) => {
           if (err) {
-            console.log('rejected session');
-            reject()
+            reject(err)
           } else {
-            console.log('accepted session');
             var logins = {};
             var loginKey = 'cognito-idp.' +
               aws_cognito_region +
@@ -141,7 +134,7 @@ export class UserService {
           }
         });
       } else {
-        reject()
+        reject("User not found.")
       }
     });
   }
@@ -173,7 +166,6 @@ export class UserService {
     attributes.push(this.cognito.makeAttribute("custom:favoriteSpots", concatedSpotIds));
     this.user.updateAttributes(attributes, function(err, result) {
         if (err) {
-            console.log(err);
             alert(err);
             return;
         }
@@ -191,7 +183,7 @@ export class UserService {
               reject(err)
             } else {
 
-              //look for favoriteSpots attribute
+              // look for favoriteSpots attribute
               let favoriteSpotIds: string[];
               for(let i = 0; i < attributes.length; i++){
                 
@@ -200,6 +192,9 @@ export class UserService {
                   favoriteSpotIds = el.Value.split(",");
                 }
               }
+              // remove null values
+              favoriteSpotIds.filter(spotId => {return spotId != null;});
+
               resolve(favoriteSpotIds)
             }
         });

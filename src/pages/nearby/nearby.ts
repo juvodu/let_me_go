@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, LoadingController, ModalController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, LoadingController, ModalController, VirtualScroll } from 'ionic-angular';
 import { SpotService } from '../../providers/service.spot';
 import { DetailPage } from '../detail/detail';
 import { NearbyfilterPage } from '../nearbyfilter/nearbyfilter';
@@ -10,6 +10,8 @@ import { AppSettings } from '../../providers/app.settings';
   templateUrl: 'nearby.html',
 })
 export class NearbyPage {
+
+  @ViewChild(VirtualScroll) virtualScroll: VirtualScroll;
 
   spots: any = [];
   loadingMessage: string = "Searching for spots nearby...";
@@ -44,7 +46,10 @@ export class NearbyPage {
    */
   getSpotsNearbyRefresher(refresher){
     
-    this.getSpotsNearby(()=>refresher.complete());
+    this.getSpotsNearby(()=>{
+        this.virtualScroll.readUpdate(true);
+        refresher.complete();
+      });
   }
 
 
@@ -57,6 +62,11 @@ export class NearbyPage {
       if(spots.length == 0){
         this.userFeedback = "No spots found nearby..."
       }
+      spots.forEach(spot=>{
+        if(spot.thumbnail == null){
+          spot.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
+        }
+      });
       this.spots = spots;
       callback();
       

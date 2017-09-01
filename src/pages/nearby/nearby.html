@@ -23,30 +23,30 @@
     </ion-refresher-content>
   </ion-refresher>
   
-  <ion-list>
+  <ion-list [virtualScroll]="spots" [approxItemHeight]="'5px'">
         
     <!-- empty list or error message -->
     <ion-item *ngIf="userFeedback">
         {{userFeedback}}
     </ion-item>
 
-    <ion-item ion-item *ngFor="let spot of spots">
+    <ion-item ion-item *virtualItem="let spot">
         <ion-thumbnail item-start>
-          <img src="{{spot.thumbnail}}">
+          <ion-img src="{{spot.thumbnail}}"></ion-img>
         </ion-thumbnail>
         <h2 class="name">
           {{spot.name}}
         </h2>
         <h3 class="description">
-          {{spot.description}}
+          {{spot.shortDescription}}
         </h3>
         <p>
           <ion-grid>
             <ion-row align-items-start>
-              <ion-col col-md-1 col-sm-2 col-xs-4>
+              <ion-col col-md-2 col-sm-3 col-xs-4>
                 <ion-icon name="navigate"></ion-icon> {{spot.distance}} km
               </ion-col>
-              <ion-col col-md-1 col-sm-2 col-xs-4>
+              <ion-col col-md-2 col-sm-3 col-xs-4>
                 <ion-icon name="pulse" item></ion-icon> 4 ft
               </ion-col>
             </ion-row>
