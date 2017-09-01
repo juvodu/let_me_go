@@ -15,14 +15,14 @@ export class NearbyfilterPage {
               public viewCtrl: ViewController) {
                 
                 // m to km - in the UI the user will select km
-                this.distance = navParams.get("distance") / 1000;
+                this.distance = navParams.get("distance");
                 this.continent = navParams.get("continent");
   }
 
   dismiss(){
     this.viewCtrl.dismiss({
       //convert back to m
-      distance: this.distance * 1000,
+      distance: this.distance,
       continent: this.continent
     });
   }
