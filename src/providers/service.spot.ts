@@ -70,6 +70,7 @@ export class SpotService {
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
         params.set('continent', continent);
+        params.set('limit', '100');
         options.params = params;
 
         let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
