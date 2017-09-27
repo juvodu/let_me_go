@@ -38,6 +38,18 @@ export class SpotService {
         return spot;
     }
 
+    getSpotsByIds(ids): Observable<any>{
+        
+        let options:RequestOptions = new RequestOptions({headers: this.headers});
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('ids', ids);
+        options.params = params;
+
+        let spot: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
+             .map((res:Response) => res.json());
+        return spot;
+    }
+
     /**
      * Get all available spots
      */
@@ -60,7 +72,7 @@ export class SpotService {
         params.set('continent', continent);
         options.params = params;
 
-        let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spot", options)
+        let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
              .map((res:Response) => res.json());
         return spots;
     }
@@ -82,54 +94,35 @@ export class SpotService {
         params.set('distance', String(distance));
         options.params = params;
 
-        let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spot", options)
+        let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
              .map((res:Response) => res.json());
         return spots;
     }
 
     /**
-     * Get all favorite spot for the current user
+     * Get all favorite spots for the current user
      */
-    getSpotsByFavorite(): Promise<[any]>{
+    getFavoriteSpots(): Promise<Array<any>>{
         
         return new Promise((resolve, reject)=>{
-            this.userService.getAllFavorites().then((favoriteSpotIds: string[]) => {
+            this.userService.getFavoriteSpotsAttribute().then((favoriteSpotIds: String) => {
                 
                 // create an observable request for each spotId to request detailed information
-                let favoriteSpots: Array<Observable<any>> = [];
+                let favoriteSpots: Array<any> = [];
                 if(favoriteSpotIds == null){
-                    resolve([]); // return empty list
+                    resolve(favoriteSpots); // return empty list
+                    return;
                 }
-                favoriteSpotIds.forEach(
-                    (favoriteSpotId) => {
-                        favoriteSpots.push(this.getSpotById(favoriteSpotId));
-                    }
-                );
 
-                // run observables in parrallel
-                Observable.forkJoin(favoriteSpots).subscribe(
-                    (results) => {
-
-                        //returns n array we just concat and return as single result list
-                        let spots: Array<any> = [];
-                        if(results != null){
-                            results.forEach(
-                                (result)=>{
-                                    
-                                    // ignore null values
-                                    let spot = result[0];
-                                    if(spot != null){
-                                        spots.push(result[0]);
-                                    }
-                                }
-                            )
-                        }
-
-                        resolve(spots);
+                // retrieve list of spots
+                this.getSpotsByIds(favoriteSpotIds).subscribe(
+                    (result)=>{
+                      resolve(result);
                     },
-                    (err) => {
-                        reject(err);
-                });
+                    (error)=>{
+                      reject(error);
+                    });
+
             }).catch((err) => {
                 reject(err);
           });

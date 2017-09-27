@@ -143,7 +143,7 @@ export class UserService {
    * Store favorite spots as an cognito attribute
    * @param favoriteSpotIds 
    */
-  updateFavoriteSpots(favoriteSpotIds: Array<string>){
+  updateFavoriteSpotsAttribute(favoriteSpotIds: Array<string>){
 
     //concate spots to one string
     let concatedSpotIds: string = "";
@@ -152,7 +152,7 @@ export class UserService {
             if(concatedSpotIds.length == 0){
               concatedSpotIds += favoriteSpotId;
             }else{
-              concatedSpotIds += "," + favoriteSpotId;
+              concatedSpotIds += "_" + favoriteSpotId;
             }
         }
     );
@@ -173,31 +173,29 @@ export class UserService {
   }
 
   /**
-   * Retrieve favorite Spots saved as a cognito cutom attribute
+   * Retrieve favorite Spots cognito attribute
    */
-  getAllFavorites(){
+  getFavoriteSpotsAttribute(): Promise<string>{
 
-      return new Promise((resolve, reject) => {
-        this.user.getUserAttributes((err, attributes) => {
-          if (err) {
-              reject(err)
-            } else {
+    return new Promise((resolve, reject) => {
+      this.user.getUserAttributes((err, attributes) => {
+        if (err) {
+            reject(err)
+          } else {
 
-              // look for favoriteSpots attribute
-              let favoriteSpotIds: string[];
-              for(let i = 0; i < attributes.length; i++){
-                
-                let el = attributes[i];
-                if(el.Name == "custom:favoriteSpots"){
-                  favoriteSpotIds = el.Value.split(",");
-                }
+            // look for favoriteSpots attribute
+            let favoriteSpotIds: string;
+            for(let i = 0; i < attributes.length; i++){
+              
+              let el = attributes[i];
+              if(el.Name == "custom:favoriteSpots"){
+                favoriteSpotIds = el.Value;
               }
-              // remove null values
-              favoriteSpotIds.filter(spotId => {return spotId != null;});
-
-              resolve(favoriteSpotIds)
             }
-        });
+
+            resolve(favoriteSpotIds)
+          }
       });
+    });
   }
 }

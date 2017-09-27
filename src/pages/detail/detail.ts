@@ -41,11 +41,11 @@ export class DetailPage {
 
     this.spotService.getSpotById(spotId).subscribe(
       (result)=>{
-        let spot = result[0];
-        if(spot.thumbnail == null){
-          spot.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
+        result;
+        if(result.thumbnail == null){
+          result.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
         }
-        this.spot = spot;
+        this.spot = result;
         this.showMap();
         this.isFavorite();
         loading.dismiss();
@@ -58,10 +58,10 @@ export class DetailPage {
 
   private isFavorite(){
 
-    this.userService.getAllFavorites().then((favoriteSpotIds: Array<string>) => {
+    this.userService.getFavoriteSpotsAttribute().then((favoriteSpotIds: string) => {
 
-        if(favoriteSpotIds != null){
-          this.favoriteSpotIds = favoriteSpotIds;
+        if(favoriteSpotIds != null && favoriteSpotIds.length > 0){
+          this.favoriteSpotIds = favoriteSpotIds.split("_");
 
           let spotId = this.spot.id;
             if(favoriteSpotIds.indexOf(spotId) > -1){
@@ -104,14 +104,14 @@ export class DetailPage {
       if (index !== -1) {
           this.favoriteSpotIds.splice(index, 1);
       }
-      this.userService.updateFavoriteSpots(this.favoriteSpotIds);
+      this.userService.updateFavoriteSpotsAttribute(this.favoriteSpotIds);
     }else{
 
       //add
       this.isFav = true;
       this.color = "danger";
       this.favoriteSpotIds.push(spotId);
-      this.userService.updateFavoriteSpots(this.favoriteSpotIds);
+      this.userService.updateFavoriteSpotsAttribute(this.favoriteSpotIds);
     }
   }
 }

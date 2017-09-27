@@ -55,7 +55,7 @@ export class FavoritesPage {
     private getFavorites(callback){
 
       this.userFeedback = null;
-      this.spotService.getSpotsByFavorite().then((spots) => {
+      this.spotService.getFavoriteSpots().then((spots) => {
 
           if(spots.length == 0){
             this.userFeedback = "You have no favorites stored yet"
