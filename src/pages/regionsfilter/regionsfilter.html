@@ -13,14 +13,27 @@
 
 <ion-content>
   <ion-list>
+
+    <!-- continent -->
     <ion-item>
           <ion-label>{{continent.label}}</ion-label>
     </ion-item>
+
+    <!-- country -->
     <ion-item>
       <ion-label>Country</ion-label>
       <ion-select [(ngModel)]="country" interface="popover">
         <ion-option *ngFor="let c of countries" value="{{c.code}}">{{c.name}}</ion-option>
       </ion-select>
     </ion-item>
+
+    <!-- limit results -->
+    <ion-item>
+        <ion-label>Result limit</ion-label>
+        <ion-range [(ngModel)]="limit" min="1" max="1000" pin="true">
+          <ion-icon range-left small name="filter"></ion-icon>
+          <ion-icon range-right name="filter"></ion-icon>
+        </ion-range>
+      </ion-item>
   </ion-list>
 </ion-content>

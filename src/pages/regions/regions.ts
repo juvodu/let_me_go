@@ -13,11 +13,14 @@ export class RegionsPage {
 
     @ViewChild(VirtualScroll) virtualScroll: VirtualScroll;
 
-    continent: {label: string, value: string};
-    country: string;
     spots: any = [];
     loadingMessage: string = "Finding spots in ";
     userFeedback: string = null;
+
+    // filters
+    continent: {label: string, value: string};
+    country: string;
+    limit: number;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -27,6 +30,9 @@ export class RegionsPage {
 
       this.continent = {label: navParams.get('label'), value: navParams.get('value')};
       this.getSpotsByRegionLoadingAlert();
+
+      // set default limit
+      this.limit = 100;
     }
 
     /**
@@ -61,7 +67,7 @@ export class RegionsPage {
     private getSpotsByRegion(callback){
       
       this.userFeedback = null;
-      this.spotService.getSpotsByRegion(this.continent.value, this.country).subscribe(
+      this.spotService.getSpotsByRegion(this.continent.value, this.country, this.limit).subscribe(
           (spots) => {
             if(spots.length == 0){
               this.userFeedback = "No spots found in " + this.continent.label
@@ -88,11 +94,13 @@ export class RegionsPage {
             RegionsfilterPage, 
             { 
               continent: this.continent,
-              country: this.country
+              country: this.country,
+              limit: this.limit
           });
           filterModal.onDidDismiss(data => {
             this.continent = data.continent;
             this.country = data.country;
+            this.limit = data.limit;
           });
           filterModal.present();
         }

@@ -67,17 +67,23 @@ export class SpotService {
      *             the required continent iso code to filter by
      * @param country
      *             the optional country iso code to filter by
+     * @param limit
+     *             the optional limit of returned results
      */
-    getSpotsByRegion(continent: string, country: string): Observable<any>{
+    getSpotsByRegion(continent: string, country: string, limit: number): Observable<any>{
 
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
         params.set('continent', continent);
-        params.set('limit', '100');
 
         // set the optional country parameter
         if(country != null){
             params.set('country', country);
+        }
+
+        // set the optional limit parameter
+        if(limit != null){
+            params.set('limit', limit.toString());
         }
 
         options.params = params;

@@ -9,8 +9,11 @@ import { CountryService } from '../../providers/service.country';
 export class RegionsfilterPage {
 
   countries: Array<any>;
+
+  // filters
   continent: string;  
   country: any;
+  limit: number;
 
   constructor(public navParams: NavParams,
               public viewCtrl: ViewController,
@@ -18,7 +21,7 @@ export class RegionsfilterPage {
 
                 this.continent = navParams.get("continent");
                 this.country = navParams.get("country");
-                console.log(this.country);
+                this.limit = navParams.get("limit");
                 this.getCountries();            
   }
 
@@ -36,7 +39,8 @@ export class RegionsfilterPage {
   dismiss(){
     this.viewCtrl.dismiss({
       continent: this.continent,
-      country: this.country
+      country: this.country,
+      limit: this.limit
     });
   }
 }
