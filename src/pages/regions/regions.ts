@@ -20,6 +20,7 @@ export class RegionsPage {
     // filters
     continent: {label: string, value: string};
     country: string;
+    sort: string;    
     limit: number;
 
     constructor(public navCtrl: NavController,
@@ -29,10 +30,12 @@ export class RegionsPage {
                 public spotService: SpotService) {
 
       this.continent = {label: navParams.get('label'), value: navParams.get('value')};
-      this.getSpotsByRegionLoadingAlert();
-
-      // set default limit
+     
+      // set default filters and sorting
+      this.sort = "ASC";      
       this.limit = 100;
+      
+      this.getSpotsByRegionLoadingAlert();
     }
 
     /**
@@ -78,7 +81,12 @@ export class RegionsPage {
               }
             });
 
-            this.spots = spots;
+            // sort
+            if(this.sort == "ASC"){
+              this.spots = spots.sort((a,b)=> {return this.asc(a,b)});
+            }else{
+              this.spots = spots.sort((a,b)=> {return this.desc(a,b)});
+            }
             callback();
           },
           (error) =>{
@@ -88,6 +96,18 @@ export class RegionsPage {
         );
     }
 
+    private asc(a,b){
+      if(a.name < b.name) return -1;
+      if(a.name > b.name) return 1;
+      return 0;
+    }
+
+    private desc(a,b){
+      if(a.name < b.name) return 1;
+      if(a.name > b.name) return -1;
+      return 0;
+    }
+
     showFilterModal(){
       
           let filterModal = this.modalCtrl.create(
@@ -95,11 +115,13 @@ export class RegionsPage {
             { 
               continent: this.continent,
               country: this.country,
+              sort: this.sort,
               limit: this.limit
           });
           filterModal.onDidDismiss(data => {
             this.continent = data.continent;
             this.country = data.country;
+            this.sort = data.sort;
             this.limit = data.limit;
           });
           filterModal.present();

@@ -27,6 +27,15 @@
       </ion-select>
     </ion-item>
 
+    <!-- sort by name -->
+    <ion-item>
+      <ion-label>Sort alphabetical by name</ion-label>
+      <ion-select [(ngModel)]="sort" interface="popover">
+        <ion-option value="ASC">Ascending</ion-option>
+        <ion-option value="DESC">Descending</ion-option>
+      </ion-select>
+    </ion-item>
+
     <!-- limit results -->
     <ion-item>
         <ion-label>Result limit</ion-label>

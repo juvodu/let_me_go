@@ -14,6 +14,7 @@ export class RegionsfilterPage {
   continent: string;  
   country: any;
   limit: number;
+  sort: string;
 
   constructor(public navParams: NavParams,
               public viewCtrl: ViewController,
@@ -22,6 +23,7 @@ export class RegionsfilterPage {
                 this.continent = navParams.get("continent");
                 this.country = navParams.get("country");
                 this.limit = navParams.get("limit");
+                this.sort = navParams.get("sort");
                 this.getCountries();            
   }
 
@@ -40,7 +42,8 @@ export class RegionsfilterPage {
     this.viewCtrl.dismiss({
       continent: this.continent,
       country: this.country,
-      limit: this.limit
+      limit: this.limit,
+      sort: this.sort,
     });
   }
 }
