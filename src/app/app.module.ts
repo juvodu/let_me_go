@@ -15,6 +15,7 @@ import { NearbyfilterPage } from '../pages/nearbyfilter/nearbyfilter';
 import { ContinentsPage } from '../pages/continents/continents';
 import { FavoritesPage } from '../pages/favorites/favorites'; 
 import { RegionsPage } from '../pages/regions/regions';
+import { RegionsfilterPage } from '../pages/regionsfilter/regionsfilter';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -22,6 +23,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 
 import { UserService } from '../providers/service.user';
 import { SpotService } from '../providers/service.spot';
+import { CountryService } from '../providers/service.country';
 import { Cognito } from '../providers/aws.cognito';
 
 @NgModule({
@@ -37,7 +39,8 @@ import { Cognito } from '../providers/aws.cognito';
     NearbyfilterPage,
     FavoritesPage,
     ContinentsPage, 
-    RegionsPage
+    RegionsPage,
+    RegionsfilterPage
   ],
   imports: [
     BrowserModule,
@@ -57,7 +60,8 @@ import { Cognito } from '../providers/aws.cognito';
     NearbyfilterPage,
     FavoritesPage,
     ContinentsPage,
-    RegionsPage
+    RegionsPage,
+    RegionsfilterPage
   ],
   providers: [
     StatusBar,
@@ -65,6 +69,7 @@ import { Cognito } from '../providers/aws.cognito';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserService,
     SpotService,
+    CountryService,
     Cognito,
     Geolocation
   ]

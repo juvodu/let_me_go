@@ -4,13 +4,12 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { UserService } from './service.user';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
-import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 
 /**
  * Service for retrieving surfspots
- * @author Juvodu
  * 
+ * @author Juvodu
  */
 @Injectable()
 export class SpotService {
@@ -62,15 +61,25 @@ export class SpotService {
     };
 
     /**
-     * Get all spots for a specific continent
-     * @param continent 
+     * Get all spots for a specific region
+     * 
+     * @param continent
+     *             the required continent iso code to filter by
+     * @param country
+     *             the optional country iso code to filter by
      */
-    getSpotsByContinent(continent: string): Observable<any>{
+    getSpotsByRegion(continent: string, country: string): Observable<any>{
 
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
         params.set('continent', continent);
         params.set('limit', '100');
+
+        // set the optional country parameter
+        if(country != null){
+            params.set('country', country);
+        }
+
         options.params = params;
 
         let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)

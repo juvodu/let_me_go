@@ -1,0 +1,26 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Regions Filter</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+          <ion-label>{{continent.label}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Country</ion-label>
+      <ion-select [(ngModel)]="country" interface="popover">
+        <ion-option *ngFor="let c of countries" value="{{c.code}}">{{c.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>
