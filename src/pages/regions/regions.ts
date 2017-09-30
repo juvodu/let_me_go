@@ -22,6 +22,7 @@ export class RegionsPage {
     country: string;
     sort: string;    
     limit: number;
+    filter: string;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -34,6 +35,7 @@ export class RegionsPage {
       // set default filters and sorting
       this.sort = "ASC";      
       this.limit = 100;
+      this.filter = this.getFilterDesc();
       
       this.getSpotsByRegionLoadingAlert();
     }
@@ -108,6 +110,15 @@ export class RegionsPage {
       return 0;
     }
 
+    private getFilterDesc(){
+      
+      let filterDesc = this.continent.value + ", ";
+      if(this.country != null){
+        filterDesc += this.country + ", ";
+      }
+      return  filterDesc + this.sort + ", " + this.limit;
+    }
+
     showFilterModal(){
       
           let filterModal = this.modalCtrl.create(
@@ -123,6 +134,12 @@ export class RegionsPage {
             this.country = data.country;
             this.sort = data.sort;
             this.limit = data.limit;
+
+            // reload spots if filter changed
+            if(this.getFilterDesc() != this.filter){
+              this.filter = this.getFilterDesc();
+              this.getSpotsByRegionLoadingAlert();
+            }
           });
           filterModal.present();
         }

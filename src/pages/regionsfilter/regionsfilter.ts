@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavParams, ViewController } from 'ionic-angular';
 import { CountryService } from '../../providers/service.country';
 
 @Component({
@@ -11,7 +11,7 @@ export class RegionsfilterPage {
   countries: Array<any>;
 
   // filters
-  continent: string;  
+  continent: { label: string, value: string };  
   country: any;
   limit: number;
   sort: string;
@@ -28,7 +28,7 @@ export class RegionsfilterPage {
   }
 
   private getCountries(){
-    this.countryService.getCountries().subscribe(
+    this.countryService.getCountries(this.continent.value).subscribe(
       (countries) => {
         this.countries = countries;
       },

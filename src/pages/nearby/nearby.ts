@@ -20,12 +20,14 @@ export class NearbyPage {
   //filter
   distance: number = AppSettings.NEARBY_DEFAULT_DISTANCE;
   continent: string = "EU";
+  filter: string;
 
   constructor(public navCtrl: NavController,
               public loadingCtrl: LoadingController,
               public spotService: SpotService,
               public modalCtrl: ModalController) {
-                
+              
+              this.filter = this.getFilterDesc();
               this.getSpotsNearbyLoadingAlert();
   }
 
@@ -52,10 +54,12 @@ export class NearbyPage {
       });
   }
 
+  private getFilterDesc(){
+    return this.continent + ", " + this.distance + " km";
+  }
 
   private getSpotsNearby(callback){
 
-   
     this.userFeedback = null;
     this.spotService.getSpotsNearby(this.continent, this.distance).then((spots) => {
 
@@ -94,6 +98,13 @@ export class NearbyPage {
     filterModal.onDidDismiss(data => {
       this.distance = data.distance;
       this.continent = data.continent;
+
+      // reload spots if filter changed
+      if(this.getFilterDesc() != this.filter){
+        this.filter = this.getFilterDesc();
+        this.getSpotsNearbyLoadingAlert();
+      }
+
     });
     filterModal.present();
   }

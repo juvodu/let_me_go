@@ -21,6 +21,11 @@
     </ion-refresher-content>
   </ion-refresher>
 
+   <!-- filter -->
+  <div class="list-header">
+      {{filter}}
+  </div>
+
   <ion-list [virtualScroll]="spots" [approxItemHeight]="'5px'">
 
     <!-- empty list or error message -->
