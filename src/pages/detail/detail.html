@@ -10,82 +10,117 @@
 <ion-content padding>
 
    <ion-card>
+
+    <!-- map -->
     <div style="height: 200px" id="{{mapId}}"></div>
-    <ion-card-content>
     
-      <ion-item>
-        <ion-thumbnail item-start>
-          <img src="{{spot.thumbnail}}">
-        </ion-thumbnail>
-        <h2>General Information</h2>
-        <p>{{spot.shortDescription}}</p>
-      </ion-item>
-      <ion-grid>
-        <ion-row>
-          <ion-col><div class="property"> Experience </div></ion-col>
-          <ion-col><div> {{spot.experience}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Wave Quality </div></ion-col>
-          <ion-col><div> {{spot.waveQuality}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Wave Frequency </div></ion-col>
-          <ion-col><div> {{spot.frequency}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Wave Power </div></ion-col>
-          <ion-col><div> {{spot.power}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Wave Direction </div></ion-col>
-          <ion-col><div> {{spot.direction}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Break Type </div></ion-col>
-          <ion-col><div> {{spot.type}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Ocean Bottom </div></ion-col>
-          <ion-col><div> {{spot.bottom}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Normal Day Length </div></ion-col>
-          <ion-col><div> {{spot.normalDayLength}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Good Day Length </div></ion-col>
-          <ion-col><div> {{spot.goodDayLength}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Good Swell Direction </div></ion-col>
-          <ion-col><div> {{spot.goodSwellDirection}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Good Wind Direction </div></ion-col>
-          <ion-col><div> {{spot.goodWindDirection}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Swell Size </div></ion-col>
-          <ion-col><div> {{spot.swellSize}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Best Tide Position </div></ion-col>
-          <ion-col><div> {{spot.bestTidePosition}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Best Tide Movement </div></ion-col>
-          <ion-col><div> {{spot.bestTideMovement}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Week Crowd </div></ion-col>
-          <ion-col><div> {{spot.weekCrowd}} </div></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><div class="property"> Week End Crowd </div></ion-col>
-          <ion-col><div> {{spot.weekEndCrowd}} </div></ion-col>
-        </ion-row>
-      </ion-grid>
+    <!-- slides -->
+    <ion-card-content>
+      <ion-slides pager>
+        
+        <!-- surf condition slide -->
+        <ion-slide class="condition-slide" *ngIf="hourlyCondition">
+          <ion-item>             
+            <h2>{{hourlyCondition.swellHeight_m}} m @ {{hourlyCondition.swellPeriod_secs}} s</h2>
+            <ion-note> Swell </ion-note> 
+          </ion-item>
+
+          <ion-item>              
+            <h2>{{hourlyCondition.windspeedKmph}} Kmph from {{hourlyCondition.winddir16Point}}</h2>
+            <ion-note> Wind </ion-note>
+          </ion-item>
+
+          <ion-item>
+            <h2>{{hourlyCondition.tempC}} C air/ {{hourlyCondition.waterTemp_C}} C water</h2>
+            <ion-note> Temperature </ion-note>                          
+          </ion-item>
+
+          <ion-item *ngFor="let tide of tides">
+              <h2>{{tide.tide_type}} {{tide.tideHeight_mt}} m - {{tide.tideTime}}</h2>
+              <ion-note> Tide </ion-note>                          
+          </ion-item>
+
+        </ion-slide>
+
+        <!-- spot regional info slide -->
+        <ion-slide class="regional-slide">
+          
+          <ion-item *ngIf="spot.thumbnail">
+            <ion-thumbnail item-start>
+              <img src="{{spot.thumbnail}}">
+            </ion-thumbnail>
+            <h2>General Information</h2>
+            <p>{{spot.shortDescription}}</p>
+          </ion-item>
+              
+          <ion-grid>
+            <ion-row *ngIf="spot.experience">
+              <ion-col><div class="property"> Experience </div></ion-col>
+              <ion-col><div> {{spot.experience}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.waveQuality">
+              <ion-col><div class="property"> Wave Quality </div></ion-col>
+              <ion-col><div> {{spot.waveQuality}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.frequency">
+              <ion-col><div class="property"> Wave Frequency </div></ion-col>
+              <ion-col><div> {{spot.frequency}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.power">
+              <ion-col><div class="property"> Wave Power </div></ion-col>
+              <ion-col><div> {{spot.power}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.direction">
+              <ion-col><div class="property"> Wave Direction </div></ion-col>
+              <ion-col><div> {{spot.direction}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.type">
+              <ion-col><div class="property"> Break Type </div></ion-col>
+              <ion-col><div> {{spot.type}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.bottom">
+              <ion-col><div class="property"> Ocean Bottom </div></ion-col>
+              <ion-col><div> {{spot.bottom}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.normalDayLength">
+              <ion-col><div class="property"> Normal Day Length </div></ion-col>
+              <ion-col><div> {{spot.normalDayLength}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.goodDayLength">
+              <ion-col><div class="property"> Good Day Length </div></ion-col>
+              <ion-col><div> {{spot.goodDayLength}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.goodSwellDirection">
+              <ion-col><div class="property"> Good Swell Direction </div></ion-col>
+              <ion-col><div> {{spot.goodSwellDirection}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.goodWindDirection">
+              <ion-col><div class="property"> Good Wind Direction </div></ion-col>
+              <ion-col><div> {{spot.goodWindDirection}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.swellSize">
+              <ion-col><div class="property"> Swell Size </div></ion-col>
+              <ion-col><div> {{spot.swellSize}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.bestTidePosition">
+              <ion-col><div class="property"> Best Tide Position </div></ion-col>
+              <ion-col><div> {{spot.bestTidePosition}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.bestTideMovement">
+              <ion-col><div class="property"> Best Tide Movement </div></ion-col>
+              <ion-col><div> {{spot.bestTideMovement}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.weekCrowd">
+              <ion-col><div class="property"> Week Crowd </div></ion-col>
+              <ion-col><div> {{spot.weekCrowd}} </div></ion-col>
+            </ion-row>
+            <ion-row *ngIf="spot.weekEndCrowd">
+              <ion-col><div class="property"> Week End Crowd </div></ion-col>
+              <ion-col><div> {{spot.weekEndCrowd}} </div></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-slide>
+      </ion-slides>
     </ion-card-content>
     <ion-item>
         <button ion-button icon-left clear item-end large (click)="toggleFavorite()">

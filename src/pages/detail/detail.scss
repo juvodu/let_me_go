@@ -1,17 +1,31 @@
 page-detail {
-    .card-subtitle{
-        font-size: 1.1em;
-    }
+    
+    .condition-slide{
 
-    ion-col div{
-        border: 1px solid #e6e9ee;
-        border-radius: 2px;
-        padding: 5px;
     }
+    
+    .regional-slide{
 
-    ion-col .property {
-        background-color: #f0f5ff;
-        text-align: center;
-        font-weight: bold;
-  }
+        .card-subtitle{
+            font-size: 1.1em;
+        }
+
+        ion-col div{
+            border: 1px solid #e6e9ee;
+            border-radius: 2px;
+            padding: 5px;
+            font-size: 0.7em;
+        }
+
+        ion-col .property {
+            background-color: #f0f5ff;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        ion-grid{
+
+            padding-bottom: 30px;
+        }
+    }
 }
