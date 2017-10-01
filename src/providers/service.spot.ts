@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angular/http';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Diagnostic } from '@ionic-native/diagnostic';
 import { UserService } from './service.user';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
@@ -16,9 +18,11 @@ export class SpotService {
 
     headers: Headers;
 
-    constructor(public http: Http,
-                public userService:UserService,
-                public geolocation: Geolocation) {
+    constructor(private http: Http,
+                private userService: UserService,
+                private geolocation: Geolocation,
+                private diagnostic: Diagnostic,
+                private platform: Platform) {
 
         this.headers = new Headers();
         this.headers.append('x-api-key', AppSettings.SPOT_API_KEY);
@@ -147,28 +151,42 @@ export class SpotService {
 
     /**
      * Get spots neary, uses the geo native plugin to retrieve current user position
+     * 
      * @param continent
      * @param distance 
      */
     getSpotsNearby(continent: string, distance: number): Promise<[any]>{
 
         return new Promise((resolve, reject)=>{
+            
+            // check that gps is available on mobile apps
+            if (! this.platform.is('core') && !this.platform.is('mobileweb')) {
+                this.diagnostic.isLocationEnabled().then((gpsAvailable) =>{
+                    
+                    if(gpsAvailable == false){
+                        reject(new Error("GPS not enabled"));
+                        return;
+                    }
+                }).catch((err) => {
+                    reject(err);
+                });
+            }
 
             // retrieve users geolocation
             this.geolocation.getCurrentPosition().then((resp) => {
+            
+            let latitude = resp.coords.latitude;
+            let longitude = resp.coords.longitude;
 
-                let latitude = resp.coords.latitude;
-                let longitude = resp.coords.longitude;
-
-                // search spots by distance
-                this.getSpotsByDistance(continent, latitude, longitude, distance).subscribe(
-                    (spots) => {
-                        resolve(spots);
-                    },
-                    (error) =>{
-                        reject(new Error(error));
-                    }
-                );
+            // search spots by distance
+            this.getSpotsByDistance(continent, latitude, longitude, distance).subscribe(
+                (spots) => {
+                    resolve(spots);
+                },
+                (error) =>{
+                    reject(new Error(error));
+                }
+            );
 
             }).catch((error) => {
                 reject(error);

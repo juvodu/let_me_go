@@ -22,10 +22,10 @@ export class NearbyPage {
   continent: string = "EU";
   filter: string;
 
-  constructor(public navCtrl: NavController,
-              public loadingCtrl: LoadingController,
-              public spotService: SpotService,
-              public modalCtrl: ModalController) {
+  constructor(private navCtrl: NavController,
+              private loadingCtrl: LoadingController,
+              private spotService: SpotService,
+              private modalCtrl: ModalController) {
               
               this.filter = this.getFilterDesc();
               this.getSpotsNearbyLoadingAlert();
@@ -62,7 +62,7 @@ export class NearbyPage {
 
     this.userFeedback = null;
     this.spotService.getSpotsNearby(this.continent, this.distance).then((spots) => {
-
+      
       if(spots.length == 0){
         this.userFeedback = "No spots found nearby..."
       }
