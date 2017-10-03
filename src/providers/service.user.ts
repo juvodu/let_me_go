@@ -82,7 +82,6 @@ export class UserService {
    */
   public delete(): Promise<any> {
 
-    let userName = this.getCurrentUser().getUsername();
     return new Promise((resolve, reject) => {
 
       this.getCurrentUser().deleteUser(function(err, result) {
