@@ -65,7 +65,6 @@ export class DetailPage {
 
     let forecastToday = this.spot.forecast.data.weather[0];
     this.tides = forecastToday.tides[0].tide_data;
-    console.log(this.tides);
 
     // array of conditions - each covers a 6 hour time window
     const currentHour = new Date().getHours();

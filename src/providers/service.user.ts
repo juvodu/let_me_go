@@ -11,23 +11,32 @@ declare const aws_user_pools_id;
 @Injectable()
 export class UserService {
 
-  private user: any;
+  //private user: any;
   public loggedIn: boolean = false;
 
   constructor(public cognito: Cognito, public config: Config) {
-    this.user = null;
   }
 
-  getUser() {
-    return this.user;
-  }
+  private getCurrentUser(): any{
 
-  getUsername() {
-    return this.getUser().getUsername();
+    var user = this.cognito.getCurrentUser();
+    if (user != null) {
+      
+      user.getSession((err, session) => {
+        if (err) {
+            alert(err);
+            return;
+        }
+        console.log('session validity: ' + session.isValid());
+      });
+    }
+    return user;
   }
 
   login(username, password) {
+
     return new Promise((resolve, reject) => {
+      
       let user = this.cognito.makeUser(username);
       let authDetails = this.cognito.makeAuthDetails(username, password);
 
@@ -61,8 +70,7 @@ export class UserService {
   }
 
   logout() {
-    this.user = null;
-    this.cognito.getUserPool().getCurrentUser().signOut();
+    this.getCurrentUser().signOut();
   }
 
   register(username, password, attr) {
@@ -84,6 +92,7 @@ export class UserService {
   }
 
   confirmRegistration(username, code) {
+
     return new Promise((resolve, reject) => {
       let user = this.cognito.makeUser(username);
       user.confirmRegistration(code, true, (err, result) => {
@@ -97,6 +106,7 @@ export class UserService {
   }
 
   resendRegistrationCode(username) {
+
     return new Promise((resolve, reject) => {
       let user = this.cognito.makeUser(username);
       user.resendConfirmationCode((err, result) => {
@@ -129,7 +139,6 @@ export class UserService {
               'Logins': logins
             });
 
-            this.user = user;
             resolve()
           }
         });
@@ -164,7 +173,7 @@ export class UserService {
 
     var attributes = [];
     attributes.push(this.cognito.makeAttribute("custom:favoriteSpots", concatedSpotIds));
-    this.user.updateAttributes(attributes, function(err, result) {
+    this.getCurrentUser().updateAttributes(attributes, (err, result) => {
         if (err) {
             alert(err);
             return;
@@ -178,8 +187,10 @@ export class UserService {
   getFavoriteSpotsAttribute(): Promise<string>{
 
     return new Promise((resolve, reject) => {
-      this.user.getUserAttributes((err, attributes) => {
+
+      this.getCurrentUser().getUserAttributes((err, attributes) => {
         if (err) {
+            alert(err);
             reject(err)
           } else {
 
