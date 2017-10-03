@@ -9,11 +9,18 @@ import { LoginPage } from '../login/login';
 })
 export class HomePage {
 
+  private logoutFn = () => { this.navCtrl.setRoot(LoginPage) };
+  private errorFn = (err) => { console.log(err) };
+
   constructor(public navCtrl: NavController, public userService: UserService) {
   }
 
   logout(){
     this.userService.logout();
     this.navCtrl.setRoot(LoginPage);
+  }
+
+  delete(){
+    this.userService.delete().then(this.logoutFn).catch(this.errorFn);    
   }
 }

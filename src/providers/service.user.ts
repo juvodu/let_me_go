@@ -20,16 +20,17 @@ export class UserService {
   private getCurrentUser(): any{
 
     var user = this.cognito.getCurrentUser();
-    if (user != null) {
-      
-      user.getSession((err, session) => {
-        if (err) {
-            alert(err);
-            return;
-        }
-        console.log('session validity: ' + session.isValid());
-      });
+    if (user == null) {
+      alert("Please login!");
     }
+      
+    user.getSession((err, session) => {
+      if (err) {
+          alert(err);
+          return;
+      }
+    });
+    
     return user;
   }
 
@@ -69,8 +70,28 @@ export class UserService {
     });
   }
 
-  logout() {
+  /**
+   * Log current user out
+   */
+  public logout() {
     this.getCurrentUser().signOut();
+  }
+
+  /**
+   * Delete the current user
+   */
+  public delete(): Promise<any> {
+
+    let userName = this.getCurrentUser().getUsername();
+    return new Promise((resolve, reject) => {
+
+      this.getCurrentUser().deleteUser(function(err, result) {
+        if (err) {
+            reject(err);
+        }
+        resolve();
+      });
+    });
   }
 
   register(username, password, attr) {
