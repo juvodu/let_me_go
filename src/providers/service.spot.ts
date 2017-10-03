@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angular/http';
-import { Geolocation } from '@ionic-native/geolocation';
+import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { UserService } from './service.user';
 import { Observable } from 'rxjs/Observable';
@@ -16,7 +16,9 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class SpotService {
 
-    headers: Headers;
+    // geolocation options - 10 min age - 5s timoute - no high accuracy
+    private geoLocationOptions: GeolocationOptions = { maximumAge: 600000, timeout: 10000, enableHighAccuracy: false };
+    private headers: Headers;
 
     constructor(private http: Http,
                 private userService: UserService,
@@ -27,7 +29,6 @@ export class SpotService {
         this.headers = new Headers();
         this.headers.append('x-api-key', AppSettings.SPOT_API_KEY);
     }
-
 
     getSpotById(id): Observable<any>{
         
@@ -169,11 +170,12 @@ export class SpotService {
                     }
                 }).catch((err) => {
                     reject(err);
+                    return;
                 });
             }
 
             // retrieve users geolocation
-            this.geolocation.getCurrentPosition().then((resp) => {
+            this.geolocation.getCurrentPosition(this.geoLocationOptions).then((resp) => {
             
             let latitude = resp.coords.latitude;
             let longitude = resp.coords.longitude;
