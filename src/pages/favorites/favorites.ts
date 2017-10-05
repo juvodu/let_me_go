@@ -61,12 +61,12 @@ export class FavoritesPage {
             this.userFeedback = "You have no favorites stored yet"
           }
           spots.forEach(spot=>{
-            if(spot.thumbnail == null){
+            if(spot != null && spot.thumbnail == null){
               spot.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
             }
           });
 
-          this.spots = spots;
+          this.spots = spots.filter(spot => spot !== null);
           callback();
 
         }).catch((error) => {
