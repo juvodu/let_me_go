@@ -26,12 +26,11 @@
       {{filter}}
   </div>
 
-  <ion-list [virtualScroll]="spots" [approxItemHeight]="'5px'">
+  <ion-note *ngIf="userFeedback">
+      {{userFeedback}}
+  </ion-note>
 
-    <!-- empty list or error message -->
-    <ion-item *ngIf="userFeedback">
-        {{userFeedback}}
-    </ion-item>
+  <ion-list [virtualScroll]="spots" [approxItemHeight]="'5px'">
 
     <ion-item ion-item *virtualItem="let spot">
         

@@ -18,6 +18,7 @@ export class DetailPage {
   map: any;
   favoriteSpotIds: Array<string>;
   loadingMessage: string = "Loading...";
+  userFeedback: string;
 
   // forecast info
   hourlyCondition: any;
@@ -45,7 +46,7 @@ export class DetailPage {
 
     this.spotService.getSpotById(spotId).subscribe(
       (result)=>{
-        
+
         if(result.thumbnail == null){
           result.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
         }
@@ -57,6 +58,7 @@ export class DetailPage {
       },
       (error)=>{
         console.log(error);
+        this.userFeedback = error;
         loading.dismiss();
       });
   }

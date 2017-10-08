@@ -8,6 +8,11 @@
 
 
 <ion-content padding>
+  
+  <!-- empty list or error message -->
+  <ion-note *ngIf="userFeedback">
+      {{userFeedback}}
+  </ion-note>
 
    <ion-card>
 
