@@ -26,26 +26,32 @@
     </ion-item>
 
     <ion-item ion-item *virtualItem="let spot">
-        <ion-thumbnail item-start>
-          <ion-img src="{{spot.thumbnail}}"></ion-img>
-        </ion-thumbnail>
-        <h2 class="name">
-          {{spot.name}}
-        </h2>
-        <p>
-          <ion-grid>
-            <ion-row align-items-start>
-              <ion-col col-md-2 col-sm-3 col-xs-4>
-                <ion-icon name="map"></ion-icon> {{spot.country.name}}, {{spot.continent}}
-              </ion-col>
-              <ion-col col-md-2 col-sm-3 col-xs-4>
-                <ion-icon name="pulse" item></ion-icon> 4 ft
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </p>
-        <button ion-button clear item-end (click)="itemTapped($event, spot)">View</button>
-      </ion-item>
+        
+      <ion-thumbnail item-start>
+        <ion-img src="{{spot.thumbnail}}"></ion-img>
+      </ion-thumbnail>
+
+      <ion-grid>
+        <ion-row>
+          <h2 class="item-name">
+            {{spot.name}}
+          </h2>
+        </ion-row>
+        <ion-row align-items-start>
+          <ion-col col-md-2 col-sm-3 col-xs-4>
+            <ion-icon name="map"></ion-icon>
+            <span class="item-location">{{spot.country.name}} </span>
+          </ion-col>
+          <ion-col col-md-2 col-sm-3 col-xs-4>
+            <ion-icon name="pulse" item></ion-icon>
+            <span class="item-wave">
+              {{spot.swellHeight}} m
+            </span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    <button ion-button clear item-end (click)="itemTapped($event, spot)">View</button>
+  </ion-item>
 
   </ion-list>
 </ion-content>
