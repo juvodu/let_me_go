@@ -53,7 +53,10 @@ export class DetailPage {
         this.spot = result;
         this.showMap();
         this.isFavorite();
-        this.getConditionInfo();        
+
+        if(this.spot.forecast != null){
+          this.getConditionInfo();
+        }        
         loading.dismiss();
       },
       (error)=>{
