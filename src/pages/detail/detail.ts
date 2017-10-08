@@ -45,7 +45,7 @@ export class DetailPage {
 
     this.spotService.getSpotById(spotId).subscribe(
       (result)=>{
-        result;
+        
         if(result.thumbnail == null){
           result.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
         }
