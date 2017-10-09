@@ -21,6 +21,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { Push } from '@ionic-native/push';
 
 import { UserService } from '../providers/service.user';
 import { SpotService } from '../providers/service.spot';
@@ -73,7 +74,8 @@ import { Cognito } from '../providers/aws.cognito';
     CountryService,
     Cognito,
     Geolocation,
-    Diagnostic
+    Diagnostic,
+    Push
   ]
 })
 export class AppModule {}
