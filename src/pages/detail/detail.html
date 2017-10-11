@@ -40,9 +40,22 @@
             <ion-note> Temperature </ion-note>                          
           </ion-item>
 
-          <ion-item *ngFor="let tide of tides">
-              <h2>{{tide.tide_type}} {{tide.tideHeight_mt}} m - {{tide.tideTime}}</h2>
-              <ion-note> Tide </ion-note>                          
+          <ion-item>
+            <h2> Tides </h2>                                                      
+            <ion-grid>
+              <ion-row>
+                <ion-col><div class="property"> type </div></ion-col>
+                <ion-col><div class="property"> height m </div></ion-col>
+                  <ion-col><div class="property">time </div></ion-col>      
+              </ion-row>
+
+              <ion-row *ngFor="let tide of tides">
+                <ion-col><div> {{tide.tide_type}} </div></ion-col>
+                <ion-col><div> {{tide.tideHeight_mt}} </div></ion-col>
+                <ion-col><div> {{tide.tideTime}} </div></ion-col>
+              </ion-row>
+
+            </ion-grid>
           </ion-item>
 
         </ion-slide>
