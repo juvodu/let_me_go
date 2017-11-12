@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { AppSettings } from '../providers/app.settings';
+import { UserService } from '../providers/service.user';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +25,8 @@ export class MyApp {
               public statusBar: StatusBar,
               public splashScreen: SplashScreen,
               public push: Push,
-              public alertCtrl: AlertController) {
+              public alertCtrl: AlertController,
+              public userService: UserService) {
     this.initializeApp();
 
     this.pages = [
@@ -36,9 +38,11 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.initPushNotification();
+      this.subscribeToLogout();
     });
   }
 
@@ -46,6 +50,16 @@ export class MyApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
+  }
+
+  /**
+   * Redirects user to login page
+   */
+  private subscribeToLogout(){
+
+    this.userService.logoutObservable.subscribe((value) => {
+      this.nav.setRoot(LoginPage);
+    });
   }
 
   /**

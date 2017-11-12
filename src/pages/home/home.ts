@@ -17,7 +17,6 @@ export class HomePage {
 
   logout(){
     this.userService.logout();
-    this.navCtrl.setRoot(LoginPage);
   }
 
   delete(){

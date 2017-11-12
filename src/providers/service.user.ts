@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Config } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
 
 import { Cognito } from './aws.cognito';
+import { LoginPage } from '../pages/login/login';
 
 declare var AWS: any;
 declare const aws_cognito_region;
@@ -11,26 +13,38 @@ declare const aws_user_pools_id;
 @Injectable()
 export class UserService {
 
-  //private user: any;
-  public loggedIn: boolean = false;
+  // Observables used to trigger logout event
+  private logoutObserver: any;
+  public logoutObservable: any;
 
   constructor(public cognito: Cognito, public config: Config) {
+
+    this.logoutObserver = null;
+    this.logoutObservable = Observable.create(observer => {
+        this.logoutObserver = observer;
+    });
   }
 
   private getCurrentUser(): any{
 
     var user = this.cognito.getCurrentUser();
-    if (user == null) {
-      alert("Please login!");
+
+    if (user != null) {
+      user.getSession((error, session) => {
+
+        if (error) {
+          // local storage is wiped from time to time, trigger logout event which
+          // requires user to login again
+          console.log(error);
+          this.logoutObserver.next(true);
+          return;
+        }
+      });
+    }else{
+      this.logoutObserver.next(true);
+      return;
     }
       
-    user.getSession((err, session) => {
-      if (err) {
-          alert(err);
-          return;
-      }
-    });
-    
     return user;
   }
 
@@ -75,6 +89,9 @@ export class UserService {
    */
   public logout() {
     this.getCurrentUser().signOut();
+
+    // trigger redirect to login page
+    this.logoutObserver.next(true);
   }
 
   /**
