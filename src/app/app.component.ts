@@ -53,54 +53,57 @@ export class MyApp {
    */
   private initPushNotification(){
     
-      const options: any = {
-        android: {
-          senderID: AppSettings.ANDROID_PUSH_SENDER_ID
-        }
-      };
-    
-      const pushObject: PushObject = this.push.init(options);
-    
-        pushObject.on('registration').subscribe((data: any) => {
-          console.log("device token:", data.registrationId);
-    
-          let alert = this.alertCtrl.create({
-                      title: 'device token',
-                      subTitle: data.registrationId,
-                      buttons: ['OK']
-                    });
-                    alert.present();
-    
-        });
-    
-        pushObject.on('notification').subscribe((data: any) => {
-          console.log('message', data.message);
-          if (data.additionalData.foreground) {
-            let confirmAlert = this.alertCtrl.create({
-              title: 'New Notification',
-              message: data.message,
-              buttons: [{
-                text: 'Ignore',
-                role: 'cancel'
-              }, {
-                text: 'View',
-                handler: () => {
-                  //TODO: Your logic here
-                }
-              }]
-            });
-            confirmAlert.present();
-          } else {
-          let alert = this.alertCtrl.create({
-                      title: 'clicked on',
-                      subTitle: "you clicked on the notification!",
-                     buttons: ['OK']
-                    });
-                    alert.present();
-            console.log("Push notification clicked");
-          }
-       });
-    
-        pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+    const options: any = {
+      android: {
+        senderID: AppSettings.ANDROID_PUSH_SENDER_ID
+      },
+      ios: {},
+      windows: {},
+      browser: {
+        pushServiceURL: 'http://push.api.phonegap.com/v1/push'
       }
+    };
+  
+    const pushObject: PushObject = this.push.init(options);
+  
+    pushObject.on('registration').subscribe((data: any) => {
+      
+      //TODO: save device token on backend
+      console.log("device token:", data.registrationId);
+    });
+  
+    pushObject.on('notification').subscribe((data: any) => {
+      
+      console.log('message', data.message);
+      if (data.additionalData.foreground) {
+
+        let confirmAlert = this.alertCtrl.create({
+          title: 'New Notification',
+          message: data.message,
+          buttons: [{
+            text: 'Ignore',
+            role: 'cancel'
+          }, {
+            text: 'View',
+            handler: () => {
+              //TODO: Your logic here
+            }
+          }]
+        });
+        confirmAlert.present();
+
+      } else {
+
+        let alert = this.alertCtrl.create({
+                    title: 'clicked on',
+                    subTitle: "you clicked on the notification!",
+                    buttons: ['OK']
+                  });
+        alert.present();
+        console.log("Push notification clicked");
+      }
+    });
+    
+    pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+  }
 }
