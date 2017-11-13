@@ -3,7 +3,6 @@ import { Config } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 import { Cognito } from './aws.cognito';
-import { LoginPage } from '../pages/login/login';
 
 declare var AWS: any;
 declare const aws_cognito_region;
@@ -25,7 +24,7 @@ export class UserService {
     });
   }
 
-  private getCurrentUser(): any{
+  public getCurrentUser(): any{
 
     var user = this.cognito.getCurrentUser();
 
@@ -228,7 +227,7 @@ export class UserService {
       this.getCurrentUser().getUserAttributes((err, attributes) => {
         if (err) {
             alert(err);
-            reject(err)
+            reject(err);
           } else {
 
             // look for favoriteSpots attribute

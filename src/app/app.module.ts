@@ -26,6 +26,7 @@ import { Push } from '@ionic-native/push';
 import { UserService } from '../providers/service.user';
 import { SpotService } from '../providers/service.spot';
 import { CountryService } from '../providers/service.country';
+import { DeviceService } from '../providers/service.device';
 import { Cognito } from '../providers/aws.cognito';
 
 @NgModule({
@@ -72,6 +73,7 @@ import { Cognito } from '../providers/aws.cognito';
     UserService,
     SpotService,
     CountryService,
+    DeviceService,
     Cognito,
     Geolocation,
     Diagnostic,

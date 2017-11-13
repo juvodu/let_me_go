@@ -10,6 +10,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { AppSettings } from '../providers/app.settings';
 import { UserService } from '../providers/service.user';
+import { DeviceService } from '../providers/service.device';
 
 @Component({
   templateUrl: 'app.html'
@@ -21,12 +22,13 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform,
-              public statusBar: StatusBar,
-              public splashScreen: SplashScreen,
-              public push: Push,
-              public alertCtrl: AlertController,
-              public userService: UserService) {
+  constructor(private platform: Platform,
+              private statusBar: StatusBar,
+              private splashScreen: SplashScreen,
+              private push: Push,
+              private alertCtrl: AlertController,
+              private userService: UserService,
+              private deviceService: DeviceService) {
     this.initializeApp();
 
     this.pages = [
@@ -66,7 +68,7 @@ export class MyApp {
    * Setup push notifications to show an alert
    */
   private initPushNotification(){
-    
+
     const options: any = {
       android: {
         senderID: AppSettings.ANDROID_PUSH_SENDER_ID
@@ -82,17 +84,21 @@ export class MyApp {
   
     pushObject.on('registration').subscribe((data: any) => {
       
-      //TODO: save device token on backend
-      console.log("device token:", data.registrationId);
+      let deviceToken = data.registrationId;
+      this.deviceService.registerDevice(deviceToken).subscribe(
+        (result) => {
+          console.log(result);
+        },
+        (error) => {
+          alert(error);
+        });
     });
   
     pushObject.on('notification').subscribe((data: any) => {
       
-      console.log('message', data.message);
-      if (data.additionalData.foreground) {
-
-        let confirmAlert = this.alertCtrl.create({
+        let notificationAlert = this.alertCtrl.create({
           title: 'New Notification',
+          subTitle: "You clicked on the notification!",          
           message: data.message,
           buttons: [{
             text: 'Ignore',
@@ -100,22 +106,11 @@ export class MyApp {
           }, {
             text: 'View',
             handler: () => {
-              //TODO: Your logic here
+              //TODO: redirect to spot detail page
             }
           }]
         });
-        confirmAlert.present();
-
-      } else {
-
-        let alert = this.alertCtrl.create({
-                    title: 'clicked on',
-                    subTitle: "you clicked on the notification!",
-                    buttons: ['OK']
-                  });
-        alert.present();
-        console.log("Push notification clicked");
-      }
+        notificationAlert.present();
     });
     
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
