@@ -44,7 +44,7 @@ export class DetailPage {
     });
     loading.present();
 
-    this.spotService.getSpotById(spotId).subscribe(
+    this.spotService.getSpotById(spotId, "12345").subscribe(
       (result)=>{
 
         if(result.thumbnail == null){
@@ -52,7 +52,12 @@ export class DetailPage {
         }
         this.spot = result;
         this.showMap();
-        this.isFavorite();
+        
+        // disply spot as user favorite
+        if(this.spot.favorite){
+          this.isFav = true;          
+          this.color = "danger";           
+        }
 
         if(this.spot.forecast != null){
           this.getConditionInfo();
@@ -75,24 +80,6 @@ export class DetailPage {
     const currentHour = new Date().getHours();
     let index: number = Math.floor(currentHour / 6);
     this.hourlyCondition = forecastToday.hourly[index];
-  }
-
-  private isFavorite(){
-
-    this.userService.getFavoriteSpotsAttribute().then((favoriteSpotIds: string) => {
-
-        if(favoriteSpotIds != null && favoriteSpotIds.length > 0){
-          this.favoriteSpotIds = favoriteSpotIds.split("_");
-
-          let spotId = this.spot.id;
-            if(favoriteSpotIds.indexOf(spotId) > -1){
-              this.isFav = true;
-              this.color = "danger"; 
-            }
-        }
-    }).catch((err) => {
-        console.log(err);
-    });
   }
 
   private showMap(){
@@ -125,14 +112,14 @@ export class DetailPage {
       if (index !== -1) {
           this.favoriteSpotIds.splice(index, 1);
       }
-      this.userService.updateFavoriteSpotsAttribute(this.favoriteSpotIds);
+      //TODO: delete favorite call
     }else{
 
       //add
       this.isFav = true;
       this.color = "danger";
       this.favoriteSpotIds.push(spotId);
-      this.userService.updateFavoriteSpotsAttribute(this.favoriteSpotIds);
+      //TODO: create favorite call
     }
   }
 }

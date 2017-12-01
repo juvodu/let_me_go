@@ -52,6 +52,7 @@ export class UserService {
     return new Promise((resolve, reject) => {
       
       let user = this.cognito.makeUser(username);
+      console.log(user);
       let authDetails = this.cognito.makeAuthDetails(username, password);
 
       user.authenticateUser(authDetails, {
@@ -181,68 +182,6 @@ export class UserService {
       } else {
         reject("User not found.")
       }
-    });
-  }
-
-  /**
-   * Store favorite spots as an cognito attribute
-   * @param favoriteSpotIds 
-   */
-  updateFavoriteSpotsAttribute(favoriteSpotIds: Array<string>){
-
-    //concate spots to one string
-    let concatedSpotIds: string = "";
-    favoriteSpotIds.forEach(
-        (favoriteSpotId) => {
-            if(concatedSpotIds.length == 0){
-              concatedSpotIds += favoriteSpotId;
-            }else{
-              concatedSpotIds += "_" + favoriteSpotId;
-            }
-        }
-    );
-
-    //max length to be stored
-    if(concatedSpotIds.length > 500){
-      return;
-    }
-
-    var attributes = [];
-    attributes.push(this.cognito.makeAttribute("custom:favoriteSpots", concatedSpotIds));
-    this.getCurrentUser().updateAttributes(attributes, (err, result) => {
-        if (err) {
-            alert(err);
-            return;
-        }
-    });
-  }
-
-  /**
-   * Retrieve favorite Spots cognito attribute
-   */
-  getFavoriteSpotsAttribute(): Promise<string>{
-
-    return new Promise((resolve, reject) => {
-
-      this.getCurrentUser().getUserAttributes((err, attributes) => {
-        if (err) {
-            alert(err);
-            reject(err);
-          } else {
-
-            // look for favoriteSpots attribute
-            let favoriteSpotIds: string;
-            for(let i = 0; i < attributes.length; i++){
-              
-              let el = attributes[i];
-              if(el.Name == "custom:favoriteSpots"){
-                favoriteSpotIds = el.Value;
-              }
-            }
-
-            resolve(favoriteSpotIds)
-          }
-      });
     });
   }
 }

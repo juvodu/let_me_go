@@ -30,11 +30,20 @@ export class SpotService {
         this.headers.append('x-api-key', AppSettings.SPOT_API_KEY);
     }
 
-    getSpotById(id): Observable<any>{
+    /**
+     * Get spot with detailed information including weather forecast
+     * 
+     * @param spotId 
+     *          the id of the spot
+     * @param userId 
+     *          the id of the user to check if the spot is favorite
+     */
+    getSpotById(spotId:string, userId:string): Observable<any>{
         
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
-        params.set('id', id);
+        params.set('spotId', spotId);
+        params.set('userId', userId);        
         options.params = params;
 
         let spot: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spot", options)
