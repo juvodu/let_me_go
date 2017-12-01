@@ -54,16 +54,15 @@ export class SpotService {
     /**
      * Get all favorite spots for the user
      * 
-     * @param userId
-     *             id of the user to retrieve favorite spots for     *
      * @param limit
      *             the optional limit of returned results
      */
-    getSpotsByUser(userId:string, limit: number): Observable<any>{
+    getFavoriteSpots(limit: number): Observable<any>{
         
+        let user:any = this.userService.getCurrentUser;
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
-        params.set('userId', userId);
+        params.set('userId', user.id);
 
         // set the optional limit parameter
         if(limit != null){
