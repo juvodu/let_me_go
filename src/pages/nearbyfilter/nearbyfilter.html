@@ -14,18 +14,6 @@
 <ion-content>
   <ion-list>
     <ion-item>
-      <ion-label>Continent</ion-label>
-      <ion-select [(ngModel)]="continent" interface="popover">
-        <ion-option value="AF">Africa</ion-option>
-        <ion-option value="AN">Antarctica</ion-option>
-        <ion-option value="AS">Asia</ion-option>
-        <ion-option value="EU">Europe</ion-option>
-        <ion-option value="NA">North America</ion-option>
-        <ion-option value="OC">Oceania</ion-option>
-        <ion-option value="SA">South America</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
       <ion-label>Max distance (km)</ion-label>
       <ion-range [(ngModel)]="distance" min="100" max="5000" pin="true">
         <ion-icon range-left small name="compass"></ion-icon>

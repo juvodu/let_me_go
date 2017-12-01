@@ -100,16 +100,14 @@ export class SpotService {
 
    /**
     * Get spots within a specific distance
-    * @param continent
     * @param lat 
     * @param long 
     * @param distance 
     */
-    getSpotsByDistance(continent: string, lat: number, lon: number, distance: number): Observable<any>{
+    getSpotsByDistance(lat: number, lon: number, distance: number): Observable<any>{
 
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
-        params.set('continent', continent);
         params.set('lat', String(lat));
         params.set('lon', String(lon));
         params.set('distance', String(distance));
@@ -153,10 +151,9 @@ export class SpotService {
     /**
      * Get spots neary, uses the geo native plugin to retrieve current user position
      * 
-     * @param continent
      * @param distance 
      */
-    getSpotsNearby(continent: string, distance: number): Promise<[any]>{
+    getSpotsNearby(distance: number): Promise<[any]>{
 
         return new Promise((resolve, reject)=>{
             
@@ -181,7 +178,7 @@ export class SpotService {
             let longitude = resp.coords.longitude;
 
             // search spots by distance
-            this.getSpotsByDistance(continent, latitude, longitude, distance).subscribe(
+            this.getSpotsByDistance(latitude, longitude, distance).subscribe(
                 (spots) => {
                     resolve(spots);
                 },

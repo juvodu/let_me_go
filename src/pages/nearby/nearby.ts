@@ -19,7 +19,6 @@ export class NearbyPage {
 
   //filter
   distance: number = AppSettings.NEARBY_DEFAULT_DISTANCE;
-  continent: string = "EU";
   filter: string;
 
   constructor(private navCtrl: NavController,
@@ -55,13 +54,13 @@ export class NearbyPage {
   }
 
   private getFilterDesc(){
-    return this.continent + ", " + this.distance + " km";
+    return "Max distance: " + this.distance + " km";
   }
 
   private getSpotsNearby(callback){
 
     this.userFeedback = null;
-    this.spotService.getSpotsNearby(this.continent, this.distance).then((spots) => {
+    this.spotService.getSpotsNearby(this.distance).then((spots) => {
       
       if(spots.length == 0){
         this.userFeedback = "No spots found nearby..."
@@ -93,11 +92,9 @@ export class NearbyPage {
       NearbyfilterPage, 
       { 
         distance: this.distance,
-        continent: this.continent
     });
     filterModal.onDidDismiss(data => {
       this.distance = data.distance;
-      this.continent = data.continent;
 
       // reload spots if filter changed
       if(this.getFilterDesc() != this.filter){
