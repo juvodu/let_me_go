@@ -55,27 +55,24 @@ export class FavoritesPage {
     private getFavorites(callback){
 
       this.userFeedback = null;
-      this.spotService.getFavoriteSpots().then((spots) => {
-
-        // filter null values
-        spots = spots.filter(spot => spot !== null);
-
-        if(spots.length == 0){
-          this.userFeedback = "You have no favorites stored yet"
-        }
-        spots.forEach(spot=>{
-          if(spot != null && spot.thumbnail == null){
-            spot.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
+      this.spotService.getSpotsByUser("12345", 10).subscribe(
+        (spots) => {
+          if(spots.length == 0){
+            this.userFeedback = "You have no favorites stored yet"
           }
-        });
+          spots.forEach(spot=>{
+            if(spot != null && spot.thumbnail == null){
+              spot.thumbnail = AppSettings.DEFAULT_IMAGE_PATH;
+            }
+          });
 
-        this.spots = spots;
-        callback();
-
-      }).catch((error) => {
-
+          this.spots = spots;
+          callback();
+        },
+        (error) =>{
           this.userFeedback = error;
           callback();
-      });
+        }
+      );
     }
 }

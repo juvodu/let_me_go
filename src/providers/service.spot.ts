@@ -49,21 +49,36 @@ export class SpotService {
         params.set('ids', ids);
         options.params = params;
 
-        let spot: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
+        let spots: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
              .map((res:Response) => res.json());
-        return spot;
+        return spots;
     }
 
     /**
-     * Get all available spots
+     * Get all favorite spots for the user
+     * 
+     * @param userId
+     *             id of the user to retrieve favorite spots for     *
+     * @param limit
+     *             the optional limit of returned results
      */
-    getAllSpots(): Observable<any>{
-
+    getSpotsByUser(userId:string, limit: number): Observable<any>{
+        
         let options:RequestOptions = new RequestOptions({headers: this.headers});
-        let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('userId', userId);
+
+        // set the optional limit parameter
+        if(limit != null){
+            params.set('limit', limit.toString());
+        }
+
+        options.params = params;
+
+        let spots: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
              .map((res:Response) => res.json());
         return spots;
-    };
+    }
 
     /**
      * Get all spots for a specific region
@@ -116,36 +131,6 @@ export class SpotService {
         let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
              .map((res:Response) => res.json());
         return spots;
-    }
-
-    /**
-     * Get all favorite spots for the current user
-     */
-    getFavoriteSpots(): Promise<Array<any>>{
-        
-        return new Promise((resolve, reject)=>{
-            this.userService.getFavoriteSpotsAttribute().then((favoriteSpotIds: String) => {
-                
-                // create an observable request for each spotId to request detailed information
-                let favoriteSpots: Array<any> = [];
-                if(favoriteSpotIds == null){
-                    resolve(favoriteSpots); // return empty list
-                    return;
-                }
-
-                // retrieve list of spots
-                this.getSpotsByIds(favoriteSpotIds).subscribe(
-                    (result)=>{
-                      resolve(result);
-                    },
-                    (error)=>{
-                      reject(error);
-                    });
-
-            }).catch((err) => {
-                reject(err);
-          });
-        });
     }
 
     /**
