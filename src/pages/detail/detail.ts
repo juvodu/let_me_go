@@ -3,6 +3,7 @@ import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { AppSettings } from '../../providers/app.settings';
 import { UserService } from '../../providers/service.user';
 import { SpotService } from '../../providers/service.spot';
+import { FavoriteService } from '../../providers/service.favorite';
 import 'leaflet';
 
 @Component({
@@ -16,7 +17,6 @@ export class DetailPage {
   color: string;
   mapId: string;
   map: any;
-  favoriteSpotIds: Array<string>;
   loadingMessage: string = "Loading...";
   userFeedback: string;
 
@@ -28,10 +28,10 @@ export class DetailPage {
               public navParams: NavParams,
               public userService: UserService,
               public spotService: SpotService,
+              public favoriteService: FavoriteService,
               public loadingCtrl: LoadingController) {
 
         this.isFav = false;
-        this.favoriteSpotIds = [];
         this.mapId = "map-" + Math.floor((1 + Math.random()) * 0x10000);
         this.color = "light_grey";
         this.getSpot(navParams.get('spotId')); 
@@ -107,19 +107,28 @@ export class DetailPage {
     //delete
     if(this.isFav == true){
       this.isFav = false;
-      this.color = "light_grey";
-      let index: number = this.favoriteSpotIds.indexOf(spotId);
-      if (index !== -1) {
-          this.favoriteSpotIds.splice(index, 1);
-      }
-      //TODO: delete favorite call
+      this.color = "light_grey"; 
+      this.favoriteService.deleteFavorite(spotId).subscribe(
+        (result)=>{
+            console.log("Deleted favorite!");
+        },
+        (error)=>{
+          alert(error);
+          this.userFeedback = error;
+        });
     }else{
 
       //add
       this.isFav = true;
       this.color = "danger";
-      this.favoriteSpotIds.push(spotId);
-      //TODO: create favorite call
+      this.favoriteService.createFavorite(spotId).subscribe(
+        (result)=>{
+            console.log("Created favorite!");
+        },
+        (error)=>{
+          alert(error);
+          this.userFeedback = error;
+        });
     }
   }
 }

@@ -51,18 +51,6 @@ export class SpotService {
         return spot;
     }
 
-    getSpotsByIds(ids): Observable<any>{
-        
-        let options:RequestOptions = new RequestOptions({headers: this.headers});
-        let params: URLSearchParams = new URLSearchParams();
-        params.set('ids', ids);
-        options.params = params;
-
-        let spots: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
-             .map((res:Response) => res.json());
-        return spots;
-    }
-
     /**
      * Get all favorite spots for the user
      * 

@@ -27,6 +27,7 @@ import { UserService } from '../providers/service.user';
 import { SpotService } from '../providers/service.spot';
 import { CountryService } from '../providers/service.country';
 import { DeviceService } from '../providers/service.device';
+import { FavoriteService } from '../providers/service.favorite';
 import { Cognito } from '../providers/aws.cognito';
 
 @NgModule({
@@ -74,6 +75,7 @@ import { Cognito } from '../providers/aws.cognito';
     SpotService,
     CountryService,
     DeviceService,
+    FavoriteService,
     Cognito,
     Geolocation,
     Diagnostic,
