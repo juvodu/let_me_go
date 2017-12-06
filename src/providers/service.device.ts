@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
-import { UserService } from './service.user';
-import 'rxjs/add/operator/map';
+import { CognitoService } from './service.cognito';
 
 /**
  * Service allows to register devices with the backend
@@ -16,7 +15,7 @@ export class DeviceService {
     headers: Headers;
 
     constructor(private http: Http,
-                private userService: UserService) {
+                private cognitoService: CognitoService) {
 
         this.headers = new Headers();
         this.headers.append('x-api-key', AppSettings.SPOT_API_KEY);
@@ -29,7 +28,7 @@ export class DeviceService {
      */
     registerDevice(deviceToken:string): Observable<Response>{
         
-        let user = this.userService.getCurrentUser();
+        let user = this.cognitoService.getCurrentUser();
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let postParams = {
             userId: user.username,

@@ -3,7 +3,7 @@ import { Platform } from 'ionic-angular';
 import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angular/http';
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
-import { UserService } from './service.user';
+import { CognitoService } from './service.cognito';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
 import 'rxjs/add/operator/map';
@@ -21,7 +21,7 @@ export class SpotService {
     private headers: Headers;
 
     constructor(private http: Http,
-                private userService: UserService,
+                private cognitoService: CognitoService,
                 private geolocation: Geolocation,
                 private diagnostic: Diagnostic,
                 private platform: Platform) {
@@ -35,15 +35,16 @@ export class SpotService {
      * 
      * @param spotId 
      *          the id of the spot
-     * @param userId 
-     *          the id of the user to check if the spot is favorite
      */
-    getSpotById(spotId:string, userId:string): Observable<any>{
+    getSpotById(spotId:string): Observable<any>{
         
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
+        let user: any = this.cognitoService.getCurrentUser();
+
+        console.log(user);
         params.set('spotId', spotId);
-        params.set('userId', userId);        
+        params.set('userId', user.username);        
         options.params = params;
 
         let spot: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spot", options)
@@ -59,7 +60,7 @@ export class SpotService {
      */
     getFavoriteSpots(limit: number): Observable<any>{
         
-        let user:any = this.userService.getCurrentUser;
+        let user:any = this.cognitoService.getCurrentUser;
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
         params.set('userId', user.id);

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
-import { UserService } from '../../providers/service.user';
+import { CognitoService } from '../../providers/service.cognito';
 import { SignupPage} from '../signup/signup';
 import { ConfirmPage } from '../confirm/confirm';
 import { TabsPage } from '../tabs/tabs';
@@ -20,13 +20,13 @@ export class LoginPage {
   error: any;
 
   constructor(public navCtrl: NavController,
-              public userService: UserService,
+              public cognitoService: CognitoService,
               public loadingCtrl: LoadingController) {
     this.loginDetails = new LoginDetails(); 
   }
 
   ionViewDidLoad() {
-    this.userService.isAuthenticated().then((result) => {
+    this.cognitoService.isAuthenticated().then((result) => {
       this.navCtrl.setRoot(TabsPage);
     }).catch((err) => {
         console.log("User not authenticated. Showing login page.");
@@ -42,10 +42,10 @@ export class LoginPage {
     let details = this.loginDetails;
     this.error = null;
 
-    this.userService.login(details.username, details.password).then((result) => {
+    this.cognitoService.login(details.username, details.password).then((result) => {
       loading.dismiss();
       this.navCtrl.setRoot(TabsPage);
-    }).catch((err) => { 
+    }).catch((err) => {
       if (err.message === "User is not confirmed.") {
         loading.dismiss();
         this.navCtrl.push(ConfirmPage, { 'username': details.username });

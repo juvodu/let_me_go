@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
-import { UserService } from './service.user';
+import { CognitoService } from './service.cognito';
 
 /**
  * Service to create and delete favorite records
@@ -15,7 +15,7 @@ export class FavoriteService {
     headers: Headers;
 
     constructor(private http: Http,
-                private userService: UserService) {
+                private cognitoService: CognitoService) {
 
         this.headers = new Headers();
         this.headers.append('x-api-key', AppSettings.SPOT_API_KEY);
@@ -29,10 +29,10 @@ export class FavoriteService {
      */
     createFavorite(spotId:string): Observable<Response>{
         
-        let user = this.userService.getCurrentUser();
+        let user = this.cognitoService.getCurrentUser();
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let postParams = {
-            userId: user.id,
+            username: user.username,
             spotId: spotId
           };
 
@@ -47,10 +47,10 @@ export class FavoriteService {
      */
     deleteFavorite(spotId:string): Observable<Response>{
         
-        let user = this.userService.getCurrentUser();
+        let user = this.cognitoService.getCurrentUser();
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let postParams = {
-            userId: user.id,
+            username: user.username,
             spotId: spotId
           };
 

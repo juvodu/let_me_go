@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { AppSettings } from '../../providers/app.settings';
-import { UserService } from '../../providers/service.user';
 import { SpotService } from '../../providers/service.spot';
 import { FavoriteService } from '../../providers/service.favorite';
 import 'leaflet';
@@ -26,7 +25,6 @@ export class DetailPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              public userService: UserService,
               public spotService: SpotService,
               public favoriteService: FavoriteService,
               public loadingCtrl: LoadingController) {
@@ -44,7 +42,7 @@ export class DetailPage {
     });
     loading.present();
 
-    this.spotService.getSpotById(spotId, "12345").subscribe(
+    this.spotService.getSpotById(spotId).subscribe(
       (result)=>{
 
         if(result.thumbnail == null){

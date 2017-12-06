@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { UserService } from '../../providers/service.user';
+import { CognitoService } from '../../providers/service.cognito';
 import { LoginPage } from '../login/login';
 
 @Component({
@@ -12,14 +12,14 @@ export class HomePage {
   private logoutFn = () => { this.navCtrl.setRoot(LoginPage) };
   private errorFn = (err) => { console.log(err) };
 
-  constructor(public navCtrl: NavController, public userService: UserService) {
+  constructor(public navCtrl: NavController, public cognitoService: CognitoService) {
   }
 
   logout(){
-    this.userService.logout();
+    this.cognitoService.logout();
   }
 
   delete(){
-    this.userService.delete().then(this.logoutFn).catch(this.errorFn);    
+    this.cognitoService.delete().then(this.logoutFn).catch(this.errorFn);    
   }
 }

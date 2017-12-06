@@ -9,7 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { AppSettings } from '../providers/app.settings';
-import { UserService } from '../providers/service.user';
+import { CognitoService } from '../providers/service.cognito';
 import { DeviceService } from '../providers/service.device';
 
 @Component({
@@ -27,7 +27,7 @@ export class MyApp {
               private splashScreen: SplashScreen,
               private push: Push,
               private alertCtrl: AlertController,
-              private userService: UserService,
+              private cognitoService: CognitoService,
               private deviceService: DeviceService) {
     this.initializeApp();
 
@@ -59,8 +59,8 @@ export class MyApp {
    */
   private subscribeToLogout(){
 
-    this.userService.logoutObservable.subscribe((value) => {
-      this.nav.setRoot(LoginPage);
+    this.cognitoService.logoutObservable.subscribe((value) => {
+      //this.nav.setRoot(LoginPage);
     });
   }
 

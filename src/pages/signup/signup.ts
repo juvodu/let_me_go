@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
-import { UserService } from '../../providers/service.user';
+import { CognitoService } from '../../providers/service.cognito';
 import { ConfirmPage } from '../confirm/confirm';
 import { LoginPage } from '../login/login';
 
@@ -21,7 +21,7 @@ export class SignupPage {
 
 
   constructor(public navCtrl: NavController,
-              public userService: UserService,
+              public cognitoService: CognitoService,
               public loadingCtrl: LoadingController) {
    this.userDetails = new UserDetails();
   }
@@ -36,7 +36,7 @@ export class SignupPage {
     let details = this.userDetails;
     this.error = null;
 
-    this.userService.register(details.username, details.password, {'email': details.email}).then((user) => {
+    this.cognitoService.register(details.username, details.password, {'email': details.email}).then((user) => {
       loading.dismiss();
       this.navCtrl.push(ConfirmPage, { username: details.username });
     }).catch((err) => {

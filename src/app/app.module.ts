@@ -23,11 +23,12 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { Push } from '@ionic-native/push';
 
-import { UserService } from '../providers/service.user';
+import { CognitoService } from '../providers/service.cognito';
 import { SpotService } from '../providers/service.spot';
 import { CountryService } from '../providers/service.country';
 import { DeviceService } from '../providers/service.device';
 import { FavoriteService } from '../providers/service.favorite';
+import { UserService } from '../providers/service.user';
 import { Cognito } from '../providers/aws.cognito';
 
 @NgModule({
@@ -71,11 +72,12 @@ import { Cognito } from '../providers/aws.cognito';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    UserService,
+    CognitoService,
     SpotService,
     CountryService,
     DeviceService,
     FavoriteService,
+    UserService,
     Cognito,
     Geolocation,
     Diagnostic,
