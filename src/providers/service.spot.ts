@@ -60,10 +60,10 @@ export class SpotService {
      */
     getFavoriteSpots(limit: number): Observable<any>{
         
-        let user:any = this.cognitoService.getCurrentUser;
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
-        params.set('username', user.id);
+        let user: any = this.cognitoService.getCurrentUser();
+        params.set('username', user.username);
 
         // set the optional limit parameter
         if(limit != null){
