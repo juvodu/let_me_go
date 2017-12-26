@@ -44,7 +44,7 @@ export class SpotService {
 
         console.log(user);
         params.set('spotId', spotId);
-        params.set('userId', user.username);        
+        params.set('username', user.username);        
         options.params = params;
 
         let spot: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spot", options)
@@ -63,7 +63,7 @@ export class SpotService {
         let user:any = this.cognitoService.getCurrentUser;
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
-        params.set('userId', user.id);
+        params.set('username', user.id);
 
         // set the optional limit parameter
         if(limit != null){
