@@ -14,7 +14,6 @@ export class ContinentsPage {
 
      this.continents = [
       { label: 'Africa', value: "AF" },
-      { label: 'Antarctica', value: "AN" },
       { label: 'Asia', value: "AS" },
       { label: 'Europe', value: "EU" },
       { label: 'North America', value: "NA" },

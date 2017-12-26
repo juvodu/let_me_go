@@ -3,7 +3,7 @@ import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { AppSettings } from '../../providers/app.settings';
 import { SpotService } from '../../providers/service.spot';
 import { FavoriteService } from '../../providers/service.favorite';
-import 'leaflet';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'page-detail',
