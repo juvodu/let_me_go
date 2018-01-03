@@ -31,10 +31,10 @@ export class DeviceService {
         let user = this.cognitoService.getCurrentUser();
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let postParams = {
-            userId: user.username,
+            username: user.username,
             deviceToken: deviceToken
           };
 
-        return this.http.post(AppSettings.SPOT_API_ENDPOINT + "device/update", postParams, options);
+        return this.http.post(AppSettings.SPOT_API_ENDPOINT + "device/create", postParams, options);
     }
 }

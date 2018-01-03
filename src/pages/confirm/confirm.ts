@@ -35,7 +35,7 @@ export class ConfirmPage {
       ).subscribe(
         (result)=>{
           console.log(result);
-          //this.navCtrl.push(LoginPage);          
+          this.navCtrl.push(LoginPage);          
         },
         (error)=>{
           console.log(error);
