@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { LoginPage } from '../login/login';
+import { NearbyPage } from '../nearby/nearby';
 import { CognitoService } from '../../providers/service.cognito';
 import { UserService } from '../../providers/service.user';
 
@@ -24,8 +24,6 @@ export class ConfirmPage {
   confirm() {
     this.cognitoService.confirmRegistration(this.username, this.code).then(() => {
 
-      console.log("Create user on backend! ");
-
       // create user on spotservice backend
       this.userService.createUser(
         {
@@ -34,8 +32,7 @@ export class ConfirmPage {
         }
       ).subscribe(
         (result)=>{
-          console.log(result);
-          this.navCtrl.push(LoginPage);          
+          this.navCtrl.push(NearbyPage);          
         },
         (error)=>{
           console.log(error);

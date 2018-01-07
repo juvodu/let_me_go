@@ -27,7 +27,6 @@ export class UserService {
      */
     createUser(cognitoUser:any): Observable<Response>{
         
-        console.log(cognitoUser);
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let postParams = {
             username: cognitoUser.username,
@@ -35,5 +34,21 @@ export class UserService {
           };
 
         return this.http.post(AppSettings.SPOT_API_ENDPOINT + "user/create", postParams, options);
+    }
+
+    /**
+     * Delete a user on the backend
+     * 
+     * @param cognitoUser
+     *              
+     */
+    deleteUser(cognitoUser:any): Observable<Response>{
+        
+        let options:RequestOptions = new RequestOptions({headers: this.headers});
+        let postParams = {
+            username: cognitoUser.username
+          };
+
+        return this.http.post(AppSettings.SPOT_API_ENDPOINT + "user/delete", postParams, options);
     }
 }
