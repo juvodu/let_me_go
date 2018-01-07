@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import { NearbyPage } from '../nearby/nearby';
+import { NavController, NavParams, ToastController } from 'ionic-angular';
+import { LoginPage } from '../login/login';
 import { CognitoService } from '../../providers/service.cognito';
 import { UserService } from '../../providers/service.user';
 
@@ -13,8 +13,9 @@ export class ConfirmPage {
   private code: string;
   private username: string;
 
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
+  constructor(private navCtrl: NavController,
+              private navParams: NavParams,
+              private toastCtrl: ToastController,
               private cognitoService: CognitoService,
               private userService: UserService) {
 
@@ -32,7 +33,16 @@ export class ConfirmPage {
         }
       ).subscribe(
         (result)=>{
-          this.navCtrl.push(NearbyPage);          
+
+          let toast = this.toastCtrl.create({
+            message: 'User was registered successfully',
+            duration: 3000,
+            position: 'bottom'
+          });
+        
+          toast.present();
+
+          this.navCtrl.setRoot(LoginPage);          
         },
         (error)=>{
           console.log(error);
