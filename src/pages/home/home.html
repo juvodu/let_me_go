@@ -8,6 +8,24 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-list>
+    <ion-item detail-push>
+        <ion-label>
+            Username
+          </ion-label>
+          <div item-content>
+            {{username}}
+          </div>
+    </ion-item>
+    <ion-item detail-push>
+        <ion-label>
+            Mail
+          </ion-label>
+          <div item-content>
+            {{email}}
+          </div>
+    </ion-item>
+  </ion-list>
   <button ion-button secondary (click)="logout()">Logout</button>
   <button ion-button secondary (click)="delete()">Delete Account</button>
 </ion-content>

@@ -188,4 +188,35 @@ export class CognitoService {
       }
     });
   }
+
+  /**
+   * Get a cognito user attribute by name
+   * 
+   * @param name
+   *          name of the cognito attribute
+   * @return Promise containing the attribute value when successful
+   */
+  getCognitoUserAttributeByName(name:string):Promise<any>{
+
+    return new Promise((resolve, reject) => {
+      let user = this.getCurrentUser();
+      user.getUserAttributes((err, result) =>{
+        if (err) {
+            alert(err);
+            return;
+        }
+
+        let value = null;
+        for (let i = 0; i < result.length; i++) {
+
+          let el = result[i];
+          if(el.getName() === name){
+            resolve(el.getValue());
+          }
+        }
+
+        reject("Attribute not found.");
+      });
+    });
+  }
 }

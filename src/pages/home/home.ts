@@ -24,13 +24,31 @@ export class HomePage {
   };
   private loadingMessage: string = "Please wait...";
   private deleteSuccessMessage: string = "Deleted user successfully";
-  private deleteErrorMessage: string = "Deletion of user failed"; 
+  private deleteErrorMessage: string = "Deletion of user failed";
+  private username: string;
+  private email: string;
 
   constructor(private navCtrl: NavController,
               private loadingCtrl: LoadingController,
               private toastCtrl: ToastController,
               private userService: UserService,
               private cognitoService: CognitoService) {
+
+              this.displayUserProfile();
+  }
+
+  displayUserProfile(){
+
+    this.username = this.cognitoService.getCurrentUser().username;
+    this.cognitoService.getCognitoUserAttributeByName("email").then(
+      (value)=>{
+        this.email = value;
+      }
+    ).catch(
+      (error) =>{
+        alert(error);
+      }
+    );
   }
 
   showToast(message:string){

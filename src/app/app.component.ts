@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Push, PushObject } from '@ionic-native/push';
+import { Push, PushObject, PushOptions } from '@ionic-native/push';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
@@ -41,7 +41,7 @@ export class MyApp {
   initializeApp() {
     this.platform.ready().then(() => {
 
-      this.statusBar.styleDefault();
+      this.statusBar.styleLightContent();
       this.splashScreen.hide();
       this.initPushNotification();
       this.subscribeToLogout();
@@ -60,7 +60,7 @@ export class MyApp {
   private subscribeToLogout(){
 
     this.cognitoService.logoutObservable.subscribe((value) => {
-      //this.nav.setRoot(LoginPage);
+      this.nav.setRoot(LoginPage);
     });
   }
 
@@ -69,7 +69,7 @@ export class MyApp {
    */
   private initPushNotification(){
 
-    const options: any = {
+    const options: PushOptions = {
       android: {
         senderID: AppSettings.ANDROID_PUSH_SENDER_ID
       },
@@ -87,6 +87,7 @@ export class MyApp {
       let deviceToken = data.registrationId;
       this.deviceService.registerDevice(deviceToken).subscribe(
         (result) => {
+          alert(result);
           console.log(result);
         },
         (error) => {
@@ -95,8 +96,10 @@ export class MyApp {
     });
   
     pushObject.on('notification').subscribe((data: any) => {
-      
-        let notificationAlert = this.alertCtrl.create({
+
+        alert("Push Message");
+
+        /*let notificationAlert = this.alertCtrl.create({
           title: 'New Notification',
           subTitle: "You clicked on the notification!",          
           message: data.message,
@@ -110,7 +113,7 @@ export class MyApp {
             }
           }]
         });
-        notificationAlert.present();
+        notificationAlert.present();*/
     });
     
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
