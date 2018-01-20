@@ -8,24 +8,63 @@
 </ion-header>
 
 <ion-content padding>
+
+  <div padding>
+    <button ion-button secondary (click)="logout()">Logout</button>
+    <button ion-button secondary (click)="delete()">Delete Account</button>
+  </div>
+
   <ion-list>
-    <ion-item detail-push>
-        <ion-label>
-            Username
+
+    <ion-item-group>
+      <ion-item-divider color="light">
+        Profile
+      </ion-item-divider>
+      <ion-item>
+          <ion-label>
+              Username
+            </ion-label>
+            <div item-content>
+              {{username}}
+            </div>
+      </ion-item>
+      <ion-item >
+          <ion-label>
+              Mail
+            </ion-label>
+            <div item-content>
+              {{email}}
+            </div>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="light">
+        Change Password
+      </ion-item-divider>
+      <p *ngIf="changePasswordError" style="text-align: center">{{changePasswordError.message}}</p>
+        <ion-item>
+          <ion-label>
+            Current Password
           </ion-label>
-          <div item-content>
-            {{username}}
-          </div>
-    </ion-item>
-    <ion-item detail-push>
-        <ion-label>
-            Mail
+          <ion-input type="password" name="password" [(ngModel)]="changePassword.password"> {{pw}} </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            New Password
           </ion-label>
-          <div item-content>
-            {{email}}
-          </div>
-    </ion-item>
-  </ion-list>
-  <button ion-button secondary (click)="logout()">Logout</button>
-  <button ion-button secondary (click)="delete()">Delete Account</button>
+          <ion-input type="password" name="newpassword" [(ngModel)]="changePassword.newpassword"> {{newpw}} </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            Repeat
+          </ion-label>
+          <ion-input type="password" name="newpasswordrepeat" [(ngModel)]="changePassword.newpasswordrepeat"> {{newpwrepeat}} </ion-input>
+        </ion-item>
+      </ion-item-group>
+      <div padding>
+          <button ion-button secondary (click)="changePasswordRequest()">Change Password</button>
+      </div>
+    </ion-list>
+
 </ion-content>

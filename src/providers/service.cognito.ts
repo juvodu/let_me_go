@@ -56,7 +56,6 @@ export class CognitoService {
     return new Promise((resolve, reject) => {
       
       let user = this.cognito.makeUser(username);
-      console.log(user);
       let authDetails = this.cognito.makeAuthDetails(username, password);
 
       user.authenticateUser(authDetails, {
@@ -206,7 +205,6 @@ export class CognitoService {
             return;
         }
 
-        let value = null;
         for (let i = 0; i < result.length; i++) {
 
           let el = result[i];
@@ -216,6 +214,20 @@ export class CognitoService {
         }
 
         reject("Attribute not found.");
+      });
+    });
+  }
+
+  changePassword(oldpassword:string, newpassword:string){
+
+    return new Promise((resolve, reject) => {
+      let user = this.getCurrentUser();
+      user.changePassword(oldpassword, newpassword, (err, result) => {
+        if (err) {
+            reject(err);
+            return;
+        }
+        resolve(err);
       });
     });
   }
