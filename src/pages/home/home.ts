@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController, LoadingController, ToastController, Toast } from 'ionic-angular';
+import { NavController, LoadingController, ToastController } from 'ionic-angular';
 import { CognitoService } from '../../providers/service.cognito';
 import { UserService } from '../../providers/service.user';
 import { LoginPage } from '../login/login';
@@ -45,7 +45,7 @@ export class HomePage {
               private toastCtrl: ToastController,
               private userService: UserService,
               private cognitoService: CognitoService,
-              private formBuilder: FormBuilder) {
+              public formBuilder: FormBuilder) {
               
               this.changePassword = new ChangePassword();
               this.changePasswordForm = formBuilder.group({

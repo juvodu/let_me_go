@@ -15,7 +15,7 @@ export class ConfirmPage {
   private email: string;
 
   constructor(private navCtrl: NavController,
-              private navParams: NavParams,
+              public navParams: NavParams,
               private toastCtrl: ToastController,
               private cognitoService: CognitoService,
               private userService: UserService) {

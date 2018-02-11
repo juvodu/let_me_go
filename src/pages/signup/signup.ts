@@ -25,7 +25,7 @@ export class SignupPage {
   constructor(private navCtrl: NavController,
               private cognitoService: CognitoService,
               private loadingCtrl: LoadingController,
-              private formBuilder: FormBuilder) {
+              public formBuilder: FormBuilder) {
 
    this.userDetails = new UserDetails();
 
