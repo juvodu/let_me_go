@@ -12,6 +12,7 @@ export class ConfirmPage {
 
   private code: string;
   private username: string;
+  private email: string;
 
   constructor(private navCtrl: NavController,
               private navParams: NavParams,
@@ -20,6 +21,7 @@ export class ConfirmPage {
               private userService: UserService) {
 
     this.username = navParams.get('username');
+    this.email = navParams.get('email');
   }
 
   confirm() {
@@ -29,7 +31,7 @@ export class ConfirmPage {
       this.userService.createUser(
         {
           username: this.username,
-          email: "juri.ticho@gmail.com"
+          email: this.email
         }
       ).subscribe(
         (result)=>{

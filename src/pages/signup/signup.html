@@ -8,23 +8,28 @@
 
 
 <ion-content padding>
-  <form (submit)="signup()">
+  <form (submit)="signup()" [formGroup]="signupForm">
     <p *ngIf="error" style="text-align: center">{{error.message}}</p>
     <ion-list>
 
       <ion-item>
         <ion-label floating>Username</ion-label>
-        <ion-input type="text" [(ngModel)]="userDetails.username" autocorrect="off" autocapitalize="none" name="username"></ion-input>
+        <ion-input formControlName="username" type="text" [(ngModel)]="userDetails.username" autocorrect="off" autocapitalize="none" name="username"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Email</ion-label>
-        <ion-input type="email" [(ngModel)]="userDetails.email" name="email"></ion-input>
+        <ion-input formControlName="email" type="email" [(ngModel)]="userDetails.email" name="email"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Password</ion-label>
-        <ion-input type="password" [(ngModel)]="userDetails.password" name="password"></ion-input>
+        <ion-input formControlName="password" type="password" [(ngModel)]="userDetails.password" name="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating> Repeat Password</ion-label>
+        <ion-input formControlName="password_repeat" type="password" [(ngModel)]="userDetails.password_repeat" name="repeat_password"></ion-input>
       </ion-item>
 
       <div padding>
