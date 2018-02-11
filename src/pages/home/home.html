@@ -42,29 +42,32 @@
       <ion-item-divider color="light">
         Change Password
       </ion-item-divider>
-      <p *ngIf="changePasswordError" style="text-align: center">{{changePasswordError.message}}</p>
+
+      <form [formGroup]="changePasswordForm">
+        <p *ngIf="changePasswordError" style="text-align: center">{{changePasswordError.message}}</p>
         <ion-item>
-          <ion-label>
+          <ion-label floating>
             Current Password
           </ion-label>
-          <ion-input type="password" name="password" [(ngModel)]="changePassword.password"> {{pw}} </ion-input>
+          <ion-input formControlName="password" type="password" name="password" [(ngModel)]="changePassword.password"> {{pw}} </ion-input>
         </ion-item>
         <ion-item>
-          <ion-label>
+          <ion-label floating>
             New Password
           </ion-label>
-          <ion-input type="password" name="newpassword" [(ngModel)]="changePassword.newpassword"> {{newpw}} </ion-input>
+          <ion-input formControlName="password_new" type="password" name="password_new" [(ngModel)]="changePassword.password_new"> {{newpw}} </ion-input>
         </ion-item>
         <ion-item>
-          <ion-label>
+          <ion-label floating>
             Repeat
           </ion-label>
-          <ion-input type="password" name="newpasswordrepeat" [(ngModel)]="changePassword.newpasswordrepeat"> {{newpwrepeat}} </ion-input>
+          <ion-input formControlName="password_new_repeat" type="password" name="password_new_repeat" [(ngModel)]="changePassword.password_new_repeat"> {{newpwrepeat}} </ion-input>
         </ion-item>
-      </ion-item-group>
-      <div padding>
-          <button ion-button secondary (click)="changePasswordRequest()">Change Password</button>
-      </div>
-    </ion-list>
+      </form>        
+    </ion-item-group>
+    <div padding>
+        <button ion-button secondary (click)="changePasswordRequest()">Change Password</button>
+    </div>
+  </ion-list>
 
 </ion-content>

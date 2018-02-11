@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController, LoadingController, ToastController, Toast } from 'ionic-angular';
 import { CognitoService } from '../../providers/service.cognito';
 import { UserService } from '../../providers/service.user';
@@ -6,8 +7,8 @@ import { LoginPage } from '../login/login';
 
 export class ChangePassword {
   password: string;
-  newpassword: string;
-  newpasswordrepeat: string;
+  password_new: string;
+  password_new_repeat: string;
 }
 
 @Component({
@@ -29,6 +30,7 @@ export class HomePage {
     this.showToast(this.deleteErrorMessage);
   };
 
+  private changePasswordForm: FormGroup;
   private loadingMessage: string = "Please wait...";
   private deleteSuccessMessage: string = "Deleted user successfully";
   private deleteErrorMessage: string = "Deletion of user failed";
@@ -42,9 +44,16 @@ export class HomePage {
               private loadingCtrl: LoadingController,
               private toastCtrl: ToastController,
               private userService: UserService,
-              private cognitoService: CognitoService) {
+              private cognitoService: CognitoService,
+              private formBuilder: FormBuilder) {
               
               this.changePassword = new ChangePassword();
+              this.changePasswordForm = formBuilder.group({
+                password: ['', Validators.compose([Validators.minLength(5), Validators.required])],
+                password_new: ['', Validators.compose([Validators.minLength(5), Validators.required])],
+                password_new_repeat: ['', Validators.compose([Validators.minLength(5), Validators.required])]
+              });
+
               this.changePasswordError = {};
               this.displayUserProfile();
   }
@@ -114,8 +123,8 @@ export class HomePage {
   changePasswordRequest(){
 
     let password = this.changePassword.password;
-    let newpassword = this.changePassword.newpassword;
-    let newpasswordrepeat = this.changePassword.newpasswordrepeat;
+    let newpassword = this.changePassword.password_new;
+    let newpasswordrepeat = this.changePassword.password_new_repeat;
 
     // validate input
     if(password == null){
@@ -132,15 +141,17 @@ export class HomePage {
       return;
     }
 
-    this.cognitoService.changePassword(password, newpassword).then(
-      (result)=>{
-        this.changePasswordError = {};
-        this.showToast(this.changePasswordSuccessMessage);
-      }
-    ).catch(
-      (error)=>{
-        this.changePasswordError = error;
-      }
-    );
+    if(this.changePasswordForm.valid){
+      this.cognitoService.changePassword(password, newpassword).then(
+        (result)=>{
+          this.changePasswordError = {};
+          this.showToast(this.changePasswordSuccessMessage);
+        }
+      ).catch(
+        (error)=>{
+          this.changePasswordError = error;
+        }
+      );
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController, LoadingController } from 'ionic-angular';
 import { CognitoService } from '../../providers/service.cognito';
 import { ConfirmPage } from '../confirm/confirm';
@@ -20,12 +20,12 @@ export class SignupPage {
 
   public userDetails: UserDetails;
   error: any;
-  signupForm: any;
+  signupForm: FormGroup;
 
-  constructor(public navCtrl: NavController,
-              public cognitoService: CognitoService,
-              public loadingCtrl: LoadingController,
-              public formBuilder: FormBuilder) {
+  constructor(private navCtrl: NavController,
+              private cognitoService: CognitoService,
+              private loadingCtrl: LoadingController,
+              private formBuilder: FormBuilder) {
 
    this.userDetails = new UserDetails();
 
