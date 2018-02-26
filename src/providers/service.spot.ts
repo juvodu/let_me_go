@@ -41,8 +41,6 @@ export class SpotService {
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
         let user: any = this.cognitoService.getCurrentUser();
-
-        console.log(user);
         params.set('spotId', spotId);
         params.set('username', user.username);        
         options.params = params;

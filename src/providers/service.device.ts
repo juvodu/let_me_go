@@ -24,7 +24,7 @@ export class DeviceService {
     /**
      * Register a device with the backend for push notifications
      * 
-     * @param deviceToken retrieved from OS to be registered
+     * @param deviceToken retrieved from mobile OS to be registered
      */
     registerDevice(deviceToken:string): Observable<Response>{
         
@@ -36,5 +36,22 @@ export class DeviceService {
           };
 
         return this.http.post(AppSettings.SPOT_API_ENDPOINT + "device/create", postParams, options);
+    }
+
+    /**
+     * Register a device with the backend for push notifications
+     * 
+     * @param deviceToken retrieved from mobile OS to be registered
+     */
+    unregisterDevice(deviceToken:string): Observable<Response>{
+        
+        let user = this.cognitoService.getCurrentUser();
+        let options:RequestOptions = new RequestOptions({headers: this.headers});
+        let postParams = {
+            username: user.username,
+            deviceToken: deviceToken
+          };
+
+        return this.http.post(AppSettings.SPOT_API_ENDPOINT + "device/delete", postParams, options);
     }
 }

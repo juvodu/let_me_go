@@ -40,3 +40,4 @@ src/assets/img/surfspot.jpg
 src/providers/app.settings.ts
 
 google-services.json
+.sourcemaps/main.js.map
