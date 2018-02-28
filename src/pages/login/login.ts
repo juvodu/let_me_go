@@ -43,9 +43,12 @@ export class LoginPage {
     this.error = null;
 
     this.cognitoService.login(details.username, details.password).then((result) => {
+
       loading.dismiss();
       this.navCtrl.setRoot(TabsPage);
+
     }).catch((err) => {
+      
       if (err.message === "User is not confirmed.") {
         loading.dismiss();
         this.navCtrl.push(ConfirmPage, { 'username': details.username });

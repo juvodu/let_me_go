@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Config } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
-
+import { Observable, Observer } from 'rxjs';
 import { Cognito } from './aws.cognito';
 
 declare var AWS: any;
@@ -16,9 +15,11 @@ declare const aws_user_pools_id;
 @Injectable()
 export class CognitoService {
 
-  // Observables used to trigger logout event
-  private logoutObserver: any;
-  public logoutObservable: any;
+  // Observables used to trigger and subscribe to logout and login events
+  private logoutObserver: Observer<any>;
+  public logoutObservable: Observable<any>;
+  private loginObserver: Observer<any>;
+  public loginObservable: Observable<any>;
 
   constructor(public cognito: Cognito, public config: Config) {
     
@@ -26,6 +27,11 @@ export class CognitoService {
     this.logoutObservable = Observable.create(observer => {
         this.logoutObserver = observer;
     });
+
+    this.logoutObserver = null;
+    this.loginObservable = Observable.create(observer => {
+      this.loginObserver = observer;
+    })
   }
 
   public getCurrentUser(): any{
@@ -44,6 +50,7 @@ export class CognitoService {
         }
       });
     }else{
+      console.log("user is null!");
       this.logoutObserver.next(true);
       return;
     }
@@ -74,6 +81,7 @@ export class CognitoService {
           });
           
           this.isAuthenticated().then(() => {
+            this.loginObserver.next(true);
             resolve();
           }).catch((err) => {
             reject(err);

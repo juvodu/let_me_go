@@ -19,14 +19,14 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = LoginPage;
-
   pages: Array<{title: string, component: any}>;
+  deviceToken: string = null;
 
   constructor(private platform: Platform,
               private statusBar: StatusBar,
               private splashScreen: SplashScreen,
               private push: Push,
-              private alertCtrl: AlertController,
+              public alertCtrl: AlertController,
               private cognitoService: CognitoService,
               private deviceService: DeviceService) {
     this.initializeApp();
@@ -43,8 +43,7 @@ export class MyApp {
 
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
-      this.initPushNotification();
-      this.subscribeToLogout();
+      this.subscribeToEvents();
     });
   }
 
@@ -55,11 +54,35 @@ export class MyApp {
   }
 
   /**
-   * Redirects user to login page
+   * Subscribe to global events like user login and logout
    */
-  private subscribeToLogout(){
+  private subscribeToEvents(){
+
+    // user login: subscribe to push notifications
+    this.cognitoService.loginObservable.subscribe((value) => {
+      
+      console.log("Login event received. Subscribing to mobile push notifications.");
+      this.initPushNotification();
+    });
 
     this.cognitoService.logoutObservable.subscribe((value) => {
+
+      console.log("Logout event received. Unsubscribing from mobile push notifications.");
+      // user logout: unsubscribe from push notification
+      if(this.deviceToken != null){
+
+        this.deviceService.unregisterDevice(this.deviceToken).subscribe(
+          (result) => {
+            console.log(result);
+            alert(result);
+            this.deviceToken == null;
+          },
+          (error) => {
+            alert(error);
+          });
+        }
+      
+      // display login 
       this.nav.setRoot(LoginPage);
     });
   }
@@ -84,10 +107,9 @@ export class MyApp {
   
     pushObject.on('registration').subscribe((data: any) => {
       
-      let deviceToken = data.registrationId;
-      this.deviceService.registerDevice(deviceToken).subscribe(
+      this.deviceToken = data.registrationId;
+      this.deviceService.registerDevice(this.deviceToken).subscribe(
         (result) => {
-          alert(result);
           console.log(result);
         },
         (error) => {

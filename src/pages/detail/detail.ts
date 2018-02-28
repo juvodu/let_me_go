@@ -57,7 +57,7 @@ export class DetailPage {
           this.color = "danger";           
         }
 
-        if(this.spot.forecast != null){
+        if(this.spot.forecast != null && this.spot.forecast.data.weather[0] != null){
           this.getConditionInfo();
         }        
         loading.dismiss();

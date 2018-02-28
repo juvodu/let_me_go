@@ -4,6 +4,7 @@ import { NavController, LoadingController, ToastController } from 'ionic-angular
 import { CognitoService } from '../../providers/service.cognito';
 import { UserService } from '../../providers/service.user';
 import { LoginPage } from '../login/login';
+import { DeviceService } from '../../providers/service.device';
 
 export class ChangePassword {
   password: string;
@@ -45,6 +46,7 @@ export class HomePage {
               private toastCtrl: ToastController,
               private userService: UserService,
               private cognitoService: CognitoService,
+              public deviceService: DeviceService,
               public formBuilder: FormBuilder) {
               
               this.changePassword = new ChangePassword();
