@@ -61,30 +61,47 @@ export class MyApp {
     // user login: subscribe to push notifications
     this.cognitoService.loginObservable.subscribe((value) => {
       
-      console.log("Login event received. Subscribing to mobile push notifications.");
+      console.info("Login event received.");
       this.initPushNotification();
     });
 
     this.cognitoService.logoutObservable.subscribe((value) => {
 
-      console.log("Logout event received. Unsubscribing from mobile push notifications.");
-      // user logout: unsubscribe from push notification
-      if(this.deviceToken != null){
+      console.info("Logout event received.");
+      if(this.deviceToken == null){
 
+        this.cognitoService.logout();
+        this.showLoginPage();
+      }else{
+
+        // user logout: unsubscribe from push notification
+        console.log("Unsubscribe from mobile push notifications.");
         this.deviceService.unregisterDevice(this.deviceToken).subscribe(
+
           (result) => {
-            console.log(result);
-            alert(result);
+
+            console.info(result);
             this.deviceToken == null;
+            this.cognitoService.logout();
+            this.showLoginPage();
           },
           (error) => {
+
+            console.error(error);
             alert(error);
+            this.showLoginPage();
           });
-        }
-      
-      // display login 
-      this.nav.setRoot(LoginPage);
+      }
     });
+  }
+
+  /**
+   * Redirect user to login page
+   */
+  private showLoginPage(){
+
+    console.log("Show login page");
+    this.nav.setRoot(LoginPage);
   }
 
   /**
@@ -107,6 +124,7 @@ export class MyApp {
   
     pushObject.on('registration').subscribe((data: any) => {
       
+      console.info("Subscribing to mobile push notifications.");
       this.deviceToken = data.registrationId;
       this.deviceService.registerDevice(this.deviceToken).subscribe(
         (result) => {

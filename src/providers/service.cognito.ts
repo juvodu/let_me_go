@@ -16,9 +16,9 @@ declare const aws_user_pools_id;
 export class CognitoService {
 
   // Observables used to trigger and subscribe to logout and login events
-  private logoutObserver: Observer<any>;
+  public logoutObserver: Observer<any>;
   public logoutObservable: Observable<any>;
-  private loginObserver: Observer<any>;
+  public loginObserver: Observer<any>;
   public loginObservable: Observable<any>;
 
   constructor(public cognito: Cognito, public config: Config) {
@@ -44,14 +44,16 @@ export class CognitoService {
         if (error) {
           // local storage is wiped from time to time, trigger logout event which
           // requires user to login again
+          alert(error);
+          alert("User session get failed in getCurrentUser()");
           console.log(error);
-          this.logoutObserver.next(true);
+
           return;
         }
       });
     }else{
-      console.log("user is null!");
-      this.logoutObserver.next(true);
+      alert("User is null in getCurrentUser()");
+      console.log("User is null in getCurrentUser()");
       return;
     }
       
@@ -99,10 +101,9 @@ export class CognitoService {
    * Log current user out
    */
   public logout() {
-    this.getCurrentUser().signOut();
 
-    // trigger redirect to login page
-    this.logoutObserver.next(true);
+    console.log("Logging out cognito user.");
+    this.getCurrentUser().signOut();
   }
 
   /**

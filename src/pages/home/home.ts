@@ -86,7 +86,7 @@ export class HomePage {
   }
 
   logout(){
-    this.cognitoService.logout();
+    this.cognitoService.logoutObserver.next(true);
   }
 
   delete(){
