@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, AlertController } from 'ionic-angular';
+import { Nav, Platform, AlertController, LoadingController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
@@ -28,7 +28,8 @@ export class MyApp {
               private push: Push,
               public alertCtrl: AlertController,
               private cognitoService: CognitoService,
-              private deviceService: DeviceService) {
+              private deviceService: DeviceService,
+              public loadingCtrl: LoadingController) {
     this.initializeApp();
 
     this.pages = [
@@ -68,9 +69,16 @@ export class MyApp {
     this.cognitoService.logoutObservable.subscribe((value) => {
 
       console.info("Logout event received.");
+
+      let logoutLoading = this.loadingCtrl.create({
+        content: 'Logging out...'
+      });
+      logoutLoading.present();
+
       if(this.deviceToken == null){
 
         this.cognitoService.logout();
+        logoutLoading.dismiss();
         this.showLoginPage();
       }else{
 
@@ -83,12 +91,14 @@ export class MyApp {
             console.info(result);
             this.deviceToken == null;
             this.cognitoService.logout();
+            logoutLoading.dismiss();
             this.showLoginPage();
           },
           (error) => {
 
             console.error(error);
             alert(error);
+            logoutLoading.dismiss();
             this.showLoginPage();
           });
       }
