@@ -91,10 +91,10 @@ export class HomePage {
 
   delete(){
 
-    let loading = this.loadingCtrl.create({
+    let loadingDelete = this.loadingCtrl.create({
       content: this.loadingMessage
     });
-    loading.present();
+    loadingDelete.present();
 
     let cognitoUser: any = this.cognitoService.getCurrentUser();
     this.userService.deleteUser(
@@ -106,14 +106,14 @@ export class HomePage {
 
         // delete cognito user - redirects to login page afterwards
         this.cognitoService.delete().then(this.logoutFn).catch(this.errorFn);
-        loading.dismiss();
+        loadingDelete.dismiss();
 
       },
       (error)=>{
 
         this.showToast(this.deleteErrorMessage);
-        loading.dismiss();
-        console.log(error);
+        loadingDelete.dismiss();
+        console.error(error);
         alert(error);
       }
     );
@@ -123,6 +123,11 @@ export class HomePage {
    * Send change password request to cognito
    */
   changePasswordRequest(){
+
+    let loadingChangePassword = this.loadingCtrl.create({
+      content: this.loadingMessage
+    });
+    loadingChangePassword.present();
 
     let password = this.changePassword.password;
     let newpassword = this.changePassword.password_new;
@@ -146,12 +151,17 @@ export class HomePage {
     if(this.changePasswordForm.valid){
       this.cognitoService.changePassword(password, newpassword).then(
         (result)=>{
+          this.changePassword.password = "";
+          this.changePassword.password_new = "";
+          this.changePassword.password_new_repeat = "";
           this.changePasswordError = {};
           this.showToast(this.changePasswordSuccessMessage);
+          loadingChangePassword.dismiss();
         }
       ).catch(
         (error)=>{
           this.changePasswordError = error;
+          loadingChangePassword.dismiss();
         }
       );
     }

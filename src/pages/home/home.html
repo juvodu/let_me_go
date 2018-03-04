@@ -43,7 +43,7 @@
         Change Password
       </ion-item-divider>
 
-      <form [formGroup]="changePasswordForm">
+      <form [formGroup]="changePasswordForm" (submit)="changePasswordRequest()">
         <p *ngIf="changePasswordError" style="text-align: center">{{changePasswordError.message}}</p>
         <ion-item>
           <ion-label floating>
@@ -63,11 +63,11 @@
           </ion-label>
           <ion-input formControlName="password_new_repeat" type="password" name="password_new_repeat" [(ngModel)]="changePassword.password_new_repeat"> {{newpwrepeat}} </ion-input>
         </ion-item>
+        <div padding>
+          <button ion-button secondary>Change Password</button>
+        </div>
       </form>        
     </ion-item-group>
-    <div padding>
-        <button ion-button secondary (click)="changePasswordRequest()">Change Password</button>
-    </div>
   </ion-list>
 
 </ion-content>
