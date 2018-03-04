@@ -20,6 +20,7 @@ export class DetailPage {
   userFeedback: string;
 
   // forecast info
+  lastUpdateDate: string;
   hourlyCondition: any;
   tides: Array<any>;
 
@@ -57,7 +58,7 @@ export class DetailPage {
           this.color = "danger";           
         }
 
-        if(this.spot.forecast != null && this.spot.forecast.data.weather[0] != null){
+        if(this.spot.forecast != null && this.spot.cronDate != null){
           this.getConditionInfo();
         }        
         loading.dismiss();
@@ -71,6 +72,7 @@ export class DetailPage {
 
   private getConditionInfo(){
 
+    this.lastUpdateDate = new Date(this.spot.cronDate).toISOString();
     let forecastToday = this.spot.forecast.data.weather[0];
     this.tides = forecastToday.tides[0].tide_data;
 

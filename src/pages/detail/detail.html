@@ -25,6 +25,7 @@
         
         <!-- surf condition slide -->
         <ion-slide class="condition-slide" *ngIf="hourlyCondition">
+
           <ion-item>             
             <h2>{{hourlyCondition.swellHeight_m}} m @ {{hourlyCondition.swellPeriod_secs}} s</h2>
             <ion-note> Swell </ion-note> 
@@ -40,7 +41,7 @@
             <ion-note> Temperature </ion-note>                          
           </ion-item>
 
-          <ion-item>
+          <ion-item class="tides">
             <h2> Tides </h2>                                                      
             <ion-grid>
               <ion-row>
@@ -56,6 +57,11 @@
               </ion-row>
 
             </ion-grid>
+            <div text-center>
+              <ion-note>
+                last update: {{lastUpdateDate | date: "yyyy-MM-dd HH:mm"}} UTC  
+              </ion-note>
+            </div>
           </ion-item>
 
         </ion-slide>
