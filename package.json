@@ -50,7 +50,7 @@
     },
     "devDependencies": {
         "@ionic/app-scripts": "^3.1.8",
-        "ionic": "3.19.1",
+        "ionic": "3.20.0",
         "typescript": "2.3.4"
     },
     "description": "An Ionic project",
@@ -65,7 +65,7 @@
             "ionic-plugin-keyboard": {},
             "cordova.plugins.diagnostic": {},
             "phonegap-plugin-push": {
-                "SENDER_ID": "1030404599323",
+                "SENDER_ID": "573215024938",
                 "FCM_VERSION": "11.0.1"
             },
             "cordova-plugin-fcm": {}

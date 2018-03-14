@@ -122,11 +122,6 @@ export class MyApp {
     const options: PushOptions = {
       android: {
         senderID: AppSettings.ANDROID_PUSH_SENDER_ID
-      },
-      ios: {},
-      windows: {},
-      browser: {
-        pushServiceURL: 'http://push.api.phonegap.com/v1/push'
       }
     };
   
@@ -147,23 +142,7 @@ export class MyApp {
   
     pushObject.on('notification').subscribe((data: any) => {
 
-        alert("Push Message");
-
-        /*let notificationAlert = this.alertCtrl.create({
-          title: 'New Notification',
-          subTitle: "You clicked on the notification!",          
-          message: data.message,
-          buttons: [{
-            text: 'Ignore',
-            role: 'cancel'
-          }, {
-            text: 'View',
-            handler: () => {
-              //TODO: redirect to spot detail page
-            }
-          }]
-        });
-        notificationAlert.present();*/
+        console.info(data);
     });
     
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
