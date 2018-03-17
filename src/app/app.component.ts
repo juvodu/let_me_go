@@ -121,7 +121,8 @@ export class MyApp {
 
     const options: PushOptions = {
       android: {
-        senderID: AppSettings.ANDROID_PUSH_SENDER_ID
+        senderID: AppSettings.ANDROID_PUSH_SENDER_ID,
+        forceShow: true
       }
     };
   
