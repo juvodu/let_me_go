@@ -34,10 +34,7 @@ aws-exports.js
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
-
-src/assets/img/surfspot.jpg
-
 src/providers/app.settings.ts
-
 google-services.json
 .sourcemaps/main.js.map
+resources/
