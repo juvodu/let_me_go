@@ -146,9 +146,9 @@ export class CognitoService {
       let user = this.cognito.makeUser(username);
       user.confirmRegistration(code, true, (err, result) => {
             if (err) {
-              reject(err);
+              return reject(err);
             } else {  
-              resolve(result);
+              return resolve(result);
             }
         });
     });

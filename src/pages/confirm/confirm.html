@@ -12,6 +12,7 @@
     <p>Please enter the confirmation code sent to your email to verify your account:</p>
   </div>
   <form (submit)="confirm()">
+    <p *ngIf="error" style="text-align: center">{{error.message}}</p>
     <ion-list>
 
       <ion-item>
