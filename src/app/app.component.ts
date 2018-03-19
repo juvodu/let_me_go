@@ -18,7 +18,7 @@ import { DeviceService } from '../providers/service.device';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = LoginPage;
+  rootPage: any;
   pages: Array<{title: string, component: any}>;
   deviceToken: string = null;
 
@@ -43,8 +43,28 @@ export class MyApp {
     this.platform.ready().then(() => {
 
       this.statusBar.styleLightContent();
+      this.subscribeToGlobalEvents();
+      this.showStartPage();
+      
+    });
+  }
+
+  /**
+   * Show Login page if not logged in, else TabsPage
+   * and hide Splash Screen
+   */
+  showStartPage(){
+
+    this.cognitoService.isAuthenticated().then(() => {
+
+      this.rootPage = TabsPage;
       this.splashScreen.hide();
-      this.subscribeToEvents();
+
+    }).catch((err) => {
+
+      console.log(err.message);
+      this.rootPage = LoginPage;
+      this.splashScreen.hide();
     });
   }
 
@@ -57,7 +77,7 @@ export class MyApp {
   /**
    * Subscribe to global events like user login and logout
    */
-  private subscribeToEvents(){
+  private subscribeToGlobalEvents(){
 
     // user login: subscribe to push notifications
     this.cognitoService.loginObservable.subscribe((value) => {
@@ -79,7 +99,7 @@ export class MyApp {
 
         this.cognitoService.logout();
         logoutLoading.dismiss();
-        this.showLoginPage();
+        this.nav.setRoot(LoginPage);
       }else{
 
         // user logout: unsubscribe from push notification
@@ -92,26 +112,17 @@ export class MyApp {
             this.deviceToken == null;
             this.cognitoService.logout();
             logoutLoading.dismiss();
-            this.showLoginPage();
+            this.nav.setRoot(LoginPage);
           },
           (error) => {
 
             console.error(error);
             alert(error);
             logoutLoading.dismiss();
-            this.showLoginPage();
+            this.nav.setRoot(LoginPage);
           });
       }
     });
-  }
-
-  /**
-   * Redirect user to login page
-   */
-  private showLoginPage(){
-
-    console.log("Show login page");
-    this.nav.setRoot(LoginPage);
   }
 
   /**

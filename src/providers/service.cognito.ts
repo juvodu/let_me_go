@@ -168,13 +168,17 @@ export class CognitoService {
     });
   }
 
+  /**
+   * Check if the current user is authenticated with Cognito
+   */
   isAuthenticated() {
+
     return new Promise((resolve, reject) => {
       let user = this.cognito.getCurrentUser();
       if (user != null) {
         user.getSession((err, session) => {
           if (err) {
-            reject(err)
+            return reject(err);
           } else {
             var logins = {};
             var loginKey = 'cognito-idp.' +
@@ -188,11 +192,11 @@ export class CognitoService {
               'Logins': logins
             });
 
-            resolve()
+            return resolve();
           }
         });
       } else {
-        reject("User not found.")
+        return reject(new Error("User not logged in."));
       }
     });
   }

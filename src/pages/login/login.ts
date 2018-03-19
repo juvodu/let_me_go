@@ -25,14 +25,6 @@ export class LoginPage {
     this.loginDetails = new LoginDetails(); 
   }
 
-  ionViewDidLoad() {
-    this.cognitoService.isAuthenticated().then((result) => {
-      this.navCtrl.setRoot(TabsPage);
-    }).catch((err) => {
-        console.log("User not authenticated. Showing login page.");
-    });
-  }
-
   login() {
     let loading = this.loadingCtrl.create({
       content: 'Please wait...'
