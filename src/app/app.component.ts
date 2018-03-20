@@ -7,6 +7,7 @@ import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { DetailPage } from '../pages/detail/detail';
 
 import { AppSettings } from '../providers/app.settings';
 import { CognitoService } from '../providers/service.cognito';
@@ -151,10 +152,25 @@ export class MyApp {
           alert(error);
         });
     });
-  
+    
+    // user clicked on received notification
     pushObject.on('notification').subscribe((data: any) => {
 
-        console.info(data);
+        console.info("Notification Reiceved.", data)
+        if(data.additionalData != null){
+          
+          let notificationType: string = data.additionalData.notification_type;
+          switch(notificationType){
+            case "swell_alert":
+              this.nav.push(DetailPage, {
+                spotId: data.additionalData.spotId
+              });
+              break;
+
+            default:
+              console.warn("Notification type unknown. Ignoring notification.");
+          }
+        }
     });
     
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
