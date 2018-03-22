@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Loading, ToastController} from 'ionic-angular';
 import { AppSettings } from '../../providers/app.settings';
 import { SpotService } from '../../providers/service.spot';
 import { FavoriteService } from '../../providers/service.favorite';
@@ -28,7 +28,8 @@ export class DetailPage {
               public navParams: NavParams,
               public spotService: SpotService,
               public favoriteService: FavoriteService,
-              public loadingCtrl: LoadingController) {
+              public loadingCtrl: LoadingController,
+              public toastCtrl: ToastController) {
 
         this.isFav = false;
         this.mapId = "map-" + Math.floor((1 + Math.random()) * 0x10000);
@@ -38,7 +39,7 @@ export class DetailPage {
 
   getSpot(spotId:string){
 
-    let loading = this.loadingCtrl.create({
+    let loading:Loading = this.loadingCtrl.create({
       content: this.loadingMessage
     });
     loading.present();
@@ -102,6 +103,11 @@ export class DetailPage {
 
   toggleFavorite(){
 
+    let loading:Loading = this.loadingCtrl.create({
+      content: this.loadingMessage
+    });
+    loading.present();
+
     let spotId = this.spot.id;
 
     //delete
@@ -110,11 +116,14 @@ export class DetailPage {
       this.color = "light_grey"; 
       this.favoriteService.deleteFavorite(spotId).subscribe(
         (result)=>{
-            console.log("Deleted favorite!");
+            loading.dismiss();
+            this.showToast("Favorite deleted");
         },
         (error)=>{
           alert(error);
           this.userFeedback = error;
+          loading.dismiss();
+          this.showToast(error);
         });
     }else{
 
@@ -123,12 +132,32 @@ export class DetailPage {
       this.color = "danger";
       this.favoriteService.createFavorite(spotId).subscribe(
         (result)=>{
-            console.log("Created favorite!");
+            loading.dismiss();
+            this.showToast("Favorite saved");
         },
         (error)=>{
           alert(error);
           this.userFeedback = error;
+          loading.dismiss();
+          this.showToast(error);
         });
     }
+  }
+
+  /**
+   * Helper message to display a toast on the bottom of the screen for 3 seconds
+   * 
+   * @param message
+   *          the message to be displayed
+   */
+  private showToast(message:string){
+
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'bottom'
+    });
+
+    toast.present();
   }
 }

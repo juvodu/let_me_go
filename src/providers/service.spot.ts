@@ -133,7 +133,7 @@ export class SpotService {
      * 
      * @param distance 
      */
-    getSpotsNearby(distance: number): Promise<[any]>{
+    getSpotsNearby(distance: number): Promise<any>{
 
         return new Promise((resolve, reject)=>{
             
