@@ -1,5 +1,9 @@
 page-detail {
     
+    .action-bar{
+        background-color: color($colors, light_grey, base);
+    }
+
     ion-col div{
         border: 1px solid #e6e9ee;
         border-radius: 2px;

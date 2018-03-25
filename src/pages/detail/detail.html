@@ -18,6 +18,18 @@
 
     <!-- map -->
     <div style="height: 200px" id="{{mapId}}"></div>
+
+    <!-- action bar -->
+    <div class="action-bar">
+      <ion-buttons start>
+        <button ion-button clear icon-only (click)="toggleFavorite()" [color]="isFavorite ? 'primary' : 'dark_grey'">
+          <ion-icon name="heart"></ion-icon>
+        </button>
+        <button ion-button clear icon-only [color]="isNotification ? 'primary' : 'dark_grey'">
+            <ion-icon [name]="isNotification ? 'notifications' : 'notifications-off'"></ion-icon>
+        </button>
+      </ion-buttons>
+    </div>
     
     <!-- slides -->
     <ion-card-content>
@@ -146,10 +158,5 @@
         </ion-slide>
       </ion-slides>
     </ion-card-content>
-    <ion-item>
-        <button ion-button icon-left clear item-end large (click)="toggleFavorite()">
-          <ion-icon name="heart" [color]="color"></ion-icon>
-        </button>
-    </ion-item>
   </ion-card>
 </ion-content>

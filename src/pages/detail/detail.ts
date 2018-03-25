@@ -12,8 +12,8 @@ import * as L from 'leaflet';
 export class DetailPage {
 
   spot: any = {};
-  isFav: boolean;
-  color: string;
+  isFavorite: boolean = false;
+  isNotification: boolean = false;
   mapId: string;
   map: any;
   loadingMessage: string = "Loading...";
@@ -31,9 +31,7 @@ export class DetailPage {
               public loadingCtrl: LoadingController,
               public toastCtrl: ToastController) {
 
-        this.isFav = false;
         this.mapId = "map-" + Math.floor((1 + Math.random()) * 0x10000);
-        this.color = "light_grey";
         this.getSpot(navParams.get('spotId')); 
   }
 
@@ -55,8 +53,7 @@ export class DetailPage {
         
         // disply spot as user favorite
         if(this.spot.favorite){
-          this.isFav = true;          
-          this.color = "danger";           
+          this.isFavorite = true;          
         }
 
         if(this.spot.forecast != null && this.spot.cronDate != null){
@@ -111,9 +108,8 @@ export class DetailPage {
     let spotId = this.spot.id;
 
     //delete
-    if(this.isFav == true){
-      this.isFav = false;
-      this.color = "light_grey"; 
+    if(this.isFavorite == true){
+      this.isFavorite = false;
       this.favoriteService.deleteFavorite(spotId).subscribe(
         (result)=>{
             loading.dismiss();
@@ -128,8 +124,7 @@ export class DetailPage {
     }else{
 
       //add
-      this.isFav = true;
-      this.color = "danger";
+      this.isFavorite = true;
       this.favoriteService.createFavorite(spotId).subscribe(
         (result)=>{
             loading.dismiss();
