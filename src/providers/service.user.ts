@@ -187,4 +187,16 @@ export class UserService {
         return Auth.resendSignUp(username);
     }
 
+    /**
+     * Inititate a forgot password request
+     * 
+     * @param username 
+     *          of the user to reset the password for
+     * @return - A promise resolves callback data if success
+     */
+    public forgotPassword(username:string): Promise<any>{
+
+        return Auth.forgotPassword(username);
+    }
+
 }
