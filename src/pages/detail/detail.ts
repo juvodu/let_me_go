@@ -3,6 +3,7 @@ import { NavController, NavParams, LoadingController, Loading, ToastController} 
 import { AppSettings } from '../../providers/app.settings';
 import { SpotService } from '../../providers/service.spot';
 import { FavoriteService } from '../../providers/service.favorite';
+import { UserService } from '../../providers/service.user';
 import * as L from 'leaflet';
 
 @Component({
@@ -23,16 +24,26 @@ export class DetailPage {
   lastUpdateDate: string;
   hourlyCondition: any;
   tides: Array<any>;
+  user: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              public spotService: SpotService,
-              public favoriteService: FavoriteService,
+              private spotService: SpotService,
+              private favoriteService: FavoriteService,
+              private userService: UserService,
               public loadingCtrl: LoadingController,
               public toastCtrl: ToastController) {
 
         this.mapId = "map-" + Math.floor((1 + Math.random()) * 0x10000);
-        this.getSpot(navParams.get('spotId')); 
+
+        this.userService.getCurrentUser().then(user => {
+
+          this.user = user;
+          this.getSpot(navParams.get('spotId')); 
+        },
+        error => {
+            this.userFeedback = error;
+        });
   }
 
   getSpot(spotId:string){
@@ -42,7 +53,7 @@ export class DetailPage {
     });
     loading.present();
 
-    this.spotService.getSpotById(spotId).subscribe(
+    this.spotService.getSpotById(this.user, spotId).subscribe(
       (result)=>{
 
         if(result.thumbnail == null){
@@ -110,7 +121,7 @@ export class DetailPage {
     //delete
     if(this.isFavorite == true){
       this.isFavorite = false;
-      this.favoriteService.deleteFavorite(spotId).subscribe(
+      this.favoriteService.deleteFavorite(this.user, spotId).subscribe(
         (result)=>{
             loading.dismiss();
             this.showToast("Favorite deleted");
@@ -125,7 +136,7 @@ export class DetailPage {
 
       //add
       this.isFavorite = true;
-      this.favoriteService.createFavorite(spotId).subscribe(
+      this.favoriteService.createFavorite(this.user, spotId).subscribe(
         (result)=>{
             loading.dismiss();
             this.showToast("Favorite saved");

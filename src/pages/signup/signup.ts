@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController, LoadingController } from 'ionic-angular';
-import { CognitoService } from '../../providers/service.cognito';
 import { ConfirmPage } from '../confirm/confirm';
 import { LoginPage } from '../login/login';
+import { UserService} from '../../providers/service.user'
+import { Logger } from 'aws-amplify';
+
+const logger = new Logger('SignUp');
 
 export class UserDetails {
     username: string;
@@ -22,10 +25,10 @@ export class SignupPage {
   error: any;
   signupForm: FormGroup;
 
-  constructor(private navCtrl: NavController,
-              private cognitoService: CognitoService,
-              private loadingCtrl: LoadingController,
-              public formBuilder: FormBuilder) {
+  constructor(public navCtrl: NavController,
+              public loadingCtrl: LoadingController,
+              public formBuilder: FormBuilder,
+              private userService: UserService) {
 
    this.userDetails = new UserDetails();
 
@@ -53,13 +56,17 @@ export class SignupPage {
     });
     loading.present();
 
-    this.cognitoService.register(details.username, details.password, {'email': details.email}).then((user) => {
-      loading.dismiss();
-      this.navCtrl.push(ConfirmPage, { username: details.username, email:  details.email});
-    }).catch((err) => {
-      loading.dismiss();
-      this.error = err;
-    });
+    logger.debug('register');
+    this.userService.register(details.username, details.password, details.email)
+      .then(user => {
+        
+        loading.dismiss();
+        this.navCtrl.push(ConfirmPage, { username: details.username, email:  details.email});
+
+      }, error => {
+        this.error = error;
+        loading.dismiss();
+      });
   }
 
   showLoginPage(){

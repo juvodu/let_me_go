@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, LoadingController} from 'ionic-angular';
 import { LoginPage } from '../login/login';
-import { CognitoService } from '../../providers/service.cognito';
 import { UserService } from '../../providers/service.user';
+import { Logger } from 'aws-amplify';
+
+const logger = new Logger('Confirm');
 
 @Component({
   selector: 'page-confirm',
@@ -12,62 +14,73 @@ export class ConfirmPage {
 
   private code: string;
   private username: string;
-  private email: string;
   error: any;
 
   constructor(private navCtrl: NavController,
               public navParams: NavParams,
               private toastCtrl: ToastController,
-              private cognitoService: CognitoService,
               private userService: UserService,
               public loadingCtrl: LoadingController) {
 
     this.username = navParams.get('username');
-    this.email = navParams.get('email');
   }
 
   confirm() {
 
     let loading = this.loadingCtrl.create({
-      content: 'Confirming...'
+      content: 'Confirming Signup...'
     });
     loading.present();
     
-    this.cognitoService.confirmRegistration(this.username, this.code).then(() => {
+    this.userService.confirmRegistration(this.username, this.code)
+      .then(data => {
 
-      // create user on spotservice backend
-      this.userService.createUser(
-        {
-          username: this.username,
-          email: this.email
-        }
-      ).subscribe(
-        (result)=>{
-
-          let toast = this.toastCtrl.create({
-            message: 'User was registered successfully',
-            duration: 3000,
-            position: 'bottom'
-          });
-          
-          loading.dismiss();
-          toast.present();
-          this.navCtrl.setRoot(LoginPage);          
-        },
-        (error)=>{
-
-          loading.dismiss();
-          console.log(error);
-          alert(error);
+        let toast = this.toastCtrl.create({
+          message: 'User was registered successfully',
+          duration: 2000,
+          position: 'bottom'
         });
-    }).catch((err) => {
-            
-      loading.dismiss();
-      this.error = err;
-    });
+        
+        loading.dismiss();
+        toast.present();
+        this.navCtrl.setRoot(LoginPage); 
+
+      },
+      error => {
+
+        loading.dismiss();
+        logger.error('confirm error', error);
+        this.error = error;
+
+      });
   }
 
   resendCode() {
-    this.cognitoService.resendRegistrationCode(this.username);
+
+    let loading = this.loadingCtrl.create({
+      content: 'Resending code...'
+    });
+    loading.present();
+
+    this.userService.resendConfirmCode(this.username)
+      .then(() => {
+
+        let toast = this.toastCtrl.create({
+          message: 'Code was resent. Please check your mail inbox.',
+          duration: 2000,
+          position: 'bottom'
+        });
+
+        loading.dismiss();
+        toast.present();
+
+      }, error => 
+      {
+
+        loading.dismiss();
+        logger.error('send code error', error);
+        this.error = error;
+
+      });
   }
 }

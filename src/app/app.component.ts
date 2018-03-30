@@ -10,8 +10,11 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { DetailPage } from '../pages/detail/detail';
 
 import { AppSettings } from '../providers/app.settings';
-import { CognitoService } from '../providers/service.cognito';
 import { DeviceService } from '../providers/service.device';
+import { UserService } from '../providers/service.user';
+import { Logger } from 'aws-amplify';
+
+const logger = new Logger('AppComponent');
 
 @Component({
   templateUrl: 'app.html'
@@ -28,9 +31,10 @@ export class MyApp {
               private splashScreen: SplashScreen,
               private push: Push,
               public alertCtrl: AlertController,
-              private cognitoService: CognitoService,
               private deviceService: DeviceService,
+              private userService: UserService,
               public loadingCtrl: LoadingController) {
+
     this.initializeApp();
 
     this.pages = [
@@ -55,15 +59,15 @@ export class MyApp {
    * and hide Splash Screen
    */
   showStartPage(){
-
-    this.cognitoService.isAuthenticated().then(() => {
+    
+    this.userService.getCurrentUser().then((user) => {
 
       this.rootPage = TabsPage;
       this.splashScreen.hide();
 
-    }).catch((err) => {
+    }, (err) => {
 
-      console.log(err.message);
+      logger.error(err.message);
       this.rootPage = LoginPage;
       this.splashScreen.hide();
     });
@@ -81,43 +85,44 @@ export class MyApp {
   private subscribeToGlobalEvents(){
 
     // user login: subscribe to push notifications
-    this.cognitoService.loginObservable.subscribe((value) => {
+    this.userService.loginObservable.subscribe(username => {
       
-      console.info("Login event received.");
-      this.initPushNotification();
+      logger.info("Login event received for " + username);
+      this.initPushNotification(username);
     });
 
-    this.cognitoService.logoutObservable.subscribe((value) => {
+    this.userService.logoutObservable.subscribe(username => {
 
-      console.info("Logout event received.");
+      logger.info("Logout event received for " + username);
 
       let logoutLoading = this.loadingCtrl.create({
-        content: 'Logging out...'
+        content: 'Logging out ' + username
       });
       logoutLoading.present();
 
       if(this.deviceToken == null){
 
-        this.cognitoService.logout();
+        this.userService.logout();
         logoutLoading.dismiss();
         this.nav.setRoot(LoginPage);
       }else{
 
         // user logout: unsubscribe from push notification
-        console.log("Unsubscribe from mobile push notifications.");
-        this.deviceService.unregisterDevice(this.deviceToken).subscribe(
+        logger.info("Unsubscribe from mobile push notifications.");
+
+        this.deviceService.unregisterDevice(username, this.deviceToken).subscribe(
 
           (result) => {
 
-            console.info(result);
+            logger.info(result);
             this.deviceToken == null;
-            this.cognitoService.logout();
+            this.userService.logout();
             logoutLoading.dismiss();
             this.nav.setRoot(LoginPage);
           },
           (error) => {
 
-            console.error(error);
+            logger.error(error);
             alert(error);
             logoutLoading.dismiss();
             this.nav.setRoot(LoginPage);
@@ -128,8 +133,12 @@ export class MyApp {
 
   /**
    * Setup push notifications to show an alert
+   * 
+   * @param username
+   *            the username to receive notifications for
+   *
    */
-  private initPushNotification(){
+  private initPushNotification(username:string){
 
     const options: PushOptions = {
       android: {
@@ -142,11 +151,14 @@ export class MyApp {
   
     pushObject.on('registration').subscribe((data: any) => {
       
-      console.info("Subscribing to mobile push notifications.");
+      logger.info("Subscribing to mobile push notifications.");
       this.deviceToken = data.registrationId;
-      this.deviceService.registerDevice(this.deviceToken).subscribe(
+
+
+      //TODO: add user
+      this.deviceService.registerDevice(username, this.deviceToken).subscribe(
         (result) => {
-          console.log(result);
+          logger.info(result);
         },
         (error) => {
           alert(error);
@@ -156,7 +168,7 @@ export class MyApp {
     // user clicked on received notification
     pushObject.on('notification').subscribe((data: any) => {
 
-        console.info("Notification Reiceved.", data)
+        logger.info("Notification Reiceved.", data)
         if(data.additionalData != null){
           
           let notificationType: string = data.additionalData.notification_type;
@@ -168,11 +180,11 @@ export class MyApp {
               break;
 
             default:
-              console.warn("Notification type unknown. Ignoring notification.");
+              logger.warn("Notification type unknown. Ignoring notification.");
           }
         }
     });
     
-    pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+    pushObject.on('error').subscribe(error => logger.error('Error with Push plugin', error));
   }
 }

@@ -23,13 +23,17 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { Push } from '@ionic-native/push';
 
-import { CognitoService } from '../providers/service.cognito';
 import { SpotService } from '../providers/service.spot';
 import { CountryService } from '../providers/service.country';
 import { DeviceService } from '../providers/service.device';
 import { FavoriteService } from '../providers/service.favorite';
 import { UserService } from '../providers/service.user';
-import { Cognito } from '../providers/aws.cognito';
+
+// setup amplify
+import Amplify from 'aws-amplify';
+import aws_exports from '../assets/js/aws-exports';
+Amplify.configure(aws_exports);
+Amplify.Logger.LOG_LEVEL = 'INFO';
 
 @NgModule({
   declarations: [
@@ -72,13 +76,11 @@ import { Cognito } from '../providers/aws.cognito';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    CognitoService,
     SpotService,
     CountryService,
     DeviceService,
     FavoriteService,
     UserService,
-    Cognito,
     Geolocation,
     Diagnostic,
     Push

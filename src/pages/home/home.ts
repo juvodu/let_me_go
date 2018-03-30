@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController, LoadingController, ToastController } from 'ionic-angular';
-import { CognitoService } from '../../providers/service.cognito';
 import { UserService } from '../../providers/service.user';
 import { LoginPage } from '../login/login';
 import { DeviceService } from '../../providers/service.device';
+import { Logger } from 'aws-amplify';
+
+const logger = new Logger('Home');
 
 export class ChangePassword {
   password: string;
@@ -36,16 +38,16 @@ export class HomePage {
   private deleteSuccessMessage: string = "Deleted user successfully";
   private deleteErrorMessage: string = "Deletion of user failed";
   private changePasswordSuccessMessage: string = "Changed password successfully.";
-  private username: string;
-  private email: string;
   private changePassword: ChangePassword;
   private changePasswordError: any;
+  private user: any;
+  public username: any = "";
+  public email: string = "";
 
   constructor(private navCtrl: NavController,
               private loadingCtrl: LoadingController,
               private toastCtrl: ToastController,
               private userService: UserService,
-              private cognitoService: CognitoService,
               public deviceService: DeviceService,
               public formBuilder: FormBuilder) {
               
@@ -62,16 +64,18 @@ export class HomePage {
 
   displayUserProfile(){
 
-    this.username = this.cognitoService.getCurrentUser().username;
-    this.cognitoService.getCognitoUserAttributeByName("email").then(
-      (value)=>{
-        this.email = value;
-      }
-    ).catch(
-      (error) =>{
-        alert(error);
-      }
-    );
+    this.userService.getCurrentUserInfo().then(userInfo => {
+      this.username = userInfo.username;
+      this.email = userInfo.attributes.email;
+    }, error => {
+      logger.error(error);
+    });
+
+    this.userService.getCurrentUser().then(user => {
+      this.user = user;
+    }, error => {
+      logger.error(error);
+    });
   }
 
   showToast(message:string){
@@ -86,7 +90,9 @@ export class HomePage {
   }
 
   logout(){
-    this.cognitoService.logoutObserver.next(true);
+
+    // trigger global logout event
+    this.userService.logoutObserver.next(this.user.username);
   }
 
   delete(){
@@ -96,16 +102,15 @@ export class HomePage {
     });
     loadingDelete.present();
 
-    let cognitoUser: any = this.cognitoService.getCurrentUser();
-    this.userService.deleteUser(
+    this.userService.deleteBackendUser(
       {
-        username: cognitoUser.username
+        username: this.user.username
       }
     ).subscribe(
       (result)=>{
 
         // delete cognito user - redirects to login page afterwards
-        this.cognitoService.delete().then(this.logoutFn).catch(this.errorFn);
+        this.userService.delete(this.user).then(this.logoutFn).catch(this.errorFn);
         loadingDelete.dismiss();
 
       },
@@ -113,8 +118,9 @@ export class HomePage {
 
         this.showToast(this.deleteErrorMessage);
         loadingDelete.dismiss();
-        console.error(error);
+        logger.error(error);
         alert(error);
+        
       }
     );
   }
@@ -149,7 +155,8 @@ export class HomePage {
     }
 
     if(this.changePasswordForm.valid){
-      this.cognitoService.changePassword(password, newpassword).then(
+
+      this.userService.changePassword(this.user, password, newpassword).then(
         (result)=>{
           this.changePassword.password = "";
           this.changePassword.password_new = "";
@@ -157,8 +164,7 @@ export class HomePage {
           this.changePasswordError = {};
           this.showToast(this.changePasswordSuccessMessage);
           loadingChangePassword.dismiss();
-        }
-      ).catch(
+        },
         (error)=>{
           this.changePasswordError = error;
           loadingChangePassword.dismiss();

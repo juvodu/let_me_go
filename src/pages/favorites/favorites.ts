@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, LoadingController, VirtualScroll } from 'ionic-angular';
 import { SpotService } from '../../providers/service.spot';
+import { UserService } from '../../providers/service.user';
 import { AppSettings } from '../../providers/app.settings';
 import { DetailPage } from '../detail/detail';
 
@@ -15,12 +16,21 @@ export class FavoritesPage {
     spots: any = [];
     loadingMessage: string = "Updating your favorite spots";
     userFeedback: string = null;
+    user: any; 
 
     constructor(public navCtrl: NavController,
                 public loadingCtrl: LoadingController,
-                public spotService: SpotService) {
+                private spotService: SpotService,
+                private userService: UserService) {
                   
-                  this.getSpotsByFavoritesLoadingAlert();
+                  this.userService.getCurrentUser().then(
+                    user => {
+                      this.user = user;
+                      this.getSpotsByFavoritesLoadingAlert();
+                    },
+                    error => {
+                      this.userFeedback = error;
+                    });
     }
 
     /**
@@ -55,7 +65,7 @@ export class FavoritesPage {
     private getFavorites(callback){
 
       this.userFeedback = null;
-      this.spotService.getFavoriteSpots(10).subscribe(
+      this.spotService.getFavoriteSpots(this.user, 10).subscribe(
         (spots) => {
           if(spots.length == 0){
             this.userFeedback = "You have no favorites stored yet"

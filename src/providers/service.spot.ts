@@ -3,7 +3,6 @@ import { Platform } from 'ionic-angular';
 import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angular/http';
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
-import { CognitoService } from './service.cognito';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
 import 'rxjs/add/operator/map';
@@ -21,7 +20,6 @@ export class SpotService {
     private headers: Headers;
 
     constructor(private http: Http,
-                private cognitoService: CognitoService,
                 private geolocation: Geolocation,
                 private diagnostic: Diagnostic,
                 private platform: Platform) {
@@ -33,14 +31,15 @@ export class SpotService {
     /**
      * Get spot with detailed information including weather forecast
      * 
+     * @param user 
+     *          the currently logged in user
      * @param spotId 
      *          the id of the spot
      */
-    getSpotById(spotId:string): Observable<any>{
+    getSpotById(user:any, spotId:string): Observable<any>{
         
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
-        let user: any = this.cognitoService.getCurrentUser();
         params.set('spotId', spotId);
         params.set('username', user.username);        
         options.params = params;
@@ -52,15 +51,15 @@ export class SpotService {
 
     /**
      * Get all favorite spots for the user
-     * 
+    * @param user 
+     *          the currently logged in user
      * @param limit
      *             the optional limit of returned results
      */
-    getFavoriteSpots(limit: number): Observable<any>{
+    getFavoriteSpots(user:any, limit: number): Observable<any>{
         
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
-        let user: any = this.cognitoService.getCurrentUser();
         params.set('username', user.username);
 
         // set the optional limit parameter

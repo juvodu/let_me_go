@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
-import { CognitoService } from '../../providers/service.cognito';
 import { SignupPage} from '../signup/signup';
-import { ConfirmPage } from '../confirm/confirm';
 import { TabsPage } from '../tabs/tabs';
+import { Logger } from 'aws-amplify';
+import { UserService} from '../../providers/service.user'
+
+const logger = new Logger('Login'); 
 
 export class LoginDetails {
   username: string;
@@ -20,8 +22,9 @@ export class LoginPage {
   error: any;
 
   constructor(public navCtrl: NavController,
-              public cognitoService: CognitoService,
-              public loadingCtrl: LoadingController) {
+              public loadingCtrl: LoadingController,
+              private userService: UserService) {
+
     this.loginDetails = new LoginDetails(); 
   }
 
@@ -34,20 +37,24 @@ export class LoginPage {
     let details = this.loginDetails;
     this.error = null;
 
-    this.cognitoService.login(details.username, details.password).then((result) => {
+    logger.info('login..');
 
-      loading.dismiss();
-      this.navCtrl.setRoot(TabsPage);
+    this.userService.login(details.username, details.password)
+      .then( user => {
 
-    }).catch((err) => {
-      
-      if (err.message === "User is not confirmed.") {
+        logger.info('signed in user', user);
+        // trigger global login event
+        this.userService.loginObserver.next(user.username);
         loading.dismiss();
-        this.navCtrl.push(ConfirmPage, { 'username': details.username });
-      }
-      loading.dismiss();
-      this.error = err;
-    });
+        this.navCtrl.setRoot(TabsPage);
+
+      },
+      error => {
+
+        this.error = error;
+        loading.dismiss();
+
+      });
   }
 
   showSignupPage() {
