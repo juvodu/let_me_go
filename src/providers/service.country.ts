@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
+import { Analytics } from 'aws-amplify';
 import 'rxjs/add/operator/map';
 
 /**
@@ -25,9 +26,9 @@ export class CountryService {
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let params: URLSearchParams = new URLSearchParams();
         params.set('continent', continent);
-
         options.params = params;
 
+        Analytics.record('GetCountries', params.paramsMap);
         let countries: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "countries", options)
              .map((res:Response) => res.json());
         return countries;

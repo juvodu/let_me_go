@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Observable, Observer } from 'rxjs';
 import { AppSettings } from './app.settings';
-import { Auth, Logger } from 'aws-amplify';
+import { Auth, Logger, Analytics } from 'aws-amplify';
 
 const logger = new Logger('UserService');
 
@@ -54,6 +54,7 @@ export class UserService {
             email: cognitoUser.email
           };
 
+        Analytics.record('CreateBackendUser', postParams);
         return this.http.post(AppSettings.SPOT_API_ENDPOINT + "user/create", postParams, options);
     }
 
@@ -69,8 +70,9 @@ export class UserService {
         let options:RequestOptions = new RequestOptions({headers: this.headers});
         let postParams = {
             username: cognitoUser.username
-          };
-
+        };
+        
+        Analytics.record('DeleteBackendUser', postParams);
         return this.http.post(AppSettings.SPOT_API_ENDPOINT + "user/delete", postParams, options);
     }
 
@@ -103,6 +105,7 @@ export class UserService {
      */
     public login(username:string, password:string): Promise<any>{
         
+        Analytics.record('Login');
         return Auth.signIn(username, password);
     }
 
@@ -111,6 +114,8 @@ export class UserService {
      * @return - A promise resolves callback data if success
      */
     public logout(): Promise<any>{
+
+        Analytics.record('Logout');
         return Auth.signOut();
     }
 
@@ -127,6 +132,7 @@ export class UserService {
      */
     public changePassword(cognitoUser:any, oldPassword:string, newpassword:string): Promise<any>{
 
+        Analytics.record('ChangePassword');
         return Auth.changePassword(cognitoUser, oldPassword, newpassword);
     }
 
@@ -139,6 +145,7 @@ export class UserService {
      */
     public delete(cognitoUser:any): Promise<any>{
 
+        Analytics.record('DeleteUser');
         return new Promise((resolve, reject) => { 
             logger.info("Amplify does not yet support deletion of users");
             resolve();
@@ -157,6 +164,8 @@ export class UserService {
      * @return - A promise resolves callback data if success
      */
     public register(username:string, password:string, email:string): Promise<any>{
+
+        Analytics.record('Register');
         return Auth.signUp(username, password, email);
     }
 
@@ -172,6 +181,7 @@ export class UserService {
      */
     public confirmRegistration(username:string, code:string): Promise<any>{
 
+        Analytics.record('ConfirmRegistration');
         return Auth.confirmSignUp(username, code);
     }
 
@@ -184,6 +194,7 @@ export class UserService {
      */
     public resendConfirmCode(username:string): Promise<any>{
 
+        Analytics.record('ResendConfirmCode');
         return Auth.resendSignUp(username);
     }
 
@@ -196,6 +207,7 @@ export class UserService {
      */
     public forgotPassword(username:string): Promise<any>{
 
+        Analytics.record('ForgotPassword');
         return Auth.forgotPassword(username);
     }
 

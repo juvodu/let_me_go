@@ -12,7 +12,7 @@ import { DetailPage } from '../pages/detail/detail';
 import { AppSettings } from '../providers/app.settings';
 import { DeviceService } from '../providers/service.device';
 import { UserService } from '../providers/service.user';
-import { Logger } from 'aws-amplify';
+import { Logger, Analytics } from 'aws-amplify';
 
 const logger = new Logger('AppComponent');
 
@@ -65,11 +65,12 @@ export class MyApp {
       this.rootPage = TabsPage;
       this.splashScreen.hide();
 
-    }, (err) => {
+    }, (error) => {
 
-      logger.error(err.message);
+      logger.error(error);
       this.rootPage = LoginPage;
       this.splashScreen.hide();
+
     });
   }
 
@@ -152,23 +153,24 @@ export class MyApp {
     pushObject.on('registration').subscribe((data: any) => {
       
       logger.info("Subscribing to mobile push notifications.");
+
       this.deviceToken = data.registrationId;
-
-
-      //TODO: add user
       this.deviceService.registerDevice(username, this.deviceToken).subscribe(
         (result) => {
           logger.info(result);
         },
         (error) => {
           alert(error);
+          Analytics.record('Error', error);
         });
     });
     
     // user clicked on received notification
     pushObject.on('notification').subscribe((data: any) => {
 
-        logger.info("Notification Reiceved.", data)
+        logger.info("Notification Reiceved.", data);
+        Analytics.record('NotificationReceived', data);
+
         if(data.additionalData != null){
           
           let notificationType: string = data.additionalData.notification_type;
@@ -185,6 +187,9 @@ export class MyApp {
         }
     });
     
-    pushObject.on('error').subscribe(error => logger.error('Error with Push plugin', error));
+    pushObject.on('error').subscribe(error => {
+      logger.error('Error with Push plugin', error);
+      Analytics.record('Error', error);
+    });
   }
 }

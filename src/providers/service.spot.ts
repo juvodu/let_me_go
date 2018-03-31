@@ -5,6 +5,7 @@ import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
+import { Analytics } from 'aws-amplify';
 import 'rxjs/add/operator/map';
 
 /**
@@ -44,6 +45,7 @@ export class SpotService {
         params.set('username', user.username);        
         options.params = params;
 
+        Analytics.record('GetSpotById', params.paramsMap);
         let spot: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spot", options)
              .map((res:Response) => res.json());
         return spot;
@@ -69,6 +71,7 @@ export class SpotService {
 
         options.params = params;
 
+        Analytics.record('GetFavoriteSpots', params.paramsMap);
         let spots: any = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
              .map((res:Response) => res.json());
         return spots;
@@ -102,6 +105,7 @@ export class SpotService {
 
         options.params = params;
 
+        Analytics.record('GetSpotsByRegion', params.paramsMap);
         let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
              .map((res:Response) => res.json());
         return spots;
@@ -109,6 +113,7 @@ export class SpotService {
 
    /**
     * Get spots within a specific distance
+    * 
     * @param lat 
     * @param long 
     * @param distance 
@@ -122,6 +127,7 @@ export class SpotService {
         params.set('distance', String(distance));
         options.params = params;
 
+        Analytics.record('GetSpotsByDistance', params.paramsMap);
         let spots = this.http.get(AppSettings.SPOT_API_ENDPOINT + "spots", options)
              .map((res:Response) => res.json());
         return spots;

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
+import { Analytics } from 'aws-amplify';
 
 /**
  * Service allows to register devices with the backend
@@ -34,6 +35,8 @@ export class DeviceService {
             username: username,
             deviceToken: deviceToken
         };
+
+        Analytics.record("RegisterDevice", postParams);
         return this.http.post(AppSettings.SPOT_API_ENDPOINT + "device/create", postParams, options);
     }
         
@@ -55,7 +58,8 @@ export class DeviceService {
             username: username,
             deviceToken: deviceToken
           };
-
+        
+        Analytics.record("UnregisterDevice", postParams);
         return this.http.post(AppSettings.SPOT_API_ENDPOINT + "device/delete", postParams, options);
     }
 }

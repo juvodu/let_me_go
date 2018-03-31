@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from './app.settings';
+import { Analytics } from 'aws-amplify';
 
 /**
  * Service to create and delete favorite records
@@ -33,7 +34,8 @@ export class FavoriteService {
             username: user.username,
             spotId: spotId
           };
-
+        
+        Analytics.record("CreateFavorite", postParams);
         return this.http.post(AppSettings.SPOT_API_ENDPOINT + "favorite/create", postParams, options);
     }
 
@@ -51,7 +53,8 @@ export class FavoriteService {
             username: user.username,
             spotId: spotId
           };
-
+        
+        Analytics.record("DeleteFavorite", postParams);
         return this.http.post(AppSettings.SPOT_API_ENDPOINT + "favorite/delete", postParams, options);
     }
 }

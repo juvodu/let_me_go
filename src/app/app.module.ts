@@ -33,7 +33,8 @@ import { UserService } from '../providers/service.user';
 import Amplify from 'aws-amplify';
 import aws_exports from '../assets/js/aws-exports';
 Amplify.configure(aws_exports);
-Amplify.Logger.LOG_LEVEL = 'INFO';
+
+Amplify.Logger.LOG_LEVEL = 'VERBOSE';
 
 @NgModule({
   declarations: [
