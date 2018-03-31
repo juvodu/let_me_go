@@ -4,6 +4,7 @@ import { SpotService } from '../../providers/service.spot';
 import { UserService } from '../../providers/service.user';
 import { AppSettings } from '../../providers/app.settings';
 import { DetailPage } from '../detail/detail';
+import { Analytics } from 'aws-amplify';
 
 @Component({
   selector: 'page-favorites',
@@ -81,6 +82,7 @@ export class FavoritesPage {
         },
         (error) =>{
           this.userFeedback = error;
+          Analytics.record('Error', error);
           callback();
         }
       );

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { SignupPage} from '../signup/signup';
 import { TabsPage } from '../tabs/tabs';
-import { Logger } from 'aws-amplify';
+import { Logger, Analytics } from 'aws-amplify';
 import { UserService} from '../../providers/service.user'
 
 const logger = new Logger('Login'); 
@@ -53,6 +53,7 @@ export class LoginPage {
 
         this.error = error;
         loading.dismiss();
+        Analytics.record('Error', error);
 
       });
   }

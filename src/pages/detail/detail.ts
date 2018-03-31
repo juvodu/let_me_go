@@ -4,7 +4,10 @@ import { AppSettings } from '../../providers/app.settings';
 import { SpotService } from '../../providers/service.spot';
 import { FavoriteService } from '../../providers/service.favorite';
 import { UserService } from '../../providers/service.user';
+import { Logger, Analytics } from 'aws-amplify';
 import * as L from 'leaflet';
+
+const logger = new Logger('Detail'); 
 
 @Component({
   selector: 'page-detail',
@@ -43,6 +46,7 @@ export class DetailPage {
         },
         error => {
             this.userFeedback = error;
+            Analytics.record('Error', error);
         });
   }
 
@@ -73,9 +77,10 @@ export class DetailPage {
         loading.dismiss();
       },
       (error)=>{
-        console.log(error);
+        logger.error(error);
         this.userFeedback = error;
         loading.dismiss();
+        Analytics.record('Error', error);
       });
   }
 
@@ -131,6 +136,7 @@ export class DetailPage {
           this.userFeedback = error;
           loading.dismiss();
           this.showToast(error);
+          Analytics.record('Error', error);
         });
     }else{
 
@@ -146,6 +152,7 @@ export class DetailPage {
           this.userFeedback = error;
           loading.dismiss();
           this.showToast(error);
+          Analytics.record('Error', error);
         });
     }
   }

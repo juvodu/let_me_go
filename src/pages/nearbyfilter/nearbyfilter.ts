@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { Analytics } from 'aws-amplify';
 
 @Component({
   selector: 'page-nearbyfilter',
@@ -18,8 +19,12 @@ export class NearbyfilterPage {
   }
 
   dismiss(){
+
+    Analytics.record('NearbyFilter', {
+      distance: this.distance.toString()
+    });
+    //convert back to m
     this.viewCtrl.dismiss({
-      //convert back to m
       distance: this.distance
     });
   }

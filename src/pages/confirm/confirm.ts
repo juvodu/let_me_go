@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, LoadingController} from 'ionic-angular';
 import { LoginPage } from '../login/login';
 import { UserService } from '../../providers/service.user';
-import { Logger } from 'aws-amplify';
+import { Logger, Analytics } from 'aws-amplify';
 
 const logger = new Logger('Confirm');
 
@@ -51,6 +51,7 @@ export class ConfirmPage {
         loading.dismiss();
         logger.error('confirm error', error);
         this.error = error;
+        Analytics.record('Error', error);
 
       });
   }
@@ -80,6 +81,7 @@ export class ConfirmPage {
         loading.dismiss();
         logger.error('send code error', error);
         this.error = error;
+        Analytics.record('Error', error);
 
       });
   }

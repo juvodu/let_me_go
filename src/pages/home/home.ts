@@ -4,7 +4,7 @@ import { NavController, LoadingController, ToastController } from 'ionic-angular
 import { UserService } from '../../providers/service.user';
 import { LoginPage } from '../login/login';
 import { DeviceService } from '../../providers/service.device';
-import { Logger } from 'aws-amplify';
+import { Logger, Analytics } from 'aws-amplify';
 
 const logger = new Logger('Home');
 
@@ -69,12 +69,14 @@ export class HomePage {
       this.email = userInfo.attributes.email;
     }, error => {
       logger.error(error);
+      Analytics.record('Error', error);
     });
 
     this.userService.getCurrentUser().then(user => {
       this.user = user;
     }, error => {
       logger.error(error);
+      Analytics.record('Error', error);
     });
   }
 
@@ -120,6 +122,7 @@ export class HomePage {
         loadingDelete.dismiss();
         logger.error(error);
         alert(error);
+        Analytics.record('Error', error);
         
       }
     );
@@ -168,6 +171,7 @@ export class HomePage {
         (error)=>{
           this.changePasswordError = error;
           loadingChangePassword.dismiss();
+          Analytics.record('Error', error);
         }
       );
     }

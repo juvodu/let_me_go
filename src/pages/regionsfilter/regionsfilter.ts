@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
 import { CountryService } from '../../providers/service.country';
+import { Logger, Analytics } from 'aws-amplify';
+
+const logger = new Logger('Regionsfilter'); 
 
 @Component({
   selector: 'page-regionsfilter',
@@ -33,17 +36,26 @@ export class RegionsfilterPage {
         this.countries = countries;
       },
       (error) =>{
-        console.log(error);
+        logger.error(error);
+        Analytics.record('Error', error);
       }
     );
   }
 
   dismiss(){
+
+    Analytics.record('RegionsFilter', {
+      continent: this.continent.value,
+      country: this.country,
+      limit: this.limit.toString(),
+      sort: this.sort,
+    });
+
     this.viewCtrl.dismiss({
       continent: this.continent,
       country: this.country,
       limit: this.limit,
       sort: this.sort,
-    });
+  });
   }
 }

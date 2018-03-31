@@ -4,6 +4,7 @@ import { SpotService } from '../../providers/service.spot';
 import { DetailPage } from '../detail/detail';
 import { NearbyfilterPage } from '../nearbyfilter/nearbyfilter';
 import { AppSettings } from '../../providers/app.settings';
+import { Analytics } from 'aws-amplify';
 
 @Component({
   selector: 'page-nearby',
@@ -76,6 +77,7 @@ export class NearbyPage {
     }).catch((error) => {
       
       this.userFeedback = error.message;
+      Analytics.record('Error', { message : error.message});
       callback();
     });
   }

@@ -4,6 +4,7 @@ import { SpotService } from '../../providers/service.spot';
 import { DetailPage } from '../detail/detail';
 import { RegionsfilterPage } from '../regionsfilter/regionsfilter';
 import { AppSettings } from '../../providers/app.settings';
+import { Analytics } from 'aws-amplify';
 
 @Component({
   selector: 'page-regions',
@@ -93,6 +94,7 @@ export class RegionsPage {
           },
           (error) =>{
             this.userFeedback = error;
+            Analytics.record('Error', error);
             callback();
           }
         );

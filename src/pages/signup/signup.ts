@@ -4,7 +4,7 @@ import { NavController, LoadingController } from 'ionic-angular';
 import { ConfirmPage } from '../confirm/confirm';
 import { LoginPage } from '../login/login';
 import { UserService} from '../../providers/service.user'
-import { Logger } from 'aws-amplify';
+import { Logger, Analytics } from 'aws-amplify';
 
 const logger = new Logger('SignUp');
 
@@ -48,6 +48,7 @@ export class SignupPage {
     if(!this.signupForm.valid || details.password != details.password_repeat){
 
       this.error = {message: "Please fill out all fields and make sure passwords match."};
+      Analytics.record('Error', this.error);
       return;
     }
 
@@ -66,6 +67,7 @@ export class SignupPage {
       }, error => {
         this.error = error;
         loading.dismiss();
+        Analytics.record('Error', error);
       });
   }
 
