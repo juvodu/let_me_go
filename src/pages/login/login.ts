@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { SignupPage} from '../signup/signup';
+import { ForgotPage } from '../forgot/forgot';
 import { TabsPage } from '../tabs/tabs';
 import { Logger, Analytics } from 'aws-amplify';
 import { UserService} from '../../providers/service.user'
@@ -60,5 +61,9 @@ export class LoginPage {
 
   showSignupPage() {
     this.navCtrl.push(SignupPage);
+  }
+
+  showForgotPage(){
+    this.navCtrl.push(ForgotPage);
   }
 }

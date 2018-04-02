@@ -211,4 +211,22 @@ export class UserService {
         return Auth.forgotPassword(username);
     }
 
+    /**
+     * Congirm a password change for forgot password request
+     * 
+     * @param username
+     *          of the user to change the password for
+     * @param code
+     *          to verify the request
+     * @param password 
+     *          the new password
+     * 
+     * @return promise which resolves upon success
+     */
+    public forgotPasswordSubmit(username:string, code:string, password:string){
+
+        Analytics.record('ForgotPasswordSubmit');
+        return Auth.forgotPasswordSubmit(username, code, password);
+    }
+
 }

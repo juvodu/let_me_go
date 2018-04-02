@@ -1,0 +1,29 @@
+<ion-header>
+
+    <ion-navbar>
+      <ion-title>Forgot Password</ion-title>
+    </ion-navbar>
+  
+  </ion-header>
+  
+  
+  <ion-content padding>
+      <div padding>
+      <p>Please enter your username. LetMeGo will send a verification code to your email required to reset your password:</p>
+    </div>
+    <form (submit)="forgotPassword()">
+      <p *ngIf="error" style="text-align: center">{{error.message}}</p>
+      <ion-list>
+  
+        <ion-item>
+          <ion-label floating>Username</ion-label>
+          <ion-input type="text" [(ngModel)]="username" name="username"></ion-input>
+        </ion-item>
+  
+        <div padding>
+          <button ion-button color="primary" block>Request new password</button>
+        </div>
+  
+      </ion-list>
+    </form>
+  </ion-content>

@@ -16,6 +16,7 @@ import { ContinentsPage } from '../pages/continents/continents';
 import { FavoritesPage } from '../pages/favorites/favorites'; 
 import { RegionsPage } from '../pages/regions/regions';
 import { RegionsfilterPage } from '../pages/regionsfilter/regionsfilter';
+import { ForgotPage } from '../pages/forgot/forgot';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -50,7 +51,8 @@ Amplify.Logger.LOG_LEVEL = 'VERBOSE';
     FavoritesPage,
     ContinentsPage, 
     RegionsPage,
-    RegionsfilterPage
+    RegionsfilterPage,
+    ForgotPage
   ],
   imports: [
     BrowserModule,
@@ -71,7 +73,8 @@ Amplify.Logger.LOG_LEVEL = 'VERBOSE';
     FavoritesPage,
     ContinentsPage,
     RegionsPage,
-    RegionsfilterPage
+    RegionsfilterPage,
+    ForgotPage
   ],
   providers: [
     StatusBar,
