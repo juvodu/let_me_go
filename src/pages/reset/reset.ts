@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController} from 'ionic-angular';
+import { NavController, ToastController, NavParams, LoadingController} from 'ionic-angular';
 import { UserService } from '../../providers/service.user'; 
 import { LoginPage } from '../../pages/login/login'
 import { Logger, Analytics } from 'aws-amplify';
@@ -21,6 +21,7 @@ export class ResetPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public loadingCtrl: LoadingController,
+              public toastCtrl: ToastController,
               private userService: UserService) {
 
                 this.username = navParams.get('username');
@@ -37,16 +38,23 @@ export class ResetPage {
     this.userService.forgotPasswordSubmit(this.username, this.code, this.password).then(
         () => {
 
-            loading.dismiss();
-            this.navCtrl.push(LoginPage);
-            
+          let toast = this.toastCtrl.create({
+            message: 'Resetted password successfully for ' + this.username,
+            duration: 2000,
+            position: 'bottom'
+          });
+
+          loading.dismiss();
+          toast.present();
+          this.navCtrl.push(LoginPage);
+
         },
         error => {
 
-            logger.error(error);
-            this.error = error;
-            loading.dismiss();
-            Analytics.record('Error', error);
+          logger.error(error);
+          this.error = error;
+          loading.dismiss();
+          Analytics.record('Error', error);
 
         });
   }
