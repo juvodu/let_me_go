@@ -11,18 +11,23 @@
       <div padding>
       <p>Please enter the verification code sent to {{email}}</p>
     </div>
-    <form (submit)="forgotPasswordSubmit()">
+    <form [formGroup]="resetPasswordForm" (submit)="forgotPasswordSubmit()">
       <p *ngIf="error" style="text-align: center">{{error.message}}</p>
       <ion-list>
   
         <ion-item>
-          <ion-label floating>Code</ion-label>
-          <ion-input type="text" [(ngModel)]="code" name="code"></ion-input>
+          <ion-label floating>Verification Code</ion-label>
+          <ion-input formControlName="code" type="text" [(ngModel)]="resetPassword.code" name="code"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label floating>New Password</ion-label>
-            <ion-input type="text" [(ngModel)]="password" name="password"></ion-input>
+            <ion-input formControlName="password_new" type="password" [(ngModel)]="resetPassword.password_new" name="password_new"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Repeat</ion-label>
+          <ion-input formControlName="password_new_repeat" type="password" [(ngModel)]="resetPassword.password_new_repeat" name="password_new_repeat"></ion-input>
         </ion-item>
   
         <div padding>

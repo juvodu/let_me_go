@@ -229,4 +229,23 @@ export class UserService {
         return Auth.forgotPasswordSubmit(username, code, password);
     }
 
+    /**
+     * Validate that the new password is valid and both parameters are equal, but not null
+     * 
+     * @param newpassword
+     *              of the user
+     * @param newpasswordrepeat
+     *              of the user to exclude typos
+     * 
+     * @return true are valid and equal
+     */
+    public validatePasswordChange(newpassword:string, newpasswordrepeat:string): boolean{
+
+        if(newpassword == null || newpassword.length < 6 || newpassword != newpasswordrepeat){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 }
