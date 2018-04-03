@@ -133,45 +133,41 @@ export class HomePage {
    */
   changePasswordRequest(){
 
-    let loadingChangePassword = this.loadingCtrl.create({
-      content: this.loadingMessage
-    });
-    loadingChangePassword.present();
+    this.changePasswordError = null;
 
-    let password = this.changePassword.password;
-    let newpassword = this.changePassword.password_new;
-    let newpasswordrepeat = this.changePassword.password_new_repeat;
-
-    // validate input
-    if(password == null){
-      this.changePasswordError.message = "Please enter your current password."
+    if(this.changePassword.password == null){
+      this.changePasswordError = { message: "Please enter your current password." };
       return;    }
 
-    if(newpassword == null || newpassword.length < 6){
-      this.changePasswordError.message = "New password must have at 6 characters or more."
-      return;
-    }
-
-    if(newpassword != newpasswordrepeat){
-      this.changePasswordError.message = "Repeated password does not match."
+    if(!this.userService.validatePasswordChange(this.changePassword.password_new, this.changePassword.password_new_repeat)){
+      this.changePasswordError  = { message: "Passwords do not match."};
       return;
     }
 
     if(this.changePasswordForm.valid){
 
-      this.userService.changePassword(this.user, password, newpassword).then(
+      let loadingChangePassword = this.loadingCtrl.create({
+        content: this.loadingMessage
+      });
+      loadingChangePassword.present();
+
+      this.userService.changePassword(this.user, this.changePassword.password, this.changePassword.password_new).then(
         (result)=>{
+
           this.changePassword.password = "";
           this.changePassword.password_new = "";
           this.changePassword.password_new_repeat = "";
           this.changePasswordError = {};
           this.showToast(this.changePasswordSuccessMessage);
           loadingChangePassword.dismiss();
+
         },
         (error)=>{
+
           this.changePasswordError = error;
           loadingChangePassword.dismiss();
           Analytics.record('Error', error);
+
         }
       );
     }
