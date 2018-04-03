@@ -29,14 +29,25 @@ export class ResetPage {
 
   forgotPasswordSubmit(){
 
+    let loading = this.loadingCtrl.create({
+      content: 'Resetting password...'
+    });
+    loading.present();
+
     this.userService.forgotPasswordSubmit(this.username, this.code, this.password).then(
         () => {
-            this.navCtrl.push(LoginPage)
+
+            loading.dismiss();
+            this.navCtrl.push(LoginPage);
+            
         },
         error => {
+
             logger.error(error);
             this.error = error;
+            loading.dismiss();
             Analytics.record('Error', error);
+
         });
   }
 }

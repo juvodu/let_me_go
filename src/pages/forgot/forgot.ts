@@ -24,16 +24,26 @@ export class ForgotPage {
 
   forgotPassword(){
 
+    let loading = this.loadingCtrl.create({
+      content: 'Requesting verification code...'
+    });
+    loading.present();
+
     this.userService.forgotPassword(this.username).then(
         (data) => {
 
+            loading.dismiss();
             let email = data.CodeDeliveryDetails.Destination;
             this.navCtrl.push(ResetPage, { username: this.username, email: email});
+
         },
         error => {
+
             logger.error(error);
             this.error = error;
+            loading.dismiss();
             Analytics.record('Error', error);
+
         });
   }
 }
