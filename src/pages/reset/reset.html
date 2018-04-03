@@ -1,0 +1,34 @@
+<ion-header>
+
+    <ion-navbar>
+      <ion-title>Reset Password</ion-title>
+    </ion-navbar>
+  
+  </ion-header>
+  
+  
+  <ion-content padding>
+      <div padding>
+      <p>Please enter the verification code sent to {{email}}</p>
+    </div>
+    <form (submit)="forgotPasswordSubmit()">
+      <p *ngIf="error" style="text-align: center">{{error.message}}</p>
+      <ion-list>
+  
+        <ion-item>
+          <ion-label floating>Code</ion-label>
+          <ion-input type="text" [(ngModel)]="code" name="code"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label floating>New Password</ion-label>
+            <ion-input type="text" [(ngModel)]="password" name="password"></ion-input>
+        </ion-item>
+  
+        <div padding>
+          <button ion-button color="primary" block>Set new password</button>
+        </div>
+  
+      </ion-list>
+    </form>
+  </ion-content>

@@ -17,6 +17,7 @@ import { FavoritesPage } from '../pages/favorites/favorites';
 import { RegionsPage } from '../pages/regions/regions';
 import { RegionsfilterPage } from '../pages/regionsfilter/regionsfilter';
 import { ForgotPage } from '../pages/forgot/forgot';
+import { ResetPage } from '../pages/reset/reset'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -35,7 +36,7 @@ import Amplify from 'aws-amplify';
 import aws_exports from '../assets/js/aws-exports';
 Amplify.configure(aws_exports);
 
-Amplify.Logger.LOG_LEVEL = 'VERBOSE';
+Amplify.Logger.LOG_LEVEL = 'INFO';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ Amplify.Logger.LOG_LEVEL = 'VERBOSE';
     ContinentsPage, 
     RegionsPage,
     RegionsfilterPage,
-    ForgotPage
+    ForgotPage,
+    ResetPage
   ],
   imports: [
     BrowserModule,
@@ -74,7 +76,8 @@ Amplify.Logger.LOG_LEVEL = 'VERBOSE';
     ContinentsPage,
     RegionsPage,
     RegionsfilterPage,
-    ForgotPage
+    ForgotPage,
+    ResetPage
   ],
   providers: [
     StatusBar,

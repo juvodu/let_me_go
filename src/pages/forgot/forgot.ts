@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController} from 'ionic-angular';
-import { LoginPage } from '../login/login';
 import { UserService } from '../../providers/service.user';
+import { ResetPage} from '../../pages/reset/reset';
 import { Logger, Analytics } from 'aws-amplify';
 
 const logger = new Logger('Forgot');
@@ -24,13 +24,15 @@ export class ForgotPage {
 
   forgotPassword(){
 
-    //TODO: validation
     this.userService.forgotPassword(this.username).then(
         (data) => {
-            logger.info(data);
+
+            let email = data.CodeDeliveryDetails.Destination;
+            this.navCtrl.push(ResetPage, { username: this.username, email: email});
         },
         error => {
             logger.error(error);
+            this.error = error;
             Analytics.record('Error', error);
         });
   }
