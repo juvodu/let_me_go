@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController, LoadingController, ToastController } from 'ionic-angular';
+import { NavController, LoadingController, ToastController, AlertController } from 'ionic-angular';
 import { UserService } from '../../providers/service.user';
 import { LoginPage } from '../login/login';
 import { DeviceService } from '../../providers/service.device';
@@ -39,17 +39,18 @@ export class HomePage {
   private deleteErrorMessage: string = "Deletion of user failed";
   private changePasswordSuccessMessage: string = "Changed password successfully.";
   private changePassword: ChangePassword;
-  private changePasswordError: any;
   private user: any;
+  public changePasswordError: any;
   public username: any = "";
   public email: string = "";
 
-  constructor(private navCtrl: NavController,
-              private loadingCtrl: LoadingController,
-              private toastCtrl: ToastController,
+  constructor(public navCtrl: NavController,
+              public loadingCtrl: LoadingController,
+              public toastCtrl: ToastController,
+              public alertCtrl: AlertController,
+              public formBuilder: FormBuilder,
               private userService: UserService,
-              public deviceService: DeviceService,
-              public formBuilder: FormBuilder) {
+              private deviceService: DeviceService) {
               
               this.changePassword = new ChangePassword();
               this.changePasswordForm = formBuilder.group({
@@ -58,7 +59,7 @@ export class HomePage {
                 password_new_repeat: ['', Validators.compose([Validators.minLength(5), Validators.required])]
               });
 
-              this.changePasswordError = {};
+              this.changePasswordError = null;
               this.displayUserProfile();
   }
 
@@ -95,6 +96,48 @@ export class HomePage {
 
     // trigger global logout event
     this.userService.logoutObserver.next(this.user.username);
+  }
+
+  showDeleteConfirm(){
+
+    let deleteConfirm = this.alertCtrl.create({
+      title: 'Delete Account',
+      message: 'Are you sure about this? This will delete your user and all associated information. After deletion your data cannot be restored.',
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Confirm',
+          handler: () => {
+            this.delete();
+          }
+        }
+      ]
+    });
+    deleteConfirm.present();
+
+  }
+
+  showLogoutConfirm(){
+
+    let logoutConfirm = this.alertCtrl.create({
+      title: 'Logout',
+      message: 'If you click on logout,  push messages on this smartphone will be disabled until your next login.',
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'LOGOUT',
+          handler: () => {
+            this.logout();
+          }
+        }
+      ]
+    });
+    logoutConfirm.present();
+
   }
 
   delete(){

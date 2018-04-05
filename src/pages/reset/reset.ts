@@ -22,8 +22,8 @@ export class ResetPage {
   private resetPasswordForm: FormGroup;
   private resetPassword:ResetPassword;
   private username:string;
-  private email:string;
-  private error:any;
+  public email:string;
+  public error:any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
