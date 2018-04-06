@@ -8,6 +8,7 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { DetailPage } from '../pages/detail/detail';
+import { NewSpotPage } from '../pages/newspot/newspot';
 
 import { AppSettings } from '../providers/app.settings';
 import { DeviceService } from '../providers/service.device';
@@ -39,7 +40,8 @@ export class MyApp {
 
     this.pages = [
       { title: 'Home', component: HomePage },
-      { title: 'Surfspots', component: TabsPage }
+      { title: 'Surfspots', component: TabsPage },
+      { title: 'New Surf Spot', component: NewSpotPage}
     ];
 
   }

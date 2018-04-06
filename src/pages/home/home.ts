@@ -50,7 +50,7 @@ export class HomePage {
               public alertCtrl: AlertController,
               public formBuilder: FormBuilder,
               private userService: UserService,
-              private deviceService: DeviceService) {
+              public deviceService: DeviceService) {
               
               this.changePassword = new ChangePassword();
               this.changePasswordForm = formBuilder.group({

@@ -1,0 +1,16 @@
+<ion-header>
+
+    <ion-navbar>
+      <ion-title>New Surf Spot</ion-title>
+    </ion-navbar>
+  
+  </ion-header>
+  
+  
+  <ion-content padding>
+    <div padding>
+      <button ion-button secondary color="secondary" (click)="getPicture(0)">Gallery Picture</button>
+      <button ion-button secondary color="secondary" (click)="getPicture(1)">Camera Picture</button>
+      <img *ngIf="photo" [src]="photo"/> 
+    </div>
+  </ion-content>

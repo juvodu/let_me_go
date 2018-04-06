@@ -17,13 +17,15 @@ import { FavoritesPage } from '../pages/favorites/favorites';
 import { RegionsPage } from '../pages/regions/regions';
 import { RegionsfilterPage } from '../pages/regionsfilter/regionsfilter';
 import { ForgotPage } from '../pages/forgot/forgot';
-import { ResetPage } from '../pages/reset/reset'
+import { ResetPage } from '../pages/reset/reset';
+import { NewSpotPage } from '../pages/newspot/newspot';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { Push } from '@ionic-native/push';
+import { Camera } from '@ionic-native/camera';
 
 import { SpotService } from '../providers/service.spot';
 import { CountryService } from '../providers/service.country';
@@ -54,7 +56,8 @@ Amplify.Logger.LOG_LEVEL = 'INFO';
     RegionsPage,
     RegionsfilterPage,
     ForgotPage,
-    ResetPage
+    ResetPage,
+    NewSpotPage
   ],
   imports: [
     BrowserModule,
@@ -77,7 +80,8 @@ Amplify.Logger.LOG_LEVEL = 'INFO';
     RegionsPage,
     RegionsfilterPage,
     ForgotPage,
-    ResetPage
+    ResetPage,
+    NewSpotPage
   ],
   providers: [
     StatusBar,
@@ -90,7 +94,8 @@ Amplify.Logger.LOG_LEVEL = 'INFO';
     UserService,
     Geolocation,
     Diagnostic,
-    Push
+    Push,
+    Camera
   ]
 })
 export class AppModule {}
