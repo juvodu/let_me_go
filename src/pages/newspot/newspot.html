@@ -1,17 +1,17 @@
 <ion-header>
-
-    <ion-navbar>
-      <ion-title>New Surf Spot</ion-title>
-    </ion-navbar>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>New Surf Spot</ion-title>
+  </ion-navbar>
+</ion-header>
   
-  </ion-header>
-  
-  
-  <ion-content padding>
-    <div padding>
-      <button ion-button secondary color="secondary" (click)="getPicture(0)">Gallery Picture</button>
-      <button ion-button secondary color="secondary" (click)="getPicture(1)">Camera Picture</button>
-      <img *ngIf="photo" [src]="photo"/> 
-      <button *ngIf="photo" ion-button (click)="upload()">Upload</button>
-    </div>
-  </ion-content>
+<ion-content padding>
+  <div padding>
+    <button ion-button secondary color="secondary" (click)="getPicture(0)">Gallery Picture</button>
+    <button ion-button secondary color="secondary" (click)="getPicture(1)">Camera Picture</button>
+    <img *ngIf="photo" [src]="photo"/> 
+    <button *ngIf="photo" ion-button (click)="upload()">Upload</button>
+  </div>
+</ion-content>

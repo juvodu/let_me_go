@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController, LoadingController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Analytics, Storage, Logger } from 'aws-amplify';
 
@@ -43,6 +43,7 @@ export class NewSpotPage {
     }, (error) => {
 
      logger.error(error);
+     Analytics.record("Error", error.message);
 
     });
   }
@@ -73,6 +74,7 @@ export class NewSpotPage {
 
             loading.dismiss();
             logger.error(error);
+            Analytics.record("Error", error.message);
 
         });  
   }
