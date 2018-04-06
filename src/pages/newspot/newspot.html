@@ -12,5 +12,6 @@
       <button ion-button secondary color="secondary" (click)="getPicture(0)">Gallery Picture</button>
       <button ion-button secondary color="secondary" (click)="getPicture(1)">Camera Picture</button>
       <img *ngIf="photo" [src]="photo"/> 
+      <button *ngIf="photo" ion-button (click)="upload()">Upload</button>
     </div>
   </ion-content>
