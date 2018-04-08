@@ -8,10 +8,55 @@
 </ion-header>
   
 <ion-content padding>
-  <div padding>
-    <button ion-button secondary color="secondary" (click)="getPicture(0)">Gallery Picture</button>
-    <button ion-button secondary color="secondary" (click)="getPicture(1)">Camera Picture</button>
-    <img *ngIf="photo" [src]="photo"/> 
-    <button *ngIf="photo" ion-button (click)="upload()">Upload</button>
-  </div>
+
+  <ion-item>
+    <ion-thumbnail item-start>
+      <ion-img [src]="photo"></ion-img> 
+    </ion-thumbnail>
+
+    <ion-grid>
+      <ion-row>
+        <h2>
+            Image from:
+        </h2>
+      </ion-row>
+      <ion-row align-items-start>
+        <button ion-button clear small (click)="getPicture(0)"> GALLERY </button>
+        <button ion-button clear small (click)="getPicture(1)"> CAMERA </button>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+
+
+  <form *ngIf="photo" (submit)="upload()">
+    
+    <p *ngIf="error" style="text-align: center">{{error.message}}</p>
+    <ion-list>
+    
+      <ion-item>
+        <ion-label floating>Name</ion-label>
+        <ion-input type="text" [(ngModel)]="spot.name" name="name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Short Description</ion-label>
+        <ion-input type="text" [(ngModel)]="spot.shortDescription" name="shortDescription"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Description</ion-label>
+        <ion-input type="text" [(ngModel)]="spot.description" name="description"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Continent</ion-label>
+        <ion-input type="text" [(ngModel)]="spot.continent" name="continent"></ion-input>
+      </ion-item>
+    
+      <div padding>
+        <button ion-button block>UPLOAD</button>
+      </div>
+    
+    </ion-list>
+  </form>
 </ion-content>

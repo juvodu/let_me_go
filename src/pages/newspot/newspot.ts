@@ -5,17 +5,28 @@ import { Analytics, Storage, Logger } from 'aws-amplify';
 
 const logger = new Logger('NewSpotPage');
 
+export class Spot {
+  name: string;
+  shortDescription: string;
+  description: string;
+  thumbnail: string;
+  continent: string;
+}
+
 @Component({
   selector: 'page-newspot',
   templateUrl: 'newspot.html',
 })
 export class NewSpotPage {
 
+  public error: any;
   public photo: any;
+  public spot: Spot;
 
   constructor(private camera: Camera, 
               private loadingCtrl: LoadingController) {
-                
+
+                this.spot = new Spot();
   }
 
   /**
@@ -41,7 +52,8 @@ export class NewSpotPage {
      this.photo = base64Image;
 
     }, (error) => {
-
+      
+     this.error = error;
      logger.error(error);
      Analytics.record("Error", error.message);
 
@@ -60,22 +72,23 @@ export class NewSpotPage {
 
   upload(){
 
-      let loading = this.loadingCtrl.create({
-        content: 'Uploading image...'
-      });
-      loading.present();
-          
-        Storage.put('spot.jpg', this.dataURItoBlob(this.photo)).then (result => {
+    let loading = this.loadingCtrl.create({
+      content: 'Uploading image...'
+    });
+    loading.present();
+        
+      Storage.put('spot.jpg', this.dataURItoBlob(this.photo)).then (result => {
 
-            loading.dismiss();
-            logger.info(result);
+          loading.dismiss();
+          logger.info(result);
 
-          }).catch(error => {
+        }).catch(error => {
 
-            loading.dismiss();
-            logger.error(error);
-            Analytics.record("Error", error.message);
+          this.error = error;
+          loading.dismiss();
+          logger.error(error);
+          Analytics.record("Error", error.message);
 
-        });  
+      });  
   }
 }
